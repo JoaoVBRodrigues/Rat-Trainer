@@ -1,173 +1,170 @@
-# MVP Decisions - Rat Trainer
+# Decisoes do MVP - Rat Trainer
 
-## Document Status
-- **Created:** 2026-11-12
-- **Confidence:** High (based on Princess Maker 2 analysis)
-- **Source:** Sumário Executivo (alta confiança), inspiração PM2 (moderada)
+## Status do documento
 
----
+- **Revisado:** 2026-11-12
+- **Estado:** decisoes do MVP consolidadas; nenhum item abaixo depende de escolha futura do usuario.
+- **Base verificada:** premissa e regras de conteudo em `CLAUDE.md`; escolhas confirmadas pelo usuario nesta revisao.
+- **Referencia indisponivel:** `design/reference/sumario-executivo.pdf` nao existe nesta copia do projeto e, portanto, nao foi usado para validar valores.
+- **Nomes:** Rat Trainer, Nyx Volt e ORAC sao nomes de trabalho, marcados como provisorios.
+- **Balanceamento:** numeros de atributos, reputacoes e limiares abaixo sao valores iniciais do MVP; podem ser ajustados por playtest sem reabrir as decisoes de escopo.
 
-## Item 1: Faixa etária do jogo
-- **Resposta:** Opção B - 12–18 anos
-- **Motivo:** Equilíbrio entre fidelidade original e escopo maduro
-- **Evidência:** Sumário original (10–18), MVP proposto (12–20 ou 6–8)
+## Decisoes consolidadas
 
-## Item 2: Valor da mesada/pensão anual
-- **Resposta:** Opção C - 200 créditos/ano
-- **Motivo:** Equilíbrio entre escopo e gestão de recursos
-- **Evidência:** 500 ouro/mês (original), 100 créditos (MVP baixo)
+### 1. Faixa etaria e duracao
 
-## Item 3: Sistema de estresse
-- **Resposta:** Opção B - Atributo independente (Stress)
-- **Motivo:** Simples de implementar, visualização clara
-- **Regra:** Se Stress > Constituição = doença
-- **Evidência:** Stress derivado (Sumário), atributo separado (pseudocódigo)
+- A protagonista comeca aos **12 anos**.
+- O MVP cobre **3 anos de jogo**, terminando aos **15 anos**.
+- Cada ano tem 12 meses e cada mes tem 3 periodos: **12 x 3 = 36 decisoes por ano**.
+- A campanha do MVP tem **3 x 36 = 108 decisoes**. Cada periodo corresponde a uma atividade agendada.
+- A faixa de 12 a 18 anos permanece como limite de conteudo do projeto. Avancar dos 15 aos 18 anos e uma possivel expansao, fora do MVP.
+- Os finais do MVP representam reputacao, vocacao ou proximo caminho da protagonista adolescente; nao representam casamento, romance ou vida adulta ja estabelecida.
 
-## Item 4: Substituição Moral/Fé
-- **Resposta:** Opção A - Ética (ETH) substitui Moral+Fé
-- **Motivo:** Atributo único, fácil de entender, adequado ao cyberpunk
-- **Faixa:** 0–100
-- **Evidência:** Sumário: Moral+Fé separados; MVP: não definido
+### 2. Mesada e dinheiro
 
-## Item 5: Reputações para finais
-- **Resposta:** Opção A - 3 reputações principais
-  - Fighter Rep (combate)
-  - Social Rep (carisma/etiqueta)
-  - Hacker Rep (inteligência técnica)
-- **Motivo:** Simplicidade para MVP, cobre necessidades
-- **Evidência:** CombatRep, CharismaRep, CriminalRep (não definidas)
+- A protagonista recebe **200 creditos no inicio de cada ano de jogo**.
+- Trabalho supervisionado e outras recompensas podem acrescentar creditos; a tabela de recompensas pertence ao balanceamento da economia e nao altera o valor da mesada definido aqui.
+- Valores de recompensas serao validados em playtest, sem mudar a duracao nem o numero de periodos do MVP.
 
-## Item 6: Corrigir "Líder Corporativa"
-- **Resposta:** Opção A - Hacker Rep == max && ETH < 30
-- **Motivo:** Usa atributos definidos para MVP
-- **Pseudocódigo corrigido:**
-  ```
-  if (HackerRep == max && ETH < 30) then final = "Líder Corporativa"
-  ```
+### 3. Stress e doenca
 
-## Item 7: Ordem de avaliação dos finais
-- **Resposta:** Opção B - Progressão lógica
-  1. Finais de carreira (combate, técnica, social)
-  2. Finais sociais (casamentos, influência)
-  3. Finais criminosos/sombrios
-- **Motivo:** Ordem lógica de desenvolvimento
-- **Evidência:** Pseudocódigo if/else (condições conflitantes)
+- Stress e um medidor separado, de **0 a 100**, iniciado em **0**; nao e um atributo de habilidade.
+- Atividades exigentes podem aumentar Stress; lazer e descanso o reduzem.
+- **STA** representa resistencia e altera a tolerancia ao stress. A doenca e acionada ao fim do periodo em que `Stress >= 60 + floor(STA / 5)`. Com STA entre 0 e 100, o limiar fica entre 60 e 80.
+- Assim, Stress nao e comparado com uma Constituicao inexistente, e STA nao e tratada como o proprio nivel de fadiga.
 
-## Item 8: Definição "3 turnos/mês"
-- **MVP:** 36 atividades por ano (3 por mês)
-- **Melhoria pós-MVP:** 108 atividades (3 turnos x 9 períodos)
-- **Motivo:** MVP focado em núcleo, expansão possível
+### 4. Etica
 
----
+- **Etica (ETH)** substitui Moral e Fe como um unico valor de **0 a 100**, iniciado em **50**.
+- ETH representa as escolhas eticas da protagonista; nao e obediencia, reputacao publica nem uma medida automatica de criminalidade.
+- Fuga, autonomia e sobrevivencia nao reduzem ETH nem criam ficha criminal por si so. Um ato ilegal escolhido e registrado separadamente.
 
-## Atributos da Persona (MVP)
+### 5. Atributos e reputacoes
 
-| Atributo | Faixa | Valor Inicial | Descrição |
-|----------|-------|---------------|-----------|
-| Força (STR) | 0–100 | 10–20 | Força física, ataque |
-| Inteligência (INT) | 0–100 | 10–20 | Habilidade técnica, hacking |
-| Carisma (CHA) | 0–100 | 10–20 | Influência social |
-| Refinamento (EGG) | 0–100 | 10–20 | Elegância, etiqueta |
-| Energia (STA) | 0–100 | 15–25 | Saúde/fadiga |
-| Ética (ETH) | 0–100 | 50–70 | Moralidade, evita delinquência |
-| **Stress** | 0–100 | 0 | Fadiga acumulada |
+Todos os atributos e reputacoes variam de **0 a 100**; ganhos e perdas sao limitados a essa faixa. Atributos comecam em valores fixos para evitar intervalos ambiguos; o balanceamento posterior pode ajustar esses valores.
 
----
+| Atributo | Inicial | Uso em atividades e resultados |
+|----------|---------|--------------------------------|
+| Forca (STR) | 15 | Ajuda em missoes fisicas e de protecao; requisito da rota de defensora. |
+| Inteligencia (INT) | 15 | Ajuda em estudo, hacking e missoes tecnicas; requisito de rotas tecnicas e de autoria. |
+| Carisma (CHA) | 15 | Ajuda em negociacao e atividades comunitarias; requisito de rotas sociais. |
+| Refinamento (REF) | 15 | Ajuda em apresentacoes, artes e etiqueta; requisito de rotas artisticas e tecnicas de precisao. Substitui o codigo ambiguo `EGG`. |
+| Resistencia (STA) | 20 | Aumenta a tolerancia ao stress pela regra da secao 3. |
+| Etica (ETH) | 50 | Reflete escolhas eticas e participa dos requisitos de finais; nao define crime sozinha. |
+| Stress | 0 | Medidor de carga acumulada; nao e atributo nem reputacao. |
 
-## Recursos do MVP
+| Reputacao | Inicial | Como e obtida e usada |
+|------------|---------|-----------------------|
+| Fighter Rep | 0 | Missoes fisicas e de protecao; requisito da rota de defensora. |
+| Social Rep | 0 | Negociacao, apresentacoes e ajuda comunitaria; requisito de rotas sociais. |
+| Hacker Rep | 0 | Missoes tecnicas e de rede; requisito de rotas de hacker, corporativa e de guardia da rede. |
 
-| Categoria | Quantidade | Escopo |
-|-----------|------------|--------|
-| Atividades | 4 (estudo, trabalho, missão, lazer) | Núcleo |
-| Cursos | 3 | Estudo básico |
-| Empregos | 3 | Trabalho doméstico |
-| Missões | 3 | Mini-aventuras |
-| Lazer | 2 | Descanso/recuperação |
-| Eventos | 12 | Fixos + aleatórios |
-| Lojas | 3 | Armas, roupas, itens |
-| Finais | 15–20 | Matriz de condições |
+As tres reputacoes sao independentes dos atributos e limitadas a 0-100. Nas condicoes dos finais, `>= 65`, `>= 70` etc. significa atingir aquele limiar; nao existe comparacao indefinida com `max`.
 
----
+### 6. Atividades, registros e finais
 
-## Fora do Escopo do MVP
+- As quatro categorias de atividade sao **estudo, trabalho supervisionado, missao e lazer**.
+- O estudo tem tres cursos: tecnologia (INT), comunicacao e escrita (CHA/REF) e artes e projeto (REF).
+- O trabalho supervisionado tem tres tarefas: reparo leve, entrega assistida e apoio comunitario.
+- Ha tres tipos de missao: fisica/protecao, tecnica e apoio comunitario. O MVP tambem tem 2 atividades de lazer e 12 eventos.
+- Tipos de missao podem ser repetidos. Uma missao tecnica concluida com sucesso incrementa `missoes_tecnicas_concluidas`.
+- Registros usados nos finais:
+  - `community_help`: obtido ao concluir uma missao ou evento identificado como ajuda comunitaria.
+  - `criminal_record`: obtido somente ao escolher e concluir uma acao explicitamente ilegal.
+  - `tech_experiments`: obtido ao concluir uma opcao de estudo ou missao de experimentacao tecnica.
+  - `disappear_from_society`: obtido somente ao aceitar a opcao explicita de desaparecer em um evento.
+- Os registros sao fatos de percurso, nao juizos automaticos sobre a protagonista. Em particular, `disappear_from_society` nao implica `criminal_record` nem reduz ETH.
+- O MVP tem **exatamente 15 finais**. A tabela abaixo tambem fixa a prioridade: avaliar de cima para baixo e conceder o primeiro final cujas condicoes forem atendidas. "Caminho Equilibrado" e o resultado de reserva se nenhum outro final for elegivel.
 
-- Dieta/peso/medidas
-- Vestuário customizável
-- Diálogos longos
-- Minigames
-- Combate manual
-- Multi-idioma
-- Sistema de peso dinâmico
-- Roupas com bônus complexos
+| Prioridade | Final | Condicoes |
+|------------|-------|-----------|
+| 1 | Evadida do Sistema | `disappear_from_society` |
+| 2 | Aprendiz de Ciborgues | INT >= 70, REF >= 50 e `tech_experiments` |
+| 3 | Tecnica Juvenil da Cidade | INT >= 65 e pelo menos 5 `missoes_tecnicas_concluidas` |
+| 4 | Guardiã da Rede | ETH >= 65, Hacker Rep >= 70 e `community_help` |
+| 5 | Lider Comunitaria Jovem | CHA >= 75, Social Rep >= 75 e `community_help` |
+| 6 | Promessa Corporativa | CHA >= 60, Social Rep >= 70 e ETH <= 30 |
+| 7 | Recruta do Submundo | INT >= 50, ETH <= 35 e `criminal_record` |
+| 8 | Voz das Ruas | CHA >= 65, Social Rep >= 65 e `community_help` |
+| 9 | Mediadora Comunitaria | ETH >= 70, CHA >= 55 e `community_help` |
+| 10 | Autora Emergente | INT >= 55 e REF >= 55 |
+| 11 | Mecanica de Campo | STR >= 50, INT >= 55 e pelo menos 3 missoes tecnicas concluidas |
+| 12 | Defensora das Ruas | STR >= 60 e Fighter Rep >= 70 |
+| 13 | Hacker de Elite | INT >= 65 e Hacker Rep >= 70 |
+| 14 | Artista Emergente | REF >= 60 e Social Rep >= 65 |
+| 15 | Caminho Equilibrado | Nenhum requisito; resultado de reserva. |
 
----
+A ordem resolve sobreposicoes sem depender da ordem acidental de condicoes em codigo. Todos os limiares numericos estao dentro das faixas definidas.
 
-## Premissa de Mundo (3 parágrafos)
+### 7. Fuga e delinquencia no tema cyberpunk
 
-**Parágrafo 1:** Em 2087, a cidade de Neo-Arcadia flutua entre o controle corporativo e os subúrbios hacker. A protagonista, uma jovem garota-rato chamada **Nyx**, vive sob a tutela do **Pai-robô ORAC**, um sistema de IA responsável por sua educação e sobrevivência após a morte de seus genitores humanos.
+- Fuga e tratada como uma escolha de autonomia ou sobrevivencia diante de vigilância, controle ou risco; nao e automaticamente delinquencia.
+- A escolha pode registrar `disappear_from_society` e levar ao final Evadida do Sistema.
+- Somente uma acao explicitamente ilegal cria `criminal_record`; ETH pode ser afetada pela acao, mas fugir nao altera ETH por si so.
+- O tom e de consequencias e sobrevivencia, sem glamourizar crime nem mostrar violencia graficamente.
 
-**Parágrafo 2:** Nyx deve gerenciar seu tempo, habilidades e recursos para se preparar para os desafios que a cidade oferece. Entre as opções de atividades: hacking em redes corporativas, estudos de biotecnologia, missões de resgate de dados, e interações sociais com a comunidade underground. Cada escolha molda sua trajetória e determina quais habilidades se desenvolverão.
+### 8. Escopo fechado do MVP
 
-**Parágrafo 3:** O futuro de Nyx depende de suas decisões: pode se tornar uma Hacker Elite, a Heroína das Ruas, ou talvez a Rainha Corporativa. Ou pode cair na escuridão, tornando-se uma figura do submundo. Sua jornada dura 6 anos de jogo (idade 12 a 18), com 36 decisões estratégicas que definirão seu destino.
+**Dentro do escopo:** agenda de 3 anos, atributos e reputacoes da secao 5, quatro categorias de atividade, economia basica, 12 eventos e 15 finais.
 
----
+**Fora do escopo:**
 
-## Nome da Protagonista
+- Dieta, peso, medidas e composicao corporal.
+- Customizacao de roupas e bonus complexos de vestuario.
+- Dialogos longos e minigames.
+- Combate manual ou em tempo real.
+- Multiplayer, conectividade online e multiplas protagonistas jogaveis.
+- Conteudo procedural e arvore de habilidades extensa.
+- Mais de 15 finais no MVP.
+- Avanco dos 15 aos 18 anos; e uma possivel expansao, nao parte do ciclo inicial.
 
-**Nyx Volt** - garota-rato, hacker, protagonista
+### 9. Premissa e nomes de trabalho
 
----
+Em 2087, Neo-Arcadia vive entre controle corporativo e comunidades independentes. Nyx Volt, uma garota-rato, e criada por ORAC, uma inteligencia artificial que atua como sua guardia e protege sua sobrevivencia depois da morte de seus genitores humanos. **Nyx Volt, ORAC e Neo-Arcadia sao nomes provisorios.**
 
-## Regras de Conteúdo
+Durante os tres anos do MVP, Nyx organiza seus periodos entre estudo, trabalho supervisionado, missoes e lazer. Hacking, biotecnologia, protecao e ajuda comunitaria representam rotas possiveis, sem exigir que todas sejam usadas em uma partida.
 
-| Regra | Status |
-|-------|--------|
-| Protagonista menor de idade (12–18) | ✅ |
-| Sem conteúdo sexual/sexualizado | ✅ |
-| Sem roupa reveladora | ✅ |
-| Sem romance com protagonista menor | ✅ |
-| Finais só profissionais/familiares/sociais | ✅ |
-| Finais "dark" não são explícitos | ✅ |
-| Finais sombrios = crime, caos, isolamento | ✅ |
+Ao final, os atributos, reputacoes, registros e decisoes determinam um caminho para o futuro de Nyx. A campanha termina aos 15 anos; os finais descrevem reconhecimento ou vocacao juvenil, nao uma vida adulta consumada.
 
----
+### 10. Regras de conteudo
 
-## Matriz de Finais (MVP - 15)
+| Regra | Aplicacao no MVP |
+|-------|------------------|
+| Idade da protagonista | 12 a 15 anos durante o MVP; nenhuma cena deve apresenta-la como adulta. |
+| Conteudo sexual ou sexualizado | Proibido. |
+| Vestuario revelador | Proibido. |
+| Romance envolvendo menor de idade | Proibido. |
+| Relacao romantica ou inadequada com a guardia | Proibida; ORAC e exclusivamente guardia. |
+| Finais de relacionamento | Somente platonicos, familiares ou profissionais, sem romance com a protagonista. |
+| Finais sombrios | Podem tratar de crime, caos ou isolamento, sem conteudo sexual, violencia grafica ou glamourizacao de dano. |
+| Assets e textos | Adequados para a faixa etaria de 12 a 15 anos. |
 
-1. **Heroína de Armas** - STR≥150, FighterRep=max
-2. **Maga Suprema** - INT≥150, HackerRep=max  
-3. **Artista Estelar** - EGG≥150, SocialRep=max
-4. **Rainha Corporativa** - HackerRep=max, ETH<30
-5. **Empresária de Gangue** - INT≥120, ETH<40
-6. **Rainha das Ruas** - ETH≤20, (flags: criminal_record)
-7. **Escritora Fama** - INT≥140, sem combate
-8. **Zen do Deserto** - ETH≥180, INT<50
-9. **Cidadã Comum** - equilíbrio geral
-10. **Mestre dos Cyborgs** - INT≥160, HackerRep=max, EGG≥80
-11. **Líder da Favela** - SocialRep=max, (flags: community_help)
-12. **Técnica da Cidade** - INT≥170, missões_hack_concluídas≥5
-13. **Guardiã da Rede** - ETH≥150, HackerRep=max
-14. **Alquimista Cibernético** - INT≥130, (flags: tech_experiments)
-15. **Anônima** - (flags: disappear_from_society)
+## Revisao final
 
----
+| Verificacao solicitada | Resolucao |
+|------------------------|-----------|
+| Incoerencias sem uma decisao | Todas resolvidas; o conjunto de escolhas esta fechado. |
+| Duracao | 3 anos, 12 meses e 3 periodos por mes: **108 decisoes no MVP**. 36 e o total anual; 216 corresponde a seis anos e fica fora do MVP. |
+| Atributos e reputacoes | Seis atributos e tres reputacoes, com faixa, inicial e utilidade em atividades, regras ou finais. Stress e separado; todos os limiares sao validos. |
+| Fuga e delinquencia | Fuga e autonomia/sobrevivencia; crime exige uma acao ilegal explicita. |
+| Nome do jogo e da protagonista | Rat Trainer e Nyx Volt marcados como provisorios; ORAC e Neo-Arcadia tambem. |
+| Fora do escopo | Inclui os adiamentos definidos na secao 8, inclusive multiplayer, romance, multiplas protagonistas, expansao etaria e sistemas complexos. |
+| Regras de conteudo | Mantidas e explicitadas na secao 10, incluindo a proibicao de relacao inadequada com a guardia. |
 
-## Fontes e Confiança
+## Fontes e confianca
 
-| Fonte | Confiança | Uso |
-|-------|-----------|-----|
-| Princess Maker 2 (Wikipedia) | Alta | Estrutura básica de calendário |
-| Guia Fís Detalhado | Alta | Fórmulas de atributos |
-| Análises CRPGAddict | Alta | Finais (74 totais) |
-| Design próprio | Moderada | Adaptação cyberpunk |
-| Inspiração PM2 | Alta | Sistema de agendamento |
+| Fonte | Estado | Uso |
+|-------|--------|-----|
+| `CLAUDE.md` do projeto | Consultado | Premissa, faixa etaria e regras de conteudo. |
+| Decisoes confirmadas pelo usuario nesta revisao | Confirmadas em 2026-11-12 | Duracao de 3 anos; estrutura de atributos e reputacoes; regra de fuga; nomes provisorios e escopo. |
+| `design/reference/sumario-executivo.pdf` | Ausente nesta copia do projeto | Nenhuma afirmacao foi atribuida ou conferida com esse documento. |
+| Inspiracao em Princess Maker 2 e design proprio | Referencia conceitual, nao validacao numerica | Inspira o agendamento e a fantasia geral; nao comprova balanceamento. |
 
----
+## Proximos passos de producao
 
-## Próximos Passos
+Os itens abaixo sao tarefas de detalhamento/implementacao e balanceamento; nao reabrem as decisoes consolidadas acima:
 
-1. Definir sistema de eventos (12 finais) ✅
-2. Criar templates de salas de estudo/trabalho
-3. Configurar sistema de salário mensal
-4. Implementar sistema de doença (Stress > STA)
-5. Criar matriz de condições de finais
+1. Detalhar os 12 eventos e suas escolhas, incluindo os registros que podem conceder.
+2. Especificar recompensas de atividades e economia usando a mesada anual de 200 creditos como base inicial.
+3. Implementar e testar a regra de Stress, STA e doenca.
+4. Implementar a avaliacao ordenada dos 15 finais e testar cada condicao e sobreposicao.
