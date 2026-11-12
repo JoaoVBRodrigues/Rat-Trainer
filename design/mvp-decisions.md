@@ -38,6 +38,7 @@
 - **Etica (ETH)** substitui Moral e Fe como um unico valor de **0 a 100**, iniciado em **50**.
 - ETH representa as escolhas eticas da protagonista; nao e obediencia, reputacao publica nem uma medida automatica de criminalidade.
 - Fuga, autonomia e sobrevivencia nao reduzem ETH nem criam ficha criminal por si so. Um ato ilegal escolhido e registrado separadamente.
+- Escolhas explicitamente cuidadosas e comunitarias podem aumentar ETH; atos explicitamente ilegais podem reduzi-la. As variacoes MVP e seus gatilhos sao definidos nos eventos e atividades, nao inferidos de reputacao.
 
 ### 5. Atributos e reputacoes
 
@@ -66,10 +67,11 @@ As tres reputacoes sao independentes dos atributos e limitadas a 0-100. Nas cond
 - As quatro categorias de atividade sao **estudo, trabalho supervisionado, missao e lazer**.
 - O estudo tem tres cursos: tecnologia (INT), comunicacao e escrita (CHA/REF) e artes e projeto (REF).
 - O trabalho supervisionado tem tres tarefas: reparo leve, entrega assistida e apoio comunitario.
-- Ha tres tipos de missao: fisica/protecao, tecnica e apoio comunitario. O MVP tambem tem 2 atividades de lazer e 12 eventos.
+- Ha tres tipos de missao: fisica/protecao, tecnica e apoio comunitario. O MVP tambem tem 2 atividades de lazer, 12 eventos fixos e um pool fechado de tres encontros aleatorios.
 - Tipos de missao podem ser repetidos. Uma missao tecnica concluida com sucesso incrementa `missoes_tecnicas_concluidas`.
 - Registros usados nos finais:
   - `community_help`: obtido ao concluir uma missao ou evento identificado como ajuda comunitaria.
+  - Opcoes comunitarias especificas dos eventos fixos concedem +3 ETH cada, conforme `events.md`; uma missao de apoio comunitario concede +2 ETH somente em caso de sucesso.
   - `criminal_record`: obtido somente ao escolher e concluir uma acao explicitamente ilegal.
   - `tech_experiments`: obtido ao concluir uma opcao de estudo ou missao de experimentacao tecnica.
   - `disappear_from_society`: obtido somente ao aceitar a opcao explicita de desaparecer em um evento.
@@ -80,14 +82,14 @@ As tres reputacoes sao independentes dos atributos e limitadas a 0-100. Nas cond
 |------------|-------|-----------|
 | 1 | Evadida do Sistema | `disappear_from_society` |
 | 2 | Aprendiz de Ciborgues | INT >= 70, REF >= 50 e `tech_experiments` |
-| 3 | Tecnica Juvenil da Cidade | INT >= 65 e pelo menos 5 `missoes_tecnicas_concluidas` |
+| 3 | Tecnica Juvenil da Cidade | INT >= 65, pelo menos 5 `missoes_tecnicas_concluidas` e Hacker Rep < 70 |
 | 4 | Guardiã da Rede | ETH >= 65, Hacker Rep >= 70 e `community_help` |
 | 5 | Lider Comunitaria Jovem | CHA >= 75, Social Rep >= 75 e `community_help` |
 | 6 | Promessa Corporativa | CHA >= 60, Social Rep >= 70 e ETH <= 30 |
 | 7 | Recruta do Submundo | INT >= 50, ETH <= 35 e `criminal_record` |
 | 8 | Voz das Ruas | CHA >= 65, Social Rep >= 65 e `community_help` |
 | 9 | Mediadora Comunitaria | ETH >= 70, CHA >= 55 e `community_help` |
-| 10 | Autora Emergente | INT >= 55 e REF >= 55 |
+| 10 | Autora Emergente | INT >= 55, REF >= 55 e menos de 3 `missoes_tecnicas_concluidas` |
 | 11 | Mecanica de Campo | STR >= 50, INT >= 55 e pelo menos 3 missoes tecnicas concluidas |
 | 12 | Defensora das Ruas | STR >= 60 e Fighter Rep >= 70 |
 | 13 | Hacker de Elite | INT >= 65 e Hacker Rep >= 70 |
@@ -95,6 +97,8 @@ As tres reputacoes sao independentes dos atributos e limitadas a 0-100. Nas cond
 | 15 | Caminho Equilibrado | Nenhum requisito; resultado de reserva. |
 
 A ordem resolve sobreposicoes sem depender da ordem acidental de condicoes em codigo. Todos os limiares numericos estao dentro das faixas definidas.
+
+As condicoes adicionais da prioridade 3 (Hacker Rep < 70) e da prioridade 10 (menos de 3 missoes tecnicas) preservam a possibilidade de alcancar, respectivamente, Hacker de Elite e Mecanica de Campo nas prioridades posteriores.
 
 ### 7. Fuga e delinquencia no tema cyberpunk
 
@@ -105,7 +109,7 @@ A ordem resolve sobreposicoes sem depender da ordem acidental de condicoes em co
 
 ### 8. Escopo fechado do MVP
 
-**Dentro do escopo:** agenda de 3 anos, atributos e reputacoes da secao 5, quatro categorias de atividade, economia basica, 12 eventos e 15 finais.
+**Dentro do escopo:** agenda de 3 anos, atributos e reputacoes da secao 5, quatro categorias de atividade, economia basica, 12 eventos fixos, tres cartas de encontro aleatorio e 15 finais.
 
 **Fora do escopo:**
 
