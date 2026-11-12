@@ -1,0 +1,10 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# References - screenshots protegidos por direitos autorais
+references/
+
+# Godot build artifacts
+*.import
+builds/
