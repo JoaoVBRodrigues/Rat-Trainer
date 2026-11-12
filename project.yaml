@@ -1,0 +1,24 @@
+project:
+  id: rat-trainer
+  name: Rat Trainer
+  description: A monthly scheduling simulator inspired by Princess Maker 2, set in a cyberpunk world with a rat girl protagonist.
+  version: 0.1.0
+  engine: godot
+  engine_version: "4.5"
+
+settings:
+  workflow: minimal
+  target: portfolio
+  automation: standard
+
+content_rules:
+  protagonist_age: "12-18"
+  no_sexual_content: true
+  no_sexualized_clothing: true
+  no_minor_romance: true
+  relationship_endings: platonic_only
+
+commit_rules:
+  no_push_keyword: true
+  no_reset_keyword: true
+  no_clean_keyword: true
