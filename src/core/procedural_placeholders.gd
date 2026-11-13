@@ -96,16 +96,22 @@ static func _create_image(asset_id: String, category: String, size: Vector2i) ->
 
 	_draw_category_shape(image, category, accent_color)
 	_draw_border(image, accent_color)
-	_draw_id(image, asset_id)
+	if category != "ui":
+		_draw_id(image, asset_id)
 	return image
 
 
 static func _draw_category_shape(image: Image, category: String, accent: Color) -> void:
 	match category:
 		"ui":
-			_fill_rect(image, Rect2i(8, 8, image.get_width() - 16, 12), accent.darkened(0.25))
-			_fill_rect(image, Rect2i(12, 30, image.get_width() - 24, 4), accent)
-			_fill_rect(image, Rect2i(12, 42, image.get_width() - 56, 4), accent.darkened(0.25))
+			_fill_rect(image, Rect2i(8, 8, 4, 4), accent)
+			_fill_rect(image, Rect2i(image.get_width() - 12, 8, 4, 4), accent)
+			_fill_rect(image, Rect2i(8, image.get_height() - 12, 4, 4), accent)
+			_fill_rect(
+				image,
+				Rect2i(image.get_width() - 12, image.get_height() - 12, 4, 4),
+				accent
+			)
 		"backgrounds":
 			var width: int = image.get_width()
 			var height: int = image.get_height()

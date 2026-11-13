@@ -1,0 +1,66 @@
+[gd_resource type="Theme" load_steps=6 format=4]
+
+[sub_resource type="StyleBoxFlat" id="PanelFallback"]
+bg_color = Color(0.08, 0.12, 0.17, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.31, 0.76, 0.82, 1)
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="ButtonNormal"]
+bg_color = Color(0.10, 0.16, 0.22, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.31, 0.76, 0.82, 0.8)
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="ButtonHover"]
+bg_color = Color(0.15, 0.25, 0.31, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.86, 0.91, 1)
+
+[sub_resource type="StyleBoxFlat" id="ButtonFocus"]
+bg_color = Color(0.12, 0.21, 0.27, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.82, 0.42, 1)
+
+[sub_resource type="StyleBoxFlat" id="ButtonPressed"]
+bg_color = Color(0.22, 0.33, 0.36, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42, 0.86, 0.91, 1)
+
+[resource]
+default_font_size = 16
+PanelContainer/styles/panel = SubResource("PanelFallback")
+Label/colors/font_color = Color(0.96, 0.97, 0.98, 1)
+Label/colors/font_outline_color = Color(0.02, 0.03, 0.05, 1)
+Button/colors/font_color = Color(0.96, 0.97, 0.98, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0.58, 0.62, 0.66, 1)
+Button/styles/normal = SubResource("ButtonNormal")
+Button/styles/hover = SubResource("ButtonHover")
+Button/styles/focus = SubResource("ButtonFocus")
+Button/styles/pressed = SubResource("ButtonPressed")
+Button/styles/disabled = SubResource("ButtonNormal")
+UITheme/colors/panel_tint = Color(1, 1, 1, 1)

@@ -41,7 +41,7 @@ func initialize(
 		return false
 	if not activities.load_missions(_missions_path):
 		return false
-	_reset_campaign_flags()
+	start_new_game()
 	return true
 
 
@@ -51,6 +51,7 @@ func start_new_game() -> void:
 	economy.start_new_game(calendar.years)
 	activities.reset()
 	_reset_campaign_flags()
+	_credit_stipend_if_due()
 
 
 func set_seed(seed_value: int) -> void:
@@ -83,13 +84,8 @@ func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
 		result.error_message = str(activity_result["error"])
 		return result
 
-	var stipend_due: int = 0
-	if calendar.is_new_year_period():
-		var stipend_status: Dictionary = economy.get_stipend_status(calendar.get_year())
-		if bool(stipend_status["eligible"]):
-			stipend_due = EconomySystem.YEARLY_STIPEND
 	var cost: int = int(activity_result.get("cost", 0))
-	if economy.get_credits() + stipend_due < cost:
+	if not economy.can_afford(cost):
 		result.error_message = "Cannot afford activity."
 		return result
 
@@ -106,11 +102,6 @@ func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
 	result.success_chance = int(activity_result.get("success_chance", 0))
 	result.mission_success = bool(activity_result.get("success", false))
 
-	if stipend_due > 0:
-		economy.start_year(calendar.get_year())
-		economy.receive_income(stipend_due)
-		result.year_stipend_given = true
-		result.credits_change += stipend_due
 	if cost > 0:
 		economy.pay(cost)
 		result.credits_change -= cost
@@ -130,6 +121,10 @@ func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
 	stats.check_and_update_disease()
 	result.is_diseased_after = stats.is_diseased
 	calendar.advance_period()
+	var next_year_stipend: int = _credit_stipend_if_due()
+	if next_year_stipend > 0:
+		result.year_stipend_given = true
+		result.credits_change += next_year_stipend
 	result.completed = true
 	result.post_period_state = get_state()
 	return result
@@ -197,6 +192,7 @@ func load_state(state: Dictionary) -> bool:
 	if not mission_count is int or mission_count < 0:
 		return false
 	_missions_technical_completed = mission_count
+	_credit_stipend_if_due()
 	return true
 
 
@@ -228,6 +224,22 @@ func get_available_activities() -> Dictionary:
 
 func is_mission_available() -> bool:
 	return _systems_are_initialized() and not stats.is_mission_blocked_by_disease()
+
+
+func _credit_stipend_if_due() -> int:
+	if not _systems_are_initialized() or not calendar.is_new_year_period():
+		return 0
+	var stipend_status: Dictionary = economy.get_stipend_status(calendar.get_year())
+	if not bool(stipend_status["eligible"]):
+		return 0
+
+	var stipend: int = economy.start_year(calendar.get_year())
+	if stipend <= 0:
+		return 0
+	if not economy.receive_income(stipend):
+		push_error("Could not credit the yearly stipend for year %d." % calendar.get_year())
+		return 0
+	return stipend
 
 
 func _parse_choice(choice: String) -> Dictionary:

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-11-13" name="report_15" tests="20" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="simulation_core_test" package="tests/unit" timestamp="2026-11-13T16:08:33" hostname="localhost" tests="20" failures="0" errors="0" skipped="0" flaky="0" time="0.393">
+		<testcase name="test_initialize_creates_all_systems" classname="simulation_core_test" time="0.010">
+		</testcase>
+		<testcase name="test_start_new_game_resets_all_state" classname="simulation_core_test" time="0.011">
+		</testcase>
+		<testcase name="test_initial_stipend_is_available_before_first_choice" classname="simulation_core_test" time="0.013">
+		</testcase>
+		<testcase name="test_advance_period_applies_study_activity" classname="simulation_core_test" time="0.012">
+		</testcase>
+		<testcase name="test_advance_period_applies_work_activity" classname="simulation_core_test" time="0.011">
+		</testcase>
+		<testcase name="test_advance_period_applies_mission_technical_on_success" classname="simulation_core_test" time="0.009">
+		</testcase>
+		<testcase name="test_successful_technical_mission_credits_its_reward" classname="simulation_core_test" time="0.017">
+		</testcase>
+		<testcase name="test_advance_period_applies_leisure" classname="simulation_core_test" time="0.013">
+		</testcase>
+		<testcase name="test_balanced_strategy_first_three_months_match_gdd_values" classname="simulation_core_test" time="0.011">
+		</testcase>
+		<testcase name="test_campaign_completes_after_108_periods_deterministic" classname="simulation_core_test" time="0.016">
+		</testcase>
+		<testcase name="test_one_year_configuration_completes_after_36_periods" classname="simulation_core_test" time="0.018">
+		</testcase>
+		<testcase name="test_disease_blocks_missions" classname="simulation_core_test" time="0.013">
+		</testcase>
+		<testcase name="test_disease_rejects_mission_without_consuming_period" classname="simulation_core_test" time="0.010">
+		</testcase>
+		<testcase name="test_year_2_stipend_comes_at_period_37" classname="simulation_core_test" time="0.013">
+		</testcase>
+		<testcase name="test_stat_clamp_applied_after_activity" classname="simulation_core_test" time="0.010">
+		</testcase>
+		<testcase name="test_stress_never_goes_negative" classname="simulation_core_test" time="0.008">
+		</testcase>
+		<testcase name="test_get_available_activities_changes_with_disease" classname="simulation_core_test" time="0.011">
+		</testcase>
+		<testcase name="test_state_can_be_saved_and_loaded" classname="simulation_core_test" time="0.018">
+		</testcase>
+		<testcase name="test_three_full_campaigns_complete_deterministically" classname="simulation_core_test" time="0.047">
+		</testcase>
+		<testcase name="test_same_seed_reproduces_identical_campaign_state" classname="simulation_core_test" time="0.033">
+		</testcase>
+	</testsuite>
+</testsuites>

@@ -26,21 +26,23 @@ func test_start_new_game_resets_all_state() -> void:
 	# Assert
 	assert_int(sim.calendar.completed_periods).is_equal(0)
 	assert_int(sim.stats.get_stress()).is_equal(0)
-	assert_int(sim.economy.get_credits()).is_equal(0)
+	assert_int(sim.economy.get_credits()).is_equal(200)
 	assert_int(sim.get_age()).is_equal(12)
 
-func test_advance_period_credits_stipend_at_year_start() -> void:
+func test_initial_stipend_is_available_before_first_choice() -> void:
 	# Arrange
 	var sim = SimulationCore.new()
 	sim.initialize()
 	sim.set_seed(42)
+	assert_int(sim.economy.get_credits()).is_equal(200)
 
 	# Act - First period should give stipend
 	var result = sim.advance_period("leisure_descanso")
 
-	# Assert - Year 1 stipend given at start
-	assert_bool(result.year_stipend_given).is_true()
-	assert_int(result.credits_change).is_equal(200)
+	# Assert - The stipend was already credited before the first choice
+	assert_bool(result.year_stipend_given).is_false()
+	assert_int(result.credits_change).is_equal(0)
+	assert_int(sim.economy.get_credits()).is_equal(200)
 
 func test_advance_period_applies_study_activity() -> void:
 	# Arrange
@@ -65,7 +67,8 @@ func test_advance_period_applies_work_activity() -> void:
 	var result = sim.advance_period("work_trabalho_reparo_leve_l1")
 
 	# Assert
-	assert_int(result.credits_change).is_equal(215)  # Stipend and income
+	assert_int(result.credits_change).is_equal(15)
+	assert_int(sim.economy.get_credits()).is_equal(215)
 	assert_int(result.activity_type).is_equal(PeriodResult.ActivityType.WORK)
 
 func test_advance_period_applies_mission_technical_on_success() -> void:
@@ -96,7 +99,7 @@ func test_successful_technical_mission_credits_its_reward() -> void:
 			continue
 
 		# Assert
-		assert_int(result.credits_change).is_equal(230)
+		assert_int(result.credits_change).is_equal(30)
 		assert_int(sim.economy.get_credits()).is_equal(230)
 		assert_int(result.mission_count).is_equal(1)
 		assert_int(result.rep_gained.get("hacker", 0)).is_equal(5)
@@ -235,9 +238,14 @@ func test_year_2_stipend_comes_at_period_37() -> void:
 	assert_int(sim.calendar.get_year()).is_equal(1)
 	assert_int(sim.calendar.get_age()).is_equal(12)
 
-	# Next period should be year 2
-	sim.advance_period("leisure_descanso", 42 + 35)
+	# The Year 2 stipend is credited before its first choice
+	var year_end_result: PeriodResult = sim.advance_period("leisure_descanso", 42 + 35)
 	assert_int(sim.calendar.get_year()).is_equal(2)
+	assert_bool(year_end_result.year_stipend_given).is_true()
+	assert_int(sim.economy.get_credits()).is_equal(400)
+	var first_year_two_result: PeriodResult = sim.advance_period("leisure_descanso", 42 + 36)
+	assert_bool(first_year_two_result.year_stipend_given).is_false()
+	assert_int(sim.economy.get_credits()).is_equal(400)
 
 func test_stat_clamp_applied_after_activity() -> void:
 	# Arrange

@@ -1,0 +1,118 @@
+[gd_scene load_steps=15 format=4 gid=16]
+
+[ext_resource path="res://src/ui/UITheme.tres" type="Theme" id=1]
+[ext_resource path="res://src/ui/widgets/StatsPanel.gd" type="Script" id=2]
+[ext_resource path="res://src/ui/widgets/StatusScreen.gd" type="Script" id=3]
+
+[node name="StatusRoot" type="Control"]
+theme = ExtResource( 1 )
+
+[node name="BackgroundOverlay" type="ColorRect" parent="."]
+anchor_left = 0
+anchor_top = 0
+anchor_right = 1
+anchor_bottom = 1
+color = Color( 0, 0, 0, 0.7 )
+visible = false
+
+[node name="StatusWindow" type="PanelContainer" parent="."]
+anchor_center = 2
+anchor_right = 1
+anchor_bottom = 1
+offset_right = -20
+offset_bottom = -20
+size = Vector2( 500, 600 )
+theme = ExtResource( 1 )
+
+[node name="TitleBar" type="HBoxContainer" parent="StatusWindow"]
+offset = Vector2( 12, 12 )
+size = Vector2( 476, 36 )
+
+[node name="TitleLabel" type="Label" parent="TitleBar"]
+text = "Status de Nyx"
+custom_fonts/font_title = null
+
+[node name="CloseButton" type="Button" parent="TitleBar"]
+text = "X"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="StatusWindow"]
+anchor_left = 0
+anchor_top = 48
+anchor_right = 1
+anchor_bottom = 1
+offset_left = 12
+offset_top = 48
+offset_right = -12
+offset_bottom = -12
+
+[node name="MainContent" type="VBoxContainer" parent="ScrollContainer"]
+size_flags_vertical = 4
+offset = Vector2( 0, 0 )
+
+[node name="AttributesTitle" type="Label" parent="MainContent"]
+offset = Vector2( 0, 0 )
+
+[node name="AttributesGrid" type="GridContainer" parent="MainContent"]
+columns = 2
+custom_constants/separation = 8
+offset = Vector2( 0, 32 )
+
+[node name="Separator1" type="Separator" parent="MainContent"]
+orientation = 1
+offset = Vector2( 0, 0 )
+
+[node name="CombatTitle" type="Label" parent="MainContent"]
+offset = Vector2( 0, 0 )
+
+[node name="CombatPanel" type="VBoxContainer" parent="MainContent"]
+custom_constants/separation = 4
+offset = Vector2( 0, 16 )
+
+[node name="CombatChanceLabel" type="HBoxContainer" parent="CombatPanel"]
+offset = Vector2( 0, 0 )
+
+[node name="ChanceLabel" type="Label" parent="CombatChanceLabel"]
+offset = Vector2( 0, 0 )
+
+[node name="ChanceValue" type="Label" parent="CombatChanceLabel"]
+text = "95%"
+
+[node name="Separator2" type="Separator" parent="MainContent"]
+orientation = 1
+offset = Vector2( 0, 0 )
+
+[node name="ReputationTitle" type="Label" parent="MainContent"]
+offset = Vector2( 0, 0 )
+
+[node name="ReputationGrid" type="GridContainer" parent="MainContent"]
+columns = 3
+custom_constants/separation = 16
+offset = Vector2( 0, 16 )
+
+[node name="Separator3" type="Separator" parent="MainContent"]
+orientation = 1
+offset = Vector2( 0, 0 )
+
+[node name="SkillsTitle" type="Label" parent="MainContent"]
+offset = Vector2( 0, 0 )
+
+[node name="SkillsPanel" type="VBoxContainer" parent="MainContent"]
+custom_constants/separation = 4
+offset = Vector2( 0, 16 )
+
+[node name="SkillsList" type="VBoxContainer" parent="SkillsPanel"]
+offset = Vector2( 0, 0 )
+
+[node name="StressTitle" type="Label" parent="MainContent"]
+offset = Vector2( 0, 0 )
+
+[node name="StressDisplay" type="HBoxContainer" parent="MainContent"]
+offset = Vector2( 0, 16 )
+
+[node name="StressLabel" type="Label" parent="StressDisplay"]
+text = "Stress: "
+
+[node name="StressBar" type="ProgressBar" parent="StressDisplay"]
+size_flags_horizontal = 4
+min_value = 0
+max_value = 100

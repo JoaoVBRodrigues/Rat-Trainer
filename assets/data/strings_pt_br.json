@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "ui": {
+    "agenda": "Agenda",
+    "perfil": "Perfil",
+    "cidade": "Cidade/Lojas",
+    "equipamento": "Equipamento",
+    "falar": "Falar",
+    "missao": "Missão",
+    "agendar": "AGENDAR",
+    "status": "Status",
+    "fechar": "Fechar",
+    "nome": "Nome",
+    "idade": "Idade",
+    "creditos": "Créditos",
+    "idade_format": "{value} anos",
+    "creditos_format": "{value} Cr",
+    "indisponivel": "Indisponível",
+    "carregando": "Carregando campanha...",
+    "sem_campanha": "Nenhuma campanha ativa.",
+    "erro_simulacao": "Não foi possível carregar a campanha.",
+    "atributos": "Atributos",
+    "combate": "Combate",
+    "combate_automatico": "O combate das missões é resolvido automaticamente.",
+    "reputacoes": "Reputações",
+    "habilidades": "Habilidades",
+    "stress": "Stress",
+    "doenca": "Doença",
+    "doenca_ativa": "Missões indisponíveis durante a doença.",
+    "sem_doenca": "Sem doença",
+    "nivel_curso_format": "Nível {level}",
+    "periodos_concluidos_format": "{completed}/{total} períodos concluídos",
+    "data_format": "Ano {year} · {month}",
+    "periodo_format": "{weekday} · Dia {day} · Período {period}",
+    "rep_fighter": "Fighter",
+    "rep_social": "Social",
+    "rep_hacker": "Hacker",
+    "tooltip": {
+      "agenda": "Solicitar acesso à agenda.",
+      "perfil": "Solicitar acesso ao perfil.",
+      "cidade": "Solicitar acesso à cidade e às lojas.",
+      "equipamento": "Solicitar acesso ao equipamento.",
+      "falar": "Solicitar uma conversa.",
+      "missao": "Solicitar acesso às missões."
+    }
+  },
+  "calendar": {
+    "months": [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro"
+    ],
+    "weekdays": ["Segunda", "Quarta", "Sexta"]
+  },
+  "stats": {
+    "forca": "Força",
+    "inteligencia": "Inteligência",
+    "carisma": "Carisma",
+    "refinamento": "Refinamento",
+    "resistencia": "Resistência",
+    "etica": "Ética"
+  },
+  "courses": {
+    "curso_tecnologia": "Tecnologia",
+    "curso_comunicacao": "Comunicação e escrita",
+    "curso_artes": "Artes e projeto"
+  }
+}

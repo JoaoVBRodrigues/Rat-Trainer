@@ -16,6 +16,17 @@ Simulador de agendamento mensal (3 períodos/mês) inspirado em Princess Maker 2
 - **Linguagem:** GDScript tipado (static typing sempre)
 - **Dados:** JSON em `assets/data/`
 
+### Godot no Windows / Claude Code Bash
+- O projeto canônico é `C:\Users\João\Documents\rat-trainer\project.godot` (raiz do repositório); não abra `src/project.godot.legacy`.
+- Editor Godot 4.5.1: `C:\Users\João\Downloads\Godot_v4.5.1-stable_win64.exe\Godot_v4.5.1-stable_win64.exe`
+- CLI headless: `C:\Users\João\Downloads\Godot_v4.5.1-stable_win64.exe\Godot_v4.5.1-stable_win64_console.exe`
+- O comando `godot` não está no PATH do Bash. No Claude Code, use `bash tools/godot.sh ...`; não misture comandos PowerShell dentro do Bash nem procure o executável novamente.
+- Para outra instalação, defina `GODOT_CONSOLE_EXE` com o caminho Git Bash do executável console antes de chamar o wrapper.
+- Validação de importação: `bash tools/godot.sh --headless --path . --editor --quit`
+- Testes: `bash tools/godot.sh --headless --path . -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode --continue -a res://tests/unit`
+- Simulação: `bash tools/godot.sh --headless --path . --script res://src/tools/simulation_cli.gd -- 12345`
+- Só declare sucesso após conferir o exit code e os erros do comando; não esconda falhas com `| head`.
+
 ### Resolução Base
 - **4:3 (1024x768)**
 - Estética inspirada no layout de UI de Princess Maker 2:
