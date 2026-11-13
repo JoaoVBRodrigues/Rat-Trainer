@@ -1,0 +1,21 @@
+; Legacy nested project config; the repository root project.godot is canonical.
+[application]
+
+config/name="Rat Trainer"
+run/main_scene="res://src/scenes/Main.tscn"
+
+[display]
+
+window/size/width=1024
+window/size/height=768
+
+[render]
+
+rendering/quality/drivers/gles3/texture_filter=1
+
+[autoload]
+
+Game="res://src/core/Game.gd"
+Data="res://src/data/DataManager.gd"
+Assets="res://src/core/Assets.gd"
+EventBus="res://src/core/EventBus.gd"

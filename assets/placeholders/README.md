@@ -1,45 +1,22 @@
-# Placeholder Asset Convention
+# Placeholder asset convention
 
-Este documento define o padrão de placeholders usado no jogo "Rat Trainer".
+Use `snake_case` IDs and preserve the same ID between final art and its placeholder.
 
-## Convenções
+- Final art: `assets/art/<category>/<id>.png`
+- Placeholder: `assets/placeholders/<category>/<id>.png`
+- Resolution order: final art, placeholder, then an in-memory procedural texture
 
-### a) IDs de Assets
-Todo asset do jogo possui um ID em `snake_case`:
-- Exemplos: `ui_portrait_frame`, `char_rat_idle`, `bg_bedroom_day`, `icon_stat_int`
+Texture categories are `ui`, `characters`, `backgrounds`, `icons`, `items`, `monsters`, and `fx`. The resolver currently handles textures only; audio placeholders are outside its API.
 
-### b) Localização de Arquivos
-- **Arquivo final** (arte oficial): `assets/art/<categoria>/<id>.png`
-- **Placeholder**: `assets/placeholders/<categoria>/<id>.png` (mesmo nome do final)
+Run `src/core/GeneratePlaceholders.gd` from Godot's Script editor or run `src/tools/generate_placeholders_cli.gd` with Godot's headless `--script` option. Both entry points call the same procedural generator.
 
-### c) Fallback de Renderização
-O jogo procura os assets na seguinte ordem:
-1. Arquivo final em `assets/art/`
-2. Placeholder em `assets/placeholders/`
-3. Se nenhum encontrado, gera um retângulo colorido com o ID escrito (implementado no prompt 02)
+Current generated examples:
 
-### d) Créditos de Terceiros
-Todo arquivo de terceiros precisa de uma linha em `CREDITS.md` no momento em que entra no repositório.
+- `ui/ui_panel`
+- `characters/char_rat_idle`
+- `backgrounds/bg_bedroom_day`
+- `icons/icon_stat_str`
+- `items/item_generic`
+- `monsters/monster_generic`
 
-### e) Fontes de Placeholders
-Fontes recomendadas do catálogo ellisonleao/magictools (seção Graphics > Assets/Placeholders):
-- **Kenney** (kenney.nl/assets) - CC0
-- **OpenGameArt** (opengameart.org) - Licenças variam
-- **Game-icons.net** - Requer atribuição
-- **420 Pixel Art Icons for RPGs**
-
-### f) Preferências de Design
-- UI: neutra/escura
-- Ícones: monocromáticos
-- Personagens: silhueta ou sprite genérico
-- Nada que lembre Princess Maker ou jogos comerciais
-
-## Categorias
-- `ui/` - Elementos de interface (botões, frames, painéis)
-- `characters/` - Sprites de personagens
-- `backgrounds/` - Planos de fundo
-- `icons/` - Ícones de status, menus, itens
-- `items/` - Sprites de itens
-- `monsters/` - Sprites de criaturas/inimigos
-- `fx/` - Efeitos visuais
-- `audio/` - Assets de áudio (placeholder sonoro)
+All six are original procedural images and require no third-party art credit. Add credits in `CREDITS.md` before adding any third-party art.

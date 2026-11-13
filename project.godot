@@ -11,13 +11,34 @@ config_version=5
 [application]
 
 config/name="Rat Trainer"
-config/features=PackedStringArray("4.4", "Forward Plus")
+run/main_scene="res://src/scenes/Main.tscn"
+config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
+Game="*res://src/core/Game.gd"
+Data="*res://src/data/DataManager.gd"
+Assets="*res://src/core/Assets.gd"
+EventBus="*res://src/core/EventBus.gd"
 FunplayMcpRuntimeBridge="*res://addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd"
+
+[debug]
+
+show_asset_report=false
+
+[display]
+
+window/size/viewport_width=1024
+window/size/viewport_height=768
+window/size/window_width_override=1024
+window/size/window_height_override=768
+window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/funplay_mcp/plugin.cfg")
+enabled=PackedStringArray("res://addons/funplay_mcp/plugin.cfg", "res://addons/gdUnit4/plugin.cfg")
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
