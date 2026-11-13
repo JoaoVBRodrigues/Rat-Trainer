@@ -1,0 +1,146 @@
+{
+	"schema_version": 1,
+	"endings": [
+		{
+			"id": "evadida_do_sistema",
+			"name": "Evadida do Sistema",
+			"description": "Nyx desaparece da sociedade, escolhendo a autonomia sobre o controle.",
+			"conditions": {
+				"disappear_from_society": true
+			}
+		},
+		{
+			"id": "aprendiz_de_ciborgues",
+			"name": "Aprendiz de Ciborgues",
+			"description": "Nyx e recrutada para experimentos tecnicos avancados.",
+			"conditions": {
+				"int_min": 70,
+				"ref_min": 50,
+				"tech_experiments": true
+			}
+		},
+		{
+			"id": "tecnica_juvenil_da_cidade",
+			"name": "Tecnica Juvenil da Cidade",
+			"description": "Nyx e reconhecida como um jovem tecnico talentoso.",
+			"conditions": {
+				"int_min": 65,
+				"missoes_tecnicas_concluidas_min": 5,
+				"hacker_rep_lt": 70
+			}
+		},
+		{
+			"id": "guardia_da_rede",
+			"name": "Guardiã da Rede",
+			"description": "Nyx e estabelecida como defensora da comunidade digital.",
+			"conditions": {
+				"eth_min": 65,
+				"hacker_rep_min": 70,
+				"community_help": true
+			}
+		},
+		{
+			"id": "lider_comunitaria_jovem",
+			"name": "Lider Comunitaria Jovem",
+			"description": "Nyx se torna uma voz respeitada em suas comunidades.",
+			"conditions": {
+				"cha_min": 75,
+				"social_rep_min": 75,
+				"community_help": true
+			}
+		},
+		{
+			"id": "promessa_corporativa",
+			"name": "Promessa Corporativa",
+			"description": "Nyx e recrutada por uma corporacao, trocando liberdade por estabilidade.",
+			"conditions": {
+				"cha_min": 60,
+				"social_rep_min": 70,
+				"eth_max": 30
+			}
+		},
+		{
+			"id": "recruta_do_submundo",
+			"name": "Recruta do Submundo",
+			"description": "Nyx e integrada a uma rede underground de resistencia.",
+			"conditions": {
+				"int_min": 50,
+				"eth_max": 35,
+				"criminal_record": true
+			}
+		},
+		{
+			"id": "voz_das_ruas",
+			"name": "Voz das Ruas",
+			"description": "Nyx se torna uma defensora popular da resistencia comunitaria.",
+			"conditions": {
+				"cha_min": 65,
+				"social_rep_min": 65,
+				"community_help": true
+			}
+		},
+		{
+			"id": "mediadora_comunitaria",
+			"name": "Mediadora Comunitaria",
+			"description": "Nyx e reconhecida como uma ponte entre diferentes grupos.",
+			"conditions": {
+				"eth_min": 70,
+				"cha_min": 55,
+				"community_help": true
+			}
+		},
+		{
+			"id": "autora_emergente",
+			"name": "Autora Emergente",
+			"description": "Nyx e iniciada sua carreira como criadora de conteudo independente.",
+			"conditions": {
+				"int_min": 55,
+				"ref_min": 55,
+				"missoes_tecnicas_concluidas_lt": 3
+			}
+		},
+		{
+			"id": "mecanica_de_campo",
+			"name": "Mecanica de Campo",
+			"description": "Nyx combina sua tecnica com habilidades fisicas para resolver problemas.",
+			"conditions": {
+				"str_min": 50,
+				"int_min": 55,
+				"missoes_tecnicas_concluidas_min": 3
+			}
+		},
+		{
+			"id": "defensora_das_ruas",
+			"name": "Defensora das Ruas",
+			"description": "Nyx se torna uma protetora respeitada de sua comunidade.",
+			"conditions": {
+				"str_min": 60,
+				"fighter_rep_min": 70
+			}
+		},
+		{
+			"id": "hacker_de_elite",
+			"name": "Hacker de Elite",
+			"description": "Nyx atinge o auge de sua carreira tecnica.",
+			"conditions": {
+				"int_min": 65,
+				"hacker_rep_min": 70
+			}
+		},
+		{
+			"id": "artista_emergente",
+			"name": "Artista Emergente",
+			"description": "Nyx e reconhecida por sua expressao criativa.",
+			"conditions": {
+				"ref_min": 60,
+				"social_rep_min": 65
+			}
+		},
+		{
+			"id": "caminho_equilibrado",
+			"name": "Caminho Equilibrado",
+			"description": "Nyx escolhe um caminho propriamente seu, sem grande destaque em ningunha causa.",
+			"conditions": {}
+		}
+	]
+}

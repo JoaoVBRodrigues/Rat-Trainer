@@ -6,9 +6,11 @@ project:
   version: 0.1.0
   engine: godot
   engine_version: "4.5"
-  engine_path: "C:/Users/João/Downloads/Godot_v4.5.1-stable_win64.exe"
   mode: existing_project
   goal: portfolio
+
+engine:
+  path: "C:/Users/João/Downloads/Godot_v4.5.1-stable_win64.exe/Godot_v4.5.1-stable_win64_console.exe"
 
 settings:
   workflow: minimal

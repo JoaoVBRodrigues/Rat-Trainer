@@ -1,0 +1,103 @@
+{
+	"schema_version": 1,
+	"activities": [
+		{
+			"id": "curso_tecnologia",
+			"type": "study",
+			"name": "Estudo - Tecnologia",
+			"description": "Estudo de tecnologia, hacking e experimentos",
+			"stat_id": "int",
+			"gains": {
+				"l1": {"int": 12},
+				"l2": {"int": 15},
+				"l3": {"int": 18}
+			},
+			"cost_l1": 8,
+			"cost_l2": 16,
+			"cost_l3": 24,
+			"stress": 2
+		},
+		{
+			"id": "curso_comunicacao",
+			"type": "study",
+			"name": "Estudo - Comunicacao e Escrita",
+			"description": "Desenvolvimento de habilidades sociais e de comunicacao",
+			"stat_id": "cha",
+			"gains": {
+				"l1": {"cha": 8, "ref": 5},
+				"l2": {"cha": 11, "ref": 8},
+				"l3": {"cha": 14, "ref": 11}
+			},
+			"cost_l1": 6,
+			"cost_l2": 12,
+			"cost_l3": 18,
+			"stress": 2
+		},
+		{
+			"id": "curso_artes",
+			"type": "study",
+			"name": "Estudo - Artes e Projeto",
+			"description": "Desenvolvimento criativo e artistico",
+			"stat_id": "ref",
+			"gains": {
+				"l1": {"ref": 8},
+				"l2": {"ref": 11},
+				"l3": {"ref": 14}
+			},
+			"cost_l1": 5,
+			"cost_l2": 10,
+			"cost_l3": 15,
+			"stress": 2
+		},
+		{
+			"id": "trabalho_reparo_leve",
+			"type": "work",
+			"name": "Trabalho - Reparo Leve",
+			"description": "Tarefas supervisionadas de manutencao simples",
+			"stat_bonus": "int",
+			"gains": {"l1": {"int": 2}, "l2": {"int": 2}},
+			"income_l1": 15,
+			"income_l2": 22,
+			"stress": 3
+		},
+		{
+			"id": "trabalho_entrega_assistida",
+			"type": "work",
+			"name": "Trabalho - Entrega Assistida",
+			"description": "Entrega de materiais de forma segura",
+			"stat_bonus": "cha",
+			"gains": {"l1": {"cha": 2}, "l2": {"cha": 2}},
+			"income_l1": 20,
+			"income_l2": 30,
+			"stress": 3
+		},
+		{
+			"id": "trabalho_apoio_comunitario",
+			"type": "work",
+			"name": "Trabalho - Apoio Comunitario",
+			"description": "Atividades supervisionadas de apoio a comunidade",
+			"stat_bonus": "cha",
+			"gains": {"l1": {"cha": 2}, "l2": {"cha": 2}},
+			"income_l1": 25,
+			"income_l2": 37,
+			"stress": 2
+		},
+		{
+			"id": "lazer_descanso",
+			"type": "leisure",
+			"name": "Descanso",
+			"description": "Recuperacao fisica e mental",
+			"gains": {"l1": {"stress": -15}},
+			"cost_l1": 0,
+			"stress_reduction": 15
+		},
+		{
+			"id": "lazer_passeio_comunitario",
+			"type": "leisure",
+			"name": "Passeio Comunitário",
+			"description": "Atividade social com a comunidade",
+			"gains": {"l1": {"cha": 2, "stress": -5}},
+			"cost_l1": 0
+		}
+	]
+}

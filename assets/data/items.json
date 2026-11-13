@@ -1,0 +1,29 @@
+{
+	"schema_version": 1,
+	"items": [
+		{
+			"id": "kit_ferramentas",
+			"name": "Kit de ferramentas",
+			"category": "tool",
+			"shop_type": "workshop",
+			"cost": 25,
+			"effect": "+5 pontos percentuais de chance em missões físicas/proteção"
+		},
+		{
+			"id": "casaco_acolchoado",
+			"name": "Casaco acolchoado",
+			"category": "protection",
+			"shop_type": "general",
+			"cost": 20,
+			"effect": "+5 pontos percentuais de chance em missões físicas/proteção"
+		},
+		{
+			"id": "adesivo_recuperacao",
+			"name": "Adesivo de recuperação",
+			"category": "consumable",
+			"shop_type": "clinic",
+			"cost": 10,
+			"effect": "Reduz Stress em 15"
+		}
+	]
+}

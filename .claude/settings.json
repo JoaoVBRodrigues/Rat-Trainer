@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "PowerShell(& \"C:\\\\Users\\\\João\\\\Downloads\\\\Godot_v4.5.1-stable_win64.exe\\\\Godot_v4.5.1-stable_win64_console.exe\" --headless --path . -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode --continue -a res://tests/unit)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\João\\Documents\\rat-trainer\\assets\\data"
+    ]
+  }
+}

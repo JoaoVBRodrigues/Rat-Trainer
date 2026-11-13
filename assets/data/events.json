@@ -1,0 +1,394 @@
+{
+	"schema_version": 1,
+	"events": [
+		{
+			"id": "e01",
+			"year": 1,
+			"month": 3,
+			"period": 3,
+			"name": "Mutirão do Mercado",
+			"description": "Ajuda a organizar o mercado comunitário do bairro",
+			"options": [
+				{
+					"id": "e01_a",
+					"text": "Ajudar",
+					"effects": {
+						"cha": 2,
+						"social_rep": 5,
+						"eth": 3,
+						"community_help": true
+					}
+				},
+				{
+					"id": "e01_b",
+					"text": "Descansar",
+					"effects": {
+						"stress": -5
+					}
+				}
+			]
+		},
+		{
+			"id": "e02",
+			"year": 1,
+			"month": 6,
+			"period": 3,
+			"name": "Feira Maker",
+			"description": "Uma feira de inovação organizada por jovens da cidade",
+			"options": [
+				{
+					"id": "e02_a",
+					"text": "Apresentar projeto",
+					"effects": {
+						"int": 2,
+						"hacker_rep": 5
+					}
+				},
+				{
+					"id": "e02_b",
+					"text": "Visitar bancas",
+					"effects": {
+						"credits": 10
+					}
+				}
+			]
+		},
+		{
+			"id": "e03",
+			"year": 1,
+			"month": 9,
+			"period": 3,
+			"name": "Repetidor Comunitário",
+			"description": "O repetidor de sinal do bairro precisa de um reparo seguro",
+			"options": [
+				{
+					"id": "e03_a",
+					"text": "Reparar para o bairro",
+					"effects": {
+						"int": 2,
+						"hacker_rep": 5,
+						"eth": 3,
+						"community_help": true
+					}
+				},
+				{
+					"id": "e03_b",
+					"text": "Conversar com moradores",
+					"effects": {
+						"cha": 2,
+						"social_rep": 5
+					}
+				}
+			]
+		},
+		{
+			"id": "e04",
+			"year": 1,
+			"month": 12,
+			"period": 3,
+			"name": "Festival de Luzes",
+			"description": "Celebração anual com apresentações e atividades comunitárias",
+			"options": [
+				{
+					"id": "e04_a",
+					"text": "Apresentacao artistica",
+					"effects": {
+						"ref": 2,
+						"social_rep": 5
+					}
+				},
+				{
+					"id": "e04_b",
+					"text": "Ajudar na organizacao",
+					"effects": {
+						"cha": 2,
+						"community_help": true
+					}
+				}
+			]
+		},
+		{
+			"id": "e05",
+			"year": 2,
+			"month": 3,
+			"period": 3,
+			"name": "Oficina Aberta",
+			"description": "Um dia de demonstrações e aprendizado na oficina comunitária",
+			"options": [
+				{
+					"id": "e05_a",
+					"text": "Testar prototipo",
+					"effects": {
+						"int": 2,
+						"hacker_rep": 5
+					}
+				},
+				{
+					"id": "e05_b",
+					"text": "Ensinar criancas",
+					"effects": {
+						"cha": 2,
+						"social_rep": 5,
+						"eth": 3,
+						"community_help": true
+					}
+				}
+			]
+		},
+		{
+			"id": "e06",
+			"year": 2,
+			"month": 6,
+			"period": 3,
+			"name": "Falha de Drones",
+			"description": "Um drone de serviço apresenta uma falha perto do bairro",
+			"options": [
+				{
+					"id": "e06_a",
+					"text": "Reportar falha",
+					"effects": {
+						"int": 2,
+						"hacker_rep": 5
+					}
+				},
+				{
+					"id": "e06_b",
+					"text": "Desviar uma unidade ilegalmente",
+					"effects": {
+						"credits": 10,
+						"eth": -5,
+						"criminal_record": true
+					}
+				}
+			]
+		},
+		{
+			"id": "e07",
+			"year": 2,
+			"month": 9,
+			"period": 3,
+			"name": "Assembleia do Bairro",
+			"description": "Moradores se reúnem para conversar sobre as necessidades locais",
+			"options": [
+				{
+					"id": "e07_a",
+					"text": "Mediar",
+					"effects": {
+						"cha": 2,
+						"social_rep": 5,
+						"eth": 3,
+						"community_help": true
+					}
+				},
+				{
+					"id": "e07_b",
+					"text": "Preparar cartazes",
+					"effects": {
+						"ref": 2
+					}
+				}
+			]
+		},
+		{
+			"id": "e08",
+			"year": 2,
+			"month": 12,
+			"period": 3,
+			"name": "Troca de Inverno",
+			"description": "Moradores organizam uma troca de materiais para o inverno",
+			"options": [
+				{
+					"id": "e08_a",
+					"text": "Contribuir",
+					"effects": {
+						"eth": 3,
+						"community_help": true,
+						"social_rep": 5
+					}
+				},
+				{
+					"id": "e08_b",
+					"text": "Guardar materiais recuperaveis",
+					"effects": {
+						"credits": 10
+					}
+				}
+			]
+		},
+		{
+			"id": "e09",
+			"year": 3,
+			"month": 3,
+			"period": 3,
+			"name": "Desafio de Tecnologia Juvenil",
+			"description": "Um desafio de tecnologia para equipes juvenis da cidade",
+			"options": [
+				{
+					"id": "e09_a",
+					"text": "Participar",
+					"effects": {
+						"int": 2,
+						"hacker_rep": 5
+					}
+				},
+				{
+					"id": "e09_b",
+					"text": "Apoiar outra equipe",
+					"effects": {
+						"cha": 2,
+						"community_help": true
+					}
+				}
+			]
+		},
+		{
+			"id": "e10",
+			"year": 3,
+			"month": 6,
+			"period": 3,
+			"name": "Alerta na Passarela",
+			"description": "Um alerta pede coordenação e ajuda segura na passarela",
+			"options": [
+				{
+					"id": "e10_a",
+					"text": "Coordenar ajuda",
+					"effects": {
+						"cha": 2,
+						"social_rep": 5,
+						"eth": 3,
+						"community_help": true
+					}
+				},
+				{
+					"id": "e10_b",
+					"text": "Fazer reparo seguro",
+					"effects": {
+						"int": 2,
+						"hacker_rep": 5
+					}
+				}
+			]
+		},
+		{
+			"id": "e11",
+			"year": 3,
+			"month": 9,
+			"period": 3,
+			"name": "Arquivo da Cidade",
+			"description": "O arquivo comunitário reúne histórias da cidade",
+			"options": [
+				{
+					"id": "e11_a",
+					"text": "Publicar uma historia",
+					"effects": {
+						"ref": 2,
+						"social_rep": 5
+					}
+				},
+				{
+					"id": "e11_b",
+					"text": "Verificar dados",
+					"effects": {
+						"int": 2,
+						"hacker_rep": 5
+					}
+				}
+			]
+		},
+		{
+			"id": "e12",
+			"year": 3,
+			"month": 12,
+			"period": 3,
+			"name": "Escolha de Caminho",
+			"description": "A última decisão do ciclo permite escolher o próximo caminho",
+			"options": [
+				{
+					"id": "e12_a",
+					"text": "Permanecer ligada a comunidade",
+					"effects": {
+						"cha": 2,
+						"eth": 3,
+						"community_help": true
+					}
+				},
+				{
+					"id": "e12_b",
+					"text": "Planejar desaparecer do sistema",
+					"effects": {
+						"disappear_from_society": true
+					}
+				}
+			]
+		}
+	],
+	"random_events": [
+		{
+			"id": "r01",
+			"name": "Mercador itinerante",
+			"description": "Um vendedor de equipamentos aparece",
+			"options": [
+				{
+					"id": "r01_a",
+					"text": "Comprar Kit de ferramentas por 25 Cr",
+					"requirements": {
+						"item_not_owned": "kit_ferramentas"
+					},
+					"effects": {
+						"item": "kit_ferramentas"
+					}
+				},
+				{
+					"id": "r01_b",
+					"text": "Recusar",
+					"effects": {}
+				}
+			]
+		},
+		{
+			"id": "r02",
+			"name": "Pedido de ajuda no bairro",
+			"description": "Um vizinho pede ajuda",
+			"options": [
+				{
+					"id": "r02_a",
+					"text": "Ajudar",
+					"effects": {
+						"cha": 2,
+						"social_rep": 5,
+						"community_help": true
+					}
+				},
+				{
+					"id": "r02_b",
+					"text": "Recusar",
+					"effects": {}
+				}
+			]
+		},
+		{
+			"id": "r03",
+			"name": "Repetidor vulnerável",
+			"description": "Um repetidor de sinal precisa de atenção e pode ser reportado com segurança",
+			"options": [
+				{
+					"id": "r03_a",
+					"text": "Reportar com seguranca",
+					"effects": {
+						"int": 2,
+						"hacker_rep": 5
+					}
+				},
+				{
+					"id": "r03_b",
+					"text": "Acessar ilegalmente",
+					"effects": {
+						"credits": 10,
+						"eth": -5,
+						"criminal_record": true
+					}
+				}
+			]
+		}
+	]
+}

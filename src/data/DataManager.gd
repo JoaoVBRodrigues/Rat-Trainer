@@ -1,8 +1,11 @@
+class_name DataManager
 extends Node
 
 const SAVE_DIR: String = "user://saves"
 const SAVE_EXTENSION: String = ".rat-save"
 const SAVE_SLOT_COUNT: int = 3
+
+var save_dir: String = SAVE_DIR
 
 signal save_completed(slot: int)
 signal load_completed(data: Dictionary)
@@ -17,10 +20,10 @@ func _ready() -> void:
 
 
 func _initialize_save_dir() -> void:
-	var absolute_path: String = ProjectSettings.globalize_path(SAVE_DIR)
+	var absolute_path: String = ProjectSettings.globalize_path(save_dir)
 	var error: Error = DirAccess.make_dir_recursive_absolute(absolute_path)
 	if error != OK and error != ERR_ALREADY_EXISTS:
-		push_error("Could not create save directory '%s': %s." % [SAVE_DIR, error_string(error)])
+		push_error("Could not create save directory '%s': %s." % [save_dir, error_string(error)])
 
 
 func save_current(slot: int) -> bool:
@@ -31,7 +34,7 @@ func save_current(slot: int) -> bool:
 		return false
 
 	var save_data: Dictionary = _current_data.duplicate(true)
-	var path: String = SAVE_DIR.path_join("slot_%d%s" % [slot, SAVE_EXTENSION])
+	var path: String = save_dir.path_join("slot_%d%s" % [slot, SAVE_EXTENSION])
 	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
 	if file == null:
 		var reason: String = "Could not open save slot %d at '%s'." % [slot, path]
@@ -57,7 +60,7 @@ func load_slot(slot: int) -> bool:
 	if not _is_valid_slot(slot):
 		return _report_load_failure("Save slot must be between 0 and %d." % (SAVE_SLOT_COUNT - 1))
 
-	var path: String = SAVE_DIR.path_join("slot_%d%s" % [slot, SAVE_EXTENSION])
+	var path: String = save_dir.path_join("slot_%d%s" % [slot, SAVE_EXTENSION])
 	if not FileAccess.file_exists(path):
 		return _report_load_failure("Save slot %d was not found." % slot)
 
@@ -96,7 +99,7 @@ func initialize_new_save() -> void:
 			"age": 12,
 			"stats": {
 				"STR": 15, "INT": 15, "CHA": 15,
-				"EGG": 15, "STA": 20, "ETH": 60
+				"REF": 15, "STA": 20, "ETH": 50
 			},
 			"stress": 0,
 			"credits": 200
@@ -142,7 +145,7 @@ func set_data(data: Dictionary) -> void:
 func get_save_slots() -> Array[int]:
 	var slots: Array[int] = []
 	for slot in range(SAVE_SLOT_COUNT):
-		var path: String = SAVE_DIR.path_join("slot_%d%s" % [slot, SAVE_EXTENSION])
+		var path: String = save_dir.path_join("slot_%d%s" % [slot, SAVE_EXTENSION])
 		if FileAccess.file_exists(path):
 			slots.append(slot)
 	return slots

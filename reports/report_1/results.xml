@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-11-12" name="report_1" tests="2" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="test_character_state" package="tests/unit" timestamp="2026-11-13T00:42:08" hostname="localhost" tests="2" failures="0" errors="0" skipped="0" flaky="0" time="0.069">
+		<testcase name="test_character_state_serialization" classname="test_character_state" time="0.011">
+		</testcase>
+		<testcase name="test_character_state_default_values" classname="test_character_state" time="0.010">
+		</testcase>
+	</testsuite>
+</testsuites>

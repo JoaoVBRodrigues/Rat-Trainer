@@ -1,0 +1,47 @@
+{
+	"schema_version": 1,
+	"stats": [
+		{
+			"id": "str",
+			"name": "Força",
+			"min": 0,
+			"max": 100,
+			"start": 15
+		},
+		{
+			"id": "int",
+			"name": "Inteligência",
+			"min": 0,
+			"max": 100,
+			"start": 15
+		},
+		{
+			"id": "cha",
+			"name": "Carisma",
+			"min": 0,
+			"max": 100,
+			"start": 15
+		},
+		{
+			"id": "ref",
+			"name": "Refinamento",
+			"min": 0,
+			"max": 100,
+			"start": 15
+		},
+		{
+			"id": "sta",
+			"name": "Resistência",
+			"min": 0,
+			"max": 100,
+			"start": 20
+		},
+		{
+			"id": "eth",
+			"name": "Ética",
+			"min": 0,
+			"max": 100,
+			"start": 50
+		}
+	]
+}

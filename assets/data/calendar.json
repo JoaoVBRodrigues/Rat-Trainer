@@ -1,0 +1,9 @@
+{
+	"schema_version": 1,
+	"calendar": {
+		"years": 3,
+		"months": 12,
+		"periods": 3,
+		"description": "3 years, 12 months, 3 periods per month = 108 total periods"
+	}
+}

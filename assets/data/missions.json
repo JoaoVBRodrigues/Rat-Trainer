@@ -1,0 +1,44 @@
+{
+	"schema_version": 1,
+	"missions": [
+		{
+			"id": "missao_fisica",
+			"type": "physical",
+			"name": "Missão Física/Proteção",
+			"stat_test": "str",
+			"stress": 4,
+			"success_effects": {
+				"credits": 25,
+				"str": 2,
+				"fighter_rep": 5
+			}
+		},
+		{
+			"id": "missao_tecnica",
+			"type": "technical",
+			"name": "Missão Técnica",
+			"stat_test": "int",
+			"stress": 3,
+			"success_effects": {
+				"credits": 30,
+				"int": 2,
+				"hacker_rep": 5,
+				"missoes_tecnicas_concluidas": 1
+			}
+		},
+		{
+			"id": "missao_comunitaria",
+			"type": "community",
+			"name": "Missão Comunitária",
+			"stat_test": "cha",
+			"stress": 3,
+			"success_effects": {
+				"credits": 20,
+				"cha": 2,
+				"social_rep": 5,
+				"eth": 2,
+				"community_help": true
+			}
+		}
+	]
+}
