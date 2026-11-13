@@ -6,6 +6,7 @@
 			"type": "physical",
 			"name": "Missão Física/Proteção",
 			"stat_test": "str",
+			"difficulty": 35,
 			"stress": 4,
 			"success_effects": {
 				"credits": 25,

@@ -35,9 +35,31 @@ The main-scene preview checks its two textures twice per second. Add or remove a
 
 Enable the asset usage summary by adding `debug/show_asset_report=true` to the `[debug]` section of `project.godot`; the report prints when the project exits.
 
+## Simulation Core (Headless)
+
+The simulation core provides a pure-code, deterministic simulation engine that can be tested independently of UI:
+
+**Main Systems:**
+- `CalendarSystem` - Period → month → year progression (108 periods total)
+- `StatsSystem` - Attributes, stress, disease mechanics
+- `EconomySystem` - Credits, costs, yearly stipends (200 Cr/year)
+- `ActivitySystem` - Study, work, mission, and leisure activities
+- `SimulationCore` - Facade coordinating all systems
+
+**Test the simulation core:**
+```powershell
+# Run all GdUnit4 tests, including the simulation tests
+& "C:\Path\To\Godot_v4.5.1-stable_win64_console.exe" --headless --path . -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode --continue -a res://tests/unit
+
+# Run a complete deterministic campaign; optionally pass a seed after --
+& "C:\Path\To\Godot_v4.5.1-stable_win64_console.exe" --headless --path . --script res://src/tools/simulation_cli.gd -- 12345
+```
+
+**Documentation:** See [docs/simulation-core.md](docs/simulation-core.md) for detailed API reference.
+
 ## Tests
 
-GdUnit4 6.2.3 is included in `addons/gdUnit4/` under its MIT license. It was chosen for native GDScript tests and Godot 4.5 support. The existing GUT-named test files were preserved and are not part of this GdUnit4 test command.
+GdUnit4 6.2.3 is included in `addons/gdUnit4/` under its MIT license. It was chosen for native GDScript tests and Godot 4.5 support. All GdUnit4 suites under `tests/unit/` are discovered by the command above.
 
 ```powershell
 & "C:\Path\To\Godot_v4.5.1-stable_win64_console.exe" --headless --path . -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode --continue -a res://tests/unit

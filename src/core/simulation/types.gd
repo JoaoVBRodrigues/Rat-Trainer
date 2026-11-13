@@ -1,0 +1,34 @@
+extends RefCounted
+class_name PeriodResult
+
+enum ActivityType { NONE, STUDY, WORK, MISSION, LEISURE }
+
+var period: int = 0
+var year: int = 1
+var month: int = 1
+var period_num: int = 1
+var age: int = 12
+var activity_type: ActivityType = ActivityType.NONE
+var activity_id: String = ""
+var activity_level: int = 1
+var completed: bool = false
+var credits_change: int = 0
+var stat_changes: Dictionary = {}
+var stress_change: int = 0
+var stress_final: int = 0
+var is_diseased_before: bool = false
+var is_diseased_after: bool = false
+var xp_gained: Dictionary = {}
+var rep_gained: Dictionary = {}
+var flags_set: Dictionary = {}
+var promotion_unlocked: bool = false
+var streaks_incremented: Dictionary = {}
+var year_stipend_given: bool = false
+var mission_count: int = 0
+var mission_success: bool = false
+var success_chance: int = 0
+var eth_change: int = 0
+var month_end_processed: bool = false
+var error_message: String = ""
+var pre_period_state: Dictionary = {}
+var post_period_state: Dictionary = {}
