@@ -31,15 +31,23 @@ var _status_button: Button
 var _schedule_button: Button
 var _menu_buttons: Array[Button] = []
 var _status_panel: StatusPanel
+var _schedule_flow: MonthlyScheduleFlow
 
 
 func _ready() -> void:
 	_build_screen()
+	_schedule_flow = MonthlyScheduleFlow.new()
+	_schedule_flow.name = "MonthlyScheduleFlow"
+	add_child(_schedule_flow)
+	_schedule_flow.bind_main_screen(self)
+	schedule_requested.connect(_schedule_flow.on_schedule_requested)
 	update_simulation(simulation)
 
 
 func update_simulation(sim: SimulationCore, profile: Dictionary = {}) -> void:
 	simulation = sim
+	if _schedule_flow != null:
+		_schedule_flow.update_simulation(sim)
 	_profile = profile.duplicate(true)
 	if _profile.is_empty():
 		var data_manager: DataManager = get_node_or_null("/root/Data") as DataManager
@@ -362,12 +370,17 @@ func _update_status() -> void:
 
 func _update_availability() -> void:
 	var has_campaign: bool = simulation != null
+	var can_plan_month: bool = (
+		has_campaign and not simulation.is_campaign_complete() and simulation.calendar.period == 1
+	)
 	for index: int in _menu_buttons.size():
 		var button: Button = _menu_buttons[index]
 		button.disabled = not has_campaign
-		if has_campaign and MENU_IDS[index] == "missao":
+		if MENU_IDS[index] == "agenda":
+			button.disabled = not can_plan_month
+		elif has_campaign and MENU_IDS[index] == "missao":
 			button.disabled = not simulation.is_mission_available()
-	_schedule_button.disabled = not has_campaign
+	_schedule_button.disabled = not can_plan_month
 
 
 func _on_status_toggle_pressed() -> void:
