@@ -17,7 +17,7 @@ Os eventos mostram como Nyx e sua comunidade enfrentam vigilancia, escassez e op
 | E01 | 1/3/3 | Mutirao do Mercado | Ajudar: +2 CHA, +5 Social Rep, +3 ETH, `community_help` | Descansar: -5 Stress |
 | E02 | 1/6/3 | Feira Maker | Apresentar projeto: +2 INT, +5 Hacker Rep | Visitar bancas: +10 Cr |
 | E03 | 1/9/3 | Repetidor Comunitario | Reparar para o bairro: +2 INT, +5 Hacker Rep, +3 ETH, `community_help` | Conversar com moradores: +2 CHA, +5 Social Rep |
-| E04 | 1/12/3 | Festival de Luzes | Apresentacao artistica: +2 REF, +5 Social Rep | Ajudar na organizacao: +2 CHA, `community_help` |
+| E04 | 1/12/3 | Festival de Luzes | Apresentacao artistica: +2 REF; com REF >= 50, tambem +5 Social Rep; abaixo disso, a apresentacao fracassa e nao concede Social Rep | Ajudar na organizacao: +2 CHA, `community_help` |
 | E05 | 2/3/3 | Oficina Aberta | Testar prototipo: +2 INT, +5 Hacker Rep | Ensinar criancas: +2 CHA, +5 Social Rep, +3 ETH, `community_help` |
 | E06 | 2/6/3 | Falha de Drones | Reportar falha: +2 INT, +5 Hacker Rep | Desviar uma unidade ilegalmente: +10 Cr, -5 ETH, `criminal_record` |
 | E07 | 2/9/3 | Assembleia do Bairro | Mediar: +2 CHA, +5 Social Rep, +3 ETH, `community_help` | Preparar cartazes: +2 REF |
@@ -72,6 +72,18 @@ Todos os efeitos de atributo, reputacao e Stress usam os clamps de `stats-and-st
 - Exemplo: maior valor entre INT/CHA/REF igual a 75 resulta em `5 + floor(75/10) = 12%`.
 - Exemplo: maior valor 100 resulta em 15%; maior valor 0 resulta em 5%.
 - Se houver encontro, sorteia-se uma das tres cartas R01-R03 com chance igual; nao se repetem cartas por periodo.
+- Cada periodo sem evento fixo e verificado uma unica vez; tentar outra atividade apos uma escolha invalida nao sorteia novamente.
+- O modo de debug do `EventSystem` registra quando uma verificacao e ignorada por prioridade de evento fixo, a rolagem e chance quando o encontro nao ocorre, ou o ID sorteado quando ocorre. A ultima mensagem fica disponivel em `last_debug_message`.
+
+### Resultado do Festival de Luzes
+
+A opcao de apresentacao artistica exige `REF >= 50` (configurado em `requirements.stats`). O requisito e avaliado antes de aplicar os efeitos:
+
+- Sucesso: +2 REF e +5 Social Rep.
+- Fracasso: +2 REF, sem ganho de Social Rep.
+- A opcao de ajudar na organizacao nao usa teste de atributo e mantem seus efeitos atuais.
+
+Exemplo: REF 49 resulta em fracasso e +2 REF; REF 50 resulta em sucesso, +2 REF e +5 Social Rep.
 
 ### Etica de escolhas comunitarias
 
@@ -106,6 +118,10 @@ Os doze eventos, suas datas e os gatilhos das flags sao escopo fechado do MVP. G
 
 - Existem exatamente 12 eventos fixos nos periodos especificados, quatro por ano, e tres cartas aleatorias finitas.
 - Cada evento ocupa um periodo e oferece exatamente uma escolha resolvida.
+- Cada periodo sem evento fixo recebe no maximo uma rolagem aleatoria; o estado evita uma nova rolagem apos tentativa invalida e sobrevive a salvar/carregar.
+- Com debug habilitado, o motivo de uma verificacao ignorada ou sem evento fica registrado, assim como o ID quando um encontro aparece.
 - `community_help` e `disappear_from_society` sao concedidas somente pelas escolhas descritas; `criminal_record` somente por E06-B/R03-B; `tech_experiments` segue `activities.md`.
 - Encontros aleatorios usam somente o pool fechado R01-R03 e a chance limitada de 5-15%.
+- E04-A concede +5 Social Rep somente com REF >= 50; abaixo do limite, informa fracasso e concede apenas +2 REF.
+- Os textos dos eventos sao adequados para 12-18 anos e nao sugerem romance ou sexualizacao da protagonista.
 - E12 e resolvido em Ano 3, mes 12, periodo 3 e precede a avaliacao dos finais.

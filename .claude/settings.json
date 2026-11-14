@@ -2,10 +2,14 @@
   "permissions": {
     "allow": [
       "Bash(python3 -c ' *)",
-      "PowerShell(& \"C:\\\\Users\\\\João\\\\Downloads\\\\Godot_v4.5.1-stable_win64.exe\\\\Godot_v4.5.1-stable_win64_console.exe\" --headless --path . -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode --continue -a res://tests/unit)"
+      "PowerShell(& \"C:\\\\Users\\\\João\\\\Downloads\\\\Godot_v4.5.1-stable_win64.exe\\\\Godot_v4.5.1-stable_win64_console.exe\" --headless --path . -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode --continue -a res://tests/unit)",
+      "Bash(tree -a design/ 2>nul || echo \"design/ not found\")",
+      "Bash(find \"c:\\\\\\\\Users\\\\\\\\João\\\\\\\\Documents\\\\\\\\rat-trainer\" -type f -name \"*.json\" -path \"*assets*\")",
+      "Bash(find \"c:\\\\\\\\Users\\\\\\\\João\\\\\\\\Documents\\\\\\\\rat-trainer\" -type f -name \"*.gd\" -o -name \"*.tscn\" -o -name \"*.tsr\")"
     ],
     "additionalDirectories": [
-      "C:\\Users\\João\\Documents\\rat-trainer\\assets\\data"
+      "C:\\Users\\João\\Documents\\rat-trainer\\assets\\data",
+      "c:\\Users\\João\\Documents\\rat-trainer"
     ]
   }
 }

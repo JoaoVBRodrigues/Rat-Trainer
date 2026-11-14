@@ -1,7 +1,7 @@
 extends RefCounted
 class_name PeriodResult
 
-enum ActivityType { NONE, STUDY, WORK, MISSION, LEISURE }
+enum ActivityType { NONE, STUDY, WORK, MISSION, LEISURE, EVENT }
 
 var period: int = 0
 var year: int = 1
@@ -9,6 +9,14 @@ var month: int = 1
 var period_num: int = 1
 var age: int = 12
 var activity_type: ActivityType = ActivityType.NONE
+
+# Event-related fields
+var is_event_pending: bool = false
+var event_id: String = ""
+var event_name: String = ""
+var event_description: String = ""
+var event_options: Array = []
+var event_outcome: String = ""
 var activity_id: String = ""
 var activity_level: int = 1
 var completed: bool = false

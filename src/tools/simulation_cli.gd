@@ -30,6 +30,17 @@ func _initialize() -> void:
 	for period_index: int in range(simulation.calendar.total_periods):
 		var choice: String = _choose_activity(simulation)
 		var result: PeriodResult = simulation.advance_period(choice)
+
+		# Handle event resolution if event triggered
+		while result.is_event_pending:
+			var event_option: String = "e01_a"  # Default to first option for fixed events
+			var event_id: String = result.event_id
+			if event_id.begins_with("e"):
+				event_option = "%s_a" % event_id
+			elif event_id.begins_with("r"):
+				event_option = "%s_a" % event_id
+			result = simulation.advance_period(event_option)
+
 		if not result.completed:
 			push_error("Period %d failed: %s" % [period_index + 1, result.error_message])
 			_finish(1)

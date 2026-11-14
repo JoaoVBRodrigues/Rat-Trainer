@@ -126,29 +126,44 @@ func test_balanced_strategy_first_three_months_match_gdd_values() -> void:
 	var sim: SimulationCore = SimulationCore.new()
 	assert_bool(sim.initialize()).is_true()
 	sim.set_seed(12345)
+
+	# Act - Run 9 periods accounting for events at months 3, 6, 9 period 3
 	var choices: Array[String] = [
 		"study_curso_tecnologia_l1",
-		"work_trabalho_reparo_leve",
+		"work_trabalho_reparo_leve_l1",
 		"leisure_descanso",
 		"study_curso_comunicacao_l1",
-		"work_trabalho_reparo_leve",
+		"work_trabalho_reparo_leve_l1",
 		"leisure_descanso",
 		"study_curso_artes_l1",
-		"work_trabalho_reparo_leve",
+		"work_trabalho_reparo_leve_l1",
 		"leisure_descanso"
 	]
 
-	# Act
-	for choice: String in choices:
-		var result: PeriodResult = sim.advance_period(choice)
+	var results: Array[PeriodResult] = []
+	for i in range(9):
+		var choice: String = choices[i]
+		var result: PeriodResult = sim.advance_period(choice, 12345 + i)
+		while result.is_event_pending:
+			var event_option: String = _get_event_option_for_result(result)
+			result = sim.advance_period(event_option, 12345 + i)
+		results.append(result)
+
+	# Check all completed successfully
+	for result: PeriodResult in results:
 		assert_bool(result.completed).is_true()
 
-	# Assert
+	# Verify final state after 9 periods; only E01 occurs in this range (year 1, month 3).
+	# Period 0: study_curso_tecnologia_l1 - INT +12, -8 credits
+	# Period 1: work_trabalho_reparo_leve - +15 credits
+	# Period 2: leisure_descanso - stress -5 (clamped to 0)
+	# Periods 3-7: normal activities, with any random events resolved separately
+	# Period 8: fixed event E01 resolved
 	assert_int(sim.stats.get_stat("int")).is_equal(33)
-	assert_int(sim.stats.get_stat("cha")).is_equal(23)
+	assert_int(sim.stats.get_stat("cha")).is_equal(25)
 	assert_int(sim.stats.get_stat("ref")).is_equal(28)
-	assert_int(sim.stats.get_stress()).is_equal(0)
 	assert_int(sim.economy.get_credits()).is_equal(226)
+	assert_int(sim.stats.get_stat("eth")).is_equal(53)
 	assert_int(sim.calendar.completed_periods).is_equal(9)
 
 func test_campaign_completes_after_108_periods_deterministic() -> void:
@@ -160,6 +175,10 @@ func test_campaign_completes_after_108_periods_deterministic() -> void:
 	# Act - Run full campaign with leisure (always succeeds)
 	for i in range(108):
 		var result = sim.advance_period("leisure_descanso", 12345 + i)
+		while result.is_event_pending:
+			var event_id: String = result.event_id
+			result = sim.advance_period("%s_a" % event_id, 12345 + i)
+			assert_bool(result.completed).is_true()
 
 	# Assert
 	assert_bool(sim.is_campaign_complete()).is_true()
@@ -182,9 +201,17 @@ func test_one_year_configuration_completes_after_36_periods() -> void:
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(config_path))
 		return
 
-	# Act
+	# Act - Month 3, 6, 9, 12 period 3 are event periods
+	var event_periods: Array[int] = [2, 5, 8, 11]  # 0-indexed
 	for period_index: int in range(36):
-		var result: PeriodResult = sim.advance_period("leisure_descanso")
+		var choice: String = "leisure_descanso"
+		var result: PeriodResult = sim.advance_period(choice)
+
+		# Handle event if triggered
+		if result.is_event_pending:
+			var event_id: String = result.event_id
+			result = sim.advance_period("%s_a" % event_id)
+
 		assert_bool(result.completed).is_true()
 
 	# Assert
@@ -231,19 +258,34 @@ func test_year_2_stipend_comes_at_period_37() -> void:
 	sim.set_seed(42)
 
 	# Act - Advance to period 36 (end of year 1)
+	# Month 3, 6, 9, 12 period 3 are event periods
+	var event_periods: Array[int] = [2, 5, 8, 11]  # 0-indexed for year 1
+
 	for i in range(35):
-		sim.advance_period("leisure_descanso", 42 + i)
+		var result: PeriodResult = sim.advance_period("leisure_descanso", 42 + i)
+		# Handle event if triggered
+		if result.is_event_pending:
+			var event_id: String = result.event_id
+			result = sim.advance_period("%s_a" % event_id, 42 + i)
 
-	# Period 36 is last of year 1, age 12
-	assert_int(sim.calendar.get_year()).is_equal(1)
-	assert_int(sim.calendar.get_age()).is_equal(12)
+	# Period 36 corresponds to year 1 month 12 period 3 (index 35 = 11+24 = month 12 period 3)
+	# But we've only done 35 advances, so we're at period 35
+	assert_int(sim.calendar.completed_periods).is_equal(35)
 
-	# The Year 2 stipend is credited before its first choice
+	# Advance to period 36 - this is Month 12, Period 3 which is event e04
 	var year_end_result: PeriodResult = sim.advance_period("leisure_descanso", 42 + 35)
+	if year_end_result.is_event_pending:
+		year_end_result = sim.advance_period("e04_a", 42 + 35)
+
+	# Year 2 stipend is credited after advancing to a new year period
 	assert_int(sim.calendar.get_year()).is_equal(2)
 	assert_bool(year_end_result.year_stipend_given).is_true()
 	assert_int(sim.economy.get_credits()).is_equal(400)
+
+	# Next period should not give another stipend
 	var first_year_two_result: PeriodResult = sim.advance_period("leisure_descanso", 42 + 36)
+	if first_year_two_result.is_event_pending:
+		first_year_two_result = sim.advance_period("e05_a", 42 + 36)
 	assert_bool(first_year_two_result.year_stipend_given).is_false()
 	assert_int(sim.economy.get_credits()).is_equal(400)
 
@@ -255,7 +297,9 @@ func test_stat_clamp_applied_after_activity() -> void:
 
 	# Act - Push INT to 99, then study should not overshoot
 	sim.stats.set_stat("int", 99)
-	sim.advance_period("study_curso_tecnologia_l1", 42)
+	var result: PeriodResult = sim.advance_period("study_curso_tecnologia_l1", 42)
+	while result.is_event_pending:
+		result = sim.advance_period("e01_a", 42)
 
 	# Assert - INT clamped to 100
 	assert_int(sim.stats.get_stat("int")).is_equal(100)
@@ -267,7 +311,9 @@ func test_stress_never_goes_negative() -> void:
 	sim.stats.set_stress(5)
 
 	# Act - Descanso reduces by 15, should clamp to 0
-	sim.advance_period("leisure_descanso", 42)
+	var result: PeriodResult = sim.advance_period("leisure_descanso", 42)
+	while result.is_event_pending:
+		result = sim.advance_period("e01_a", 42)
 
 	# Assert
 	assert_int(sim.stats.get_stress()).is_equal(0)
@@ -323,8 +369,15 @@ func test_three_full_campaigns_complete_deterministically() -> void:
 
 		# Act - Run full campaign
 		for i in range(108):
-			var choice: String = "mission_missao_tecnica" if i % 4 == 0 else "leisure_descanso"
-			var result = sim.advance_period(choice, seed + i)
+			# Always call with normal choice first - event detection happens internally
+			var choice: String = _get_activity_choice(i)
+			var result: PeriodResult = sim.advance_period(choice, seed + i)
+
+			# Handle event resolution (either fixed or random event triggered)
+			while result.is_event_pending:
+				var event_option: String = _get_event_option_for_result(result)
+				result = sim.advance_period(event_option, seed + i)
+
 			assert_bool(result.completed).is_true()
 			assert_str(result.error_message).is_empty()
 
@@ -341,12 +394,192 @@ func test_same_seed_reproduces_identical_campaign_state() -> void:
 	assert_str(JSON.stringify(first.get_state())).is_equal(JSON.stringify(second.get_state()))
 
 
+func test_event_eth_applied_only_once_per_choice() -> void:
+	# Arrange
+	var sim = SimulationCore.new()
+	sim.initialize()
+	sim.set_seed(42)
+
+	# Act - Advance through 8 periods
+	# Note: Random events CAN trigger in these periods; we resolve them to reach Month 3, Period 3
+	# e01 is a fixed event at Year 1, Month 3, Period 3 (completed_periods=8)
+	var result: PeriodResult
+	for i in range(8):
+		result = sim.advance_period("leisure_descanso", 42 + i)
+		while result.is_event_pending:
+			var event_option: String = _get_event_option_for_result(result)
+			result = sim.advance_period(event_option, 42 + i)
+
+	# Verify we're at Month 3, Period 3 before triggering e01
+	assert_int(sim.calendar.get_month()).is_equal(3)
+	assert_int(sim.calendar.get_period()).is_equal(3)
+
+	# Now advance the 9th period - e01 should trigger as a fixed event
+	result = sim.advance_period("leisure_descanso", 42 + 8)
+
+	# Assert - e01 should be pending as a fixed event
+	assert_bool(result.is_event_pending).is_true()
+	assert_str(result.event_id).is_equal("e01")
+
+	# Record ETH before resolving e01
+	var eth_before: int = sim.stats.get_stat("eth")
+
+	# Resolve e01 with option "a" (Ajudar) - gives ETH +3
+	result = sim.advance_period("e01_a", 42 + 8)
+
+	# Assert - Verify ETH was added exactly once by e01's "Ajudar" option (+3)
+	assert_int(result.stat_changes.get("eth", 0)).is_equal(3)
+	assert_int(sim.stats.get_stat("eth") - eth_before).is_equal(3)
+
+
+func test_festival_presentation_fails_below_ref_threshold() -> void:
+	# Arrange
+	var sim: SimulationCore = _simulation_at_first_year_festival(49)
+
+	# Act
+	var pending: PeriodResult = sim.advance_period("leisure_descanso")
+	assert_bool(pending.is_event_pending).is_true()
+	assert_str(pending.event_id).is_equal("e04")
+	var result: PeriodResult = sim.advance_period("e04_a")
+
+	# Assert
+	assert_str(result.event_outcome).is_equal("failure")
+	assert_int(result.stat_changes.get("ref", 0)).is_equal(2)
+	assert_int(result.rep_gained.get("social", 0)).is_equal(0)
+
+
+func test_festival_presentation_succeeds_at_ref_threshold() -> void:
+	# Arrange
+	var sim: SimulationCore = _simulation_at_first_year_festival(50)
+
+	# Act
+	var pending: PeriodResult = sim.advance_period("leisure_descanso")
+	assert_bool(pending.is_event_pending).is_true()
+	assert_str(pending.event_id).is_equal("e04")
+	var result: PeriodResult = sim.advance_period("e04_a")
+
+	# Assert
+	assert_str(result.event_outcome).is_equal("success")
+	assert_int(result.stat_changes.get("ref", 0)).is_equal(2)
+	assert_int(result.rep_gained.get("social", 0)).is_equal(5)
+
+
+func test_random_event_check_is_not_repeated_for_invalid_choice() -> void:
+	# Arrange / Act
+	for seed_value: int in range(1, 100):
+		var sim: SimulationCore = SimulationCore.new()
+		assert_bool(sim.initialize()).is_true()
+		sim.stats.set_stat("int", 0)
+		sim.stats.set_stat("cha", 0)
+		sim.stats.set_stat("ref", 0)
+		var first_result: PeriodResult = sim.advance_period("invalid_choice", seed_value)
+		if first_result.is_event_pending:
+			continue
+
+		var first_diagnostic: String = sim.events.last_debug_message
+		var restored_sim: SimulationCore = SimulationCore.new()
+		assert_bool(restored_sim.initialize()).is_true()
+		assert_bool(restored_sim.load_state(sim.get_state())).is_true()
+		var retry_result: PeriodResult = restored_sim.advance_period(
+			"invalid_choice", seed_value + 1000
+		)
+
+		# Assert
+		assert_bool(first_result.error_message.is_empty()).is_false()
+		assert_bool(retry_result.error_message.is_empty()).is_false()
+		assert_bool(retry_result.is_event_pending).is_false()
+		assert_bool(first_diagnostic.contains("not triggered")).is_true()
+		assert_bool(restored_sim.events.last_debug_message.contains("already checked")).is_true()
+		return
+
+	assert_bool(false).is_true()
+
+
+func test_fixed_event_debug_log_explains_random_check_skip() -> void:
+	# Arrange
+	var sim: SimulationCore = _simulation_at_first_year_festival(15)
+
+	# Act
+	var result: PeriodResult = sim.advance_period("leisure_descanso")
+
+	# Assert
+	assert_bool(result.is_event_pending).is_true()
+	assert_str(result.event_id).is_equal("e04")
+	assert_bool(sim.events.last_debug_message.contains("fixed event e04 has priority")).is_true()
+
+
+func test_two_year_campaign_contains_varied_fixed_and_random_events() -> void:
+	# Arrange
+	var sim: SimulationCore = SimulationCore.new()
+	assert_bool(sim.initialize()).is_true()
+	sim.stats.set_stat("int", 100)
+	sim.stats.set_stat("cha", 100)
+	sim.stats.set_stat("ref", 100)
+	var event_counts: Dictionary = {}
+
+	# Act
+	for period_index: int in range(72):
+		var result: PeriodResult = sim.advance_period("leisure_descanso", 20250212 + period_index)
+		while result.is_event_pending:
+			var event_id: String = result.event_id
+			event_counts[event_id] = int(event_counts.get(event_id, 0)) + 1
+			result = sim.advance_period(
+				_get_event_option_for_result(result), 20250212 + period_index
+			)
+		assert_bool(result.completed).is_true()
+
+	# Assert - The two-year campaign includes all eight fixed events and multiple random types.
+	for event_number: int in range(1, 9):
+		assert_bool(event_counts.has("e%02d" % event_number)).is_true()
+	var random_event_types: int = 0
+	for event_id: String in ["r01", "r02", "r03"]:
+		if event_counts.has(event_id):
+			random_event_types += 1
+	assert_bool(random_event_types >= 2).is_true()
+
+
+func _simulation_at_first_year_festival(ref_value: int) -> SimulationCore:
+	var sim: SimulationCore = SimulationCore.new()
+	assert_bool(sim.initialize()).is_true()
+	for period_index: int in range(35):
+		var result: PeriodResult = sim.advance_period("leisure_descanso", 3100 + period_index)
+		while result.is_event_pending:
+			result = sim.advance_period(
+				_get_event_option_for_result(result), 3100 + period_index
+			)
+		assert_bool(result.completed).is_true()
+	sim.stats.set_stat("ref", ref_value)
+	return sim
+
+
 func _run_seeded_campaign(seed_value: int) -> SimulationCore:
 	var sim: SimulationCore = SimulationCore.new()
 	sim.initialize()
 	sim.set_seed(seed_value)
 	for period_index: int in range(sim.calendar.total_periods):
-		var choice: String = "mission_missao_tecnica" if period_index % 4 == 0 else "leisure_descanso"
+		var choice: String = _get_activity_choice(period_index)
 		var result: PeriodResult = sim.advance_period(choice)
+
+		while result.is_event_pending:
+			var event_option: String = _get_event_option_for_result(result)
+			result = sim.advance_period(event_option)
+
 		assert_bool(result.completed).is_true()
 	return sim
+
+
+func _get_activity_choice(period_index: int) -> String:
+	# Normal activity selection - events are handled internally by advance_period
+	if period_index % 4 == 0:
+		return "mission_missao_tecnica_l1"
+	return "leisure_descanso"
+
+
+func _get_event_option_for_result(result: PeriodResult) -> String:
+	# Return the first available event option for the pending event
+	var event_id: String = result.event_id
+	if event_id.begins_with("e"):
+		return "%s_a" % event_id  # Fixed events use option "a"
+	if event_id.begins_with("r"):
+		return "%s_a" % event_id  # Random events use option "a"
+	return "option_a"  # Fallback

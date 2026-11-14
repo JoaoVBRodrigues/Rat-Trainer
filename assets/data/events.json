@@ -92,8 +92,15 @@
 				{
 					"id": "e04_a",
 					"text": "Apresentacao artistica",
+					"requirements": {
+						"stats": {
+							"ref": 50
+						}
+					},
 					"effects": {
-						"ref": 2,
+						"ref": 2
+					},
+					"success_effects": {
 						"social_rep": 5
 					}
 				},

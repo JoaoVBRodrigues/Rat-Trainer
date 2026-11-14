@@ -151,6 +151,8 @@ func display_result(result: PeriodResult, simulation: SimulationCore) -> void:
 	var succeeded: bool = result.completed
 	if result.activity_type == PeriodResult.ActivityType.MISSION:
 		succeeded = result.mission_success
+	elif not result.event_outcome.is_empty():
+		succeeded = result.event_outcome == "success"
 	_outcome_label.text = (
 		"✓ %s" % Localization.text("ui.resultado_sucesso")
 		if succeeded
@@ -175,6 +177,8 @@ func _activity_record(result: PeriodResult) -> Dictionary:
 			return _simulation.activities.get_course(result.activity_id)
 		PeriodResult.ActivityType.MISSION:
 			return _simulation.activities.get_mission(result.activity_id)
+		PeriodResult.ActivityType.EVENT:
+			return _simulation.events.get_event_by_id(result.event_id)
 	return {}
 
 

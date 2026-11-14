@@ -4,12 +4,17 @@ class_name SimulationCore
 const DEFAULT_CALENDAR_PATH: String = "res://assets/data/calendar.json"
 const DEFAULT_ACTIVITIES_PATH: String = "res://assets/data/activities.json"
 const DEFAULT_MISSIONS_PATH: String = "res://assets/data/missions.json"
+const DEFAULT_EVENTS_PATH: String = "res://assets/data/events.json"
 
 var calendar: CalendarSystem
 var stats: StatsSystem
 var economy: EconomySystem
 var activities: ActivitySystem
+var events: EventSystem = EventSystem.new()
+var completed_events: Array[String] = []
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _pending_event: Dictionary = {}  # Event waiting for player choice
+var _last_random_event_check_turn: int = -1
 var tech_experiments: bool = false
 var criminal_record: bool = false
 var community_help: bool = false
@@ -18,28 +23,35 @@ var _missions_technical_completed: int = 0
 var _calendar_config_path: String = DEFAULT_CALENDAR_PATH
 var _activities_path: String = DEFAULT_ACTIVITIES_PATH
 var _missions_path: String = DEFAULT_MISSIONS_PATH
+var _events_path: String = DEFAULT_EVENTS_PATH
 
 
 func initialize(
 	calendar_config_path: String = DEFAULT_CALENDAR_PATH,
 	activities_path: String = DEFAULT_ACTIVITIES_PATH,
-	missions_path: String = DEFAULT_MISSIONS_PATH
+	missions_path: String = DEFAULT_MISSIONS_PATH,
+	events_path: String = DEFAULT_EVENTS_PATH
 ) -> bool:
 	_calendar_config_path = calendar_config_path
 	_activities_path = activities_path
 	_missions_path = missions_path
+	_events_path = events_path
 	calendar = CalendarSystem.new()
 	stats = StatsSystem.new()
 	economy = EconomySystem.new()
 	activities = ActivitySystem.new()
+	events = EventSystem.new()
 	if not calendar.initialize_from_config(_calendar_config_path):
 		return false
 	stats.initialize()
 	economy.start_new_game(calendar.years)
 	activities.rng = rng
+	events.rng = rng
 	if not activities.load_activities(_activities_path):
 		return false
 	if not activities.load_missions(_missions_path):
+		return false
+	if not events.load_events(_events_path):
 		return false
 	start_new_game()
 	return true
@@ -50,6 +62,8 @@ func start_new_game() -> void:
 	stats.initialize()
 	economy.start_new_game(calendar.years)
 	activities.reset()
+	completed_events.clear()
+	_last_random_event_check_turn = -1
 	_reset_campaign_flags()
 	_credit_stipend_if_due()
 
@@ -58,6 +72,8 @@ func set_seed(seed_value: int) -> void:
 	rng.seed = seed_value
 	if activities != null:
 		activities.rng = rng
+	if events != null:
+		events.rng = rng
 
 
 func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
@@ -71,10 +87,65 @@ func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
 	if period_seed != 0:
 		rng.seed = period_seed
 
+	# Check for pending event resolution
+	if not _pending_event.is_empty():
+		return _resolve_pending_event(choice)
+
+	# Check for fixed event
+	var year: int = calendar.get_year()
+	var month: int = calendar.get_month()
+	var period: int = calendar.get_period()
+	var fixed_event: Dictionary = events.get_fixed_event_for_date(year, month, period)
+	var is_fixed_event_period: bool = (
+		month in EventSystem.FIXED_EVENT_MONTHS
+		and period == EventSystem.FIXED_EVENT_PERIOD
+	)
+
+	if not fixed_event.is_empty() and not completed_events.has(fixed_event.get("id", "")):
+		events.record_random_check_skipped(
+			"fixed event %s has priority at year %d, month %d, period %d"
+			% [str(fixed_event.get("id", "")), year, month, period]
+		)
+		# Set up pending event for player choice
+		_pending_event = fixed_event
+		result.is_event_pending = true
+		result.event_id = fixed_event.get("id", "")
+		result.event_name = fixed_event.get("name", "")
+		result.event_description = fixed_event.get("description", "")
+		result.event_options = fixed_event.get("options", [])
+		return result
+
+	# Check once per non-fixed period, including when a later choice is invalid.
+	if is_fixed_event_period:
+		events.record_random_check_skipped(
+			"year %d, month %d, period %d is reserved for fixed events"
+			% [year, month, period]
+		)
+	elif _last_random_event_check_turn != calendar.get_turn_number():
+		_last_random_event_check_turn = calendar.get_turn_number()
+		var max_attr: int = max(
+			stats.get_stat("int"),
+			max(stats.get_stat("cha"), stats.get_stat("ref"))
+		)
+		var random_event: Dictionary = events.roll_random_event(max_attr)
+		if not random_event.is_empty():
+			_pending_event = random_event
+			result.is_event_pending = true
+			result.event_id = random_event.get("id", "")
+			result.event_name = random_event.get("name", "")
+			result.event_description = random_event.get("description", "")
+			result.event_options = random_event.get("options", [])
+			return result
+	else:
+		events.record_random_check_skipped(
+			"the current period was already checked"
+		)
+
 	var parsed_choice: Dictionary = _parse_choice(choice)
 	if parsed_choice.has("error"):
 		result.error_message = str(parsed_choice["error"])
 		return result
+
 	if parsed_choice["type"] == "mission" and stats.is_mission_blocked_by_disease():
 		result.error_message = "Missions are unavailable while diseased."
 		return result
@@ -130,6 +201,182 @@ func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
 	return result
 
 
+func _resolve_pending_event(option_id: String) -> PeriodResult:
+	var result: PeriodResult = PeriodResult.new()
+
+	if not _pending_event.is_empty():
+		var event_id: String = _pending_event.get("id", "")
+		var options: Array = _pending_event.get("options", [])
+
+		# Find the selected option
+		var selected_option: Dictionary = {}
+		for option: Dictionary in options:
+			if option.get("id", "") == option_id:
+				selected_option = option
+				break
+
+		if selected_option.is_empty():
+			result.error_message = "Invalid event option '%s' for event '%s'." % [option_id, event_id]
+			return result
+
+		var event_resolution: Dictionary = _get_event_resolution(selected_option)
+		if event_resolution.has("error"):
+			result.error_message = str(event_resolution["error"])
+			return result
+
+		# Mark event as completed
+		if not event_id.is_empty():
+			completed_events.append(event_id)
+
+		# Build result
+		result.pre_period_state = get_state()
+		result.period = calendar.get_turn_number()
+		result.year = calendar.get_year()
+		result.month = calendar.get_month()
+		result.period_num = calendar.get_period()
+		result.age = calendar.get_age()
+		result.is_diseased_before = stats.is_diseased
+		result.activity_type = PeriodResult.ActivityType.EVENT
+		result.event_id = event_id
+		result.event_name = str(_pending_event.get("name", ""))
+		result.event_description = str(_pending_event.get("description", ""))
+		result.event_outcome = str(event_resolution.get("outcome", ""))
+		result.activity_id = "event_%s" % event_id
+		result.activity_level = 1
+		result.completed = true
+
+		# Apply effects
+		var effects: Dictionary = event_resolution["effects"]
+
+		# Credits
+		var income: int = int(effects.get("credits", 0))
+		if income > 0:
+			economy.receive_income(income)
+			result.credits_change += income
+
+		# Stats
+		for stat_id: String in ["str", "int", "cha", "ref", "sta"]:
+			var delta: int = int(effects.get(stat_id, 0))
+			if delta != 0:
+				var actual_delta: int = stats.add_stat(stat_id, delta)
+				if actual_delta != 0:
+					result.stat_changes[stat_id] = actual_delta
+
+		# Ethics (special handling - uses eth key)
+		var eth_delta: int = int(effects.get("eth", 0))
+		if eth_delta != 0:
+			var actual_delta: int = stats.add_ethics(eth_delta)
+			if actual_delta != 0:
+				result.stat_changes["eth"] = actual_delta
+
+		# Stress
+		var stress_delta: int = int(effects.get("stress", 0))
+		result.stress_change = stats.add_stress(stress_delta)
+		result.stress_final = stats.get_stress()
+
+		# Reputation (handle both short and long keys)
+		var reputation_keys: Dictionary = {
+			"fighter_rep": "fighter",
+			"social_rep": "social",
+			"hacker_rep": "hacker"
+		}
+		for effect_key: String in reputation_keys:
+			var delta: int = int(effects.get(effect_key, 0))
+			if delta != 0:
+				var rep_id: String = str(reputation_keys[effect_key])
+				var actual_delta: int = stats.add_reputation(rep_id, delta)
+				if actual_delta != 0:
+					result.rep_gained[rep_id] = actual_delta
+
+		# Flags
+		for key: String in effects:
+			if effects[key] is bool and effects[key]:
+				_set_campaign_flag(key, true)
+				result.flags_set[key] = true
+
+		# Month end processing
+		if calendar.is_month_end():
+			var month_result: Dictionary = activities.close_month()
+			result.month_end_processed = true
+			result.streaks_incremented = month_result["streaks_incremented"]
+			result.promotion_unlocked = not month_result["promotions"].is_empty()
+
+		stats.check_and_update_disease()
+		result.is_diseased_after = stats.is_diseased
+		calendar.advance_period()
+
+		post_event_actions()
+
+		var next_year_stipend: int = _credit_stipend_if_due()
+		if next_year_stipend > 0:
+			result.year_stipend_given = true
+			result.credits_change += next_year_stipend
+
+		result.completed = true
+		result.post_period_state = get_state()
+		_pending_event = {}
+		return result
+
+	result.error_message = "No pending event."
+	return result
+
+
+func _get_event_resolution(selected_option: Dictionary) -> Dictionary:
+	var effects_data: Variant = selected_option.get("effects", {})
+	var requirements: Variant = selected_option.get("requirements", {})
+	if not effects_data is Dictionary or not requirements is Dictionary:
+		return {"error": "Event option has malformed effects or requirements."}
+
+	var effects: Dictionary = effects_data.duplicate(true)
+	var stat_requirements: Variant = requirements.get("stats", {})
+	if not stat_requirements is Dictionary:
+		return {"error": "Event option has malformed stat requirements."}
+	if stat_requirements.is_empty():
+		return {"effects": effects, "outcome": ""}
+
+	var requirements_met: bool = true
+	for stat_id: Variant in stat_requirements:
+		var minimum: Variant = stat_requirements[stat_id]
+		if (
+			typeof(stat_id) != TYPE_STRING
+			or (typeof(minimum) != TYPE_INT and typeof(minimum) != TYPE_FLOAT)
+			or not stats.get_base_stats().has(str(stat_id))
+		):
+			return {"error": "Event option has an invalid stat requirement."}
+		if stats.get_stat(str(stat_id)) < int(minimum):
+			requirements_met = false
+
+	var outcome_key: String = "success_effects" if requirements_met else "failure_effects"
+	var outcome_effects: Variant = selected_option.get(outcome_key, {})
+	if not outcome_effects is Dictionary:
+		return {"error": "Event option has malformed %s." % outcome_key}
+	effects.merge(outcome_effects, true)
+	return {
+		"effects": effects,
+		"outcome": "success" if requirements_met else "failure"
+	}
+
+
+func post_event_actions() -> void:
+	pass  # Override in subclasses for additional logic (e.g., inventory management)
+
+
+func _set_campaign_flag(flag_id: String, value: bool) -> void:
+	match flag_id:
+		"community_help":
+			community_help = value
+		"criminal_record":
+			criminal_record = value
+		"disappear_from_society":
+			disappear_from_society = value
+		"tech_experiments":
+			tech_experiments = value
+
+
+func _event_flag_granted(flag_id: String) -> void:
+	pass  # Override in subclasses for side effects
+
+
 func get_state() -> Dictionary:
 	if not _systems_are_initialized():
 		return {}
@@ -138,6 +385,9 @@ func get_state() -> Dictionary:
 		"stats": stats.get_state(),
 		"economy": economy.get_state(),
 		"activities": activities.get_state(),
+		"events": events.get_state(),
+		"completed_events": completed_events.duplicate(),
+		"random_event_check_turn": _last_random_event_check_turn,
 		"tech_experiments": tech_experiments,
 		"criminal_record": criminal_record,
 		"community_help": community_help,
@@ -153,9 +403,13 @@ func load_state(state: Dictionary) -> bool:
 	var saved_stats: Variant = state.get("stats")
 	var saved_economy: Variant = state.get("economy")
 	var saved_activities: Variant = state.get("activities", {})
+	var saved_events: Variant = state.get("events", {})
+	var saved_random_event_check_turn: Variant = state.get("random_event_check_turn", -1)
 	if not saved_calendar is Dictionary or not saved_stats is Dictionary:
 		return false
 	if not saved_economy is Dictionary or not saved_activities is Dictionary:
+		return false
+	if not saved_random_event_check_turn is int or saved_random_event_check_turn < -1:
 		return false
 
 	var calendar_copy: CalendarSystem = CalendarSystem.new()
@@ -183,7 +437,18 @@ func load_state(state: Dictionary) -> bool:
 	stats = stats_copy
 	economy = economy_copy
 	activities = activities_copy
+	_last_random_event_check_turn = saved_random_event_check_turn
 	activities.rng = rng
+	events.rng = rng
+	events.load_state(saved_events)
+
+	var saved_completed: Variant = state.get("completed_events", [])
+	if saved_completed is Array:
+		completed_events = []
+		for id in saved_completed:
+			if id is String and not completed_events.has(id):
+				completed_events.append(id)
+
 	tech_experiments = bool(state.get("tech_experiments", false))
 	criminal_record = bool(state.get("criminal_record", false))
 	community_help = bool(state.get("community_help", false))
@@ -240,6 +505,37 @@ func _credit_stipend_if_due() -> int:
 		push_error("Could not credit the yearly stipend for year %d." % calendar.get_year())
 		return 0
 	return stipend
+
+
+func get_upcoming_fixed_event() -> Dictionary:
+	var year: int = calendar.get_year()
+	var month: int = calendar.get_month()
+	var period: int = calendar.get_period()
+	return events.get_fixed_event_for_date(year, month, period)
+
+
+func roll_for_random_event() -> Dictionary:
+	var max_attr: int = max(
+		stats.get_stat("int"),
+		max(stats.get_stat("cha"), stats.get_stat("ref"))
+	)
+	return events.roll_random_event(max_attr)
+
+
+func get_completed_events() -> Array[String]:
+	return completed_events.duplicate()
+
+
+func is_event_completed(event_id: String) -> bool:
+	return completed_events.has(event_id)
+
+
+func get_pending_event() -> Dictionary:
+	return _pending_event.duplicate()
+
+
+func has_pending_event() -> bool:
+	return not _pending_event.is_empty()
 
 
 func _parse_choice(choice: String) -> Dictionary:
@@ -342,9 +638,9 @@ func _apply_activity_effects(
 				if bool(parsed_choice["experiment"]):
 					tech_experiments = true
 					result.flags_set["tech_experiments"] = true
-			if bool(effects.get("community_help", false)):
-				community_help = true
-				result.flags_set["community_help"] = true
+				if bool(effects.get("community_help", false)):
+					community_help = true
+					result.flags_set["community_help"] = true
 
 
 func _apply_mission_effects(effects: Dictionary, result: PeriodResult) -> void:
@@ -372,7 +668,7 @@ func _apply_mission_effects(effects: Dictionary, result: PeriodResult) -> void:
 
 
 func _systems_are_initialized() -> bool:
-	return calendar != null and stats != null and economy != null and activities != null
+	return calendar != null and stats != null and economy != null and activities != null and events != null
 
 
 func _reset_campaign_flags() -> void:
@@ -381,3 +677,4 @@ func _reset_campaign_flags() -> void:
 	community_help = false
 	disappear_from_society = false
 	_missions_technical_completed = 0
+	_pending_event = {}
