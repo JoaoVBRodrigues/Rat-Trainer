@@ -8,6 +8,7 @@
     "falar": "Falar",
     "missao": "Missão",
     "agendar": "AGENDAR",
+    "nova_campanha": "Nova campanha",
     "status": "Status",
     "fechar": "Fechar",
     "nome": "Nome",
@@ -43,6 +44,27 @@
     "rep_fighter": "Fighter",
     "rep_social": "Social",
     "rep_hacker": "Hacker",
+    "lutar": "Lutar",
+    "conversar": "Conversar",
+    "fugir": "Fugir",
+    "esconder": "Esconder",
+    "encontro": {
+      "instrucoes": "Escolha uma acao contra o inimigo:"
+    },
+    "encounter": {
+      "instrucoes": "Escolha uma acao contra o inimigo:",
+      "lutar": "Lutar: ataque fisico com chance baseada em Forca e Resistencia.",
+      "conversar": "Conversar: tentativa diplomatica com chance baseada em Carisma e Etica.",
+      "fugir": "Fugir: foge do combate, mas aumenta o estresse.",
+      "esconder": "Esconder: se esconde do combate, mas aumenta o estresse.",
+      "recompensa_lutar": "Recompensa por vencer em combate.",
+      "recompensa_conversar": "Recompensa por resolver sem violencia.",
+      "nenhuma_recompensa": "Sem recompensa."
+    },
+    "lutar": "Lutar",
+    "conversar": "Conversar",
+    "fugir": "Fugir",
+    "esconder": "Esconder",
     "tooltip": {
       "agenda": "Solicitar acesso à agenda.",
       "perfil": "Solicitar acesso ao perfil.",

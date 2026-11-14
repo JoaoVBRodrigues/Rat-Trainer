@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "encounter_rules": {
+    "chance": {
+      "base": 50,
+      "minimum": 5,
+      "maximum": 95,
+      "roll_minimum": 0,
+      "roll_maximum": 99,
+      "attribute_divisor": 2,
+      "support_divisor": 10,
+      "equipment_bonus_per_item": 5,
+      "maximum_equipment_bonus": 10
+    },
+    "options": {
+      "fight": {
+        "primary_stat": "str",
+        "support_stat": "sta"
+      },
+      "talk": {
+        "primary_stat": "cha",
+        "support_stat": "int"
+      },
+      "flee": {
+        "primary_stat": "sta",
+        "support_stat": "ref"
+      },
+      "hide": {
+        "primary_stat": "int",
+        "support_stat": "cha"
+      }
+    },
+    "stress": {
+      "physical_activity": 4,
+      "options": {
+        "fight": {
+          "success": 3,
+          "failure": 6
+        },
+        "talk": {
+          "success": 2,
+          "failure": 4
+        },
+        "flee": {
+          "success": 2,
+          "failure": 6
+        },
+        "hide": {
+          "success": 1,
+          "failure": 6
+        }
+      }
+    },
+    "talk_rewards": {
+      "credit_fraction": 0.5,
+      "charisma": 1,
+      "social_rep": 2
+    },
+    "drop": {
+      "item_id": "adesivo_recuperacao",
+      "chance_percent": 25,
+      "eligible_options": ["fight", "talk"]
+    },
+    "orac_return_description": "ORAC leva Nyx para casa em segurança; a cena termina sem ferimentos."
+  }
+}

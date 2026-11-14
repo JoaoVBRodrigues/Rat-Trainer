@@ -2,6 +2,7 @@ extends RefCounted
 class_name PeriodResult
 
 enum ActivityType { NONE, STUDY, WORK, MISSION, LEISURE, EVENT }
+enum EncounterOption { FIGHT, TALK, FLEE, HIDE }
 
 var period: int = 0
 var year: int = 1
@@ -17,6 +18,16 @@ var event_name: String = ""
 var event_description: String = ""
 var event_options: Array = []
 var event_outcome: String = ""
+
+# Encounter-related fields (physical missions only)
+var is_encounter_pending: bool = false
+var encounter_id: String = ""
+var encounter_options: Array = []
+var encounter_monster_name: String = ""
+var encounter_monster_id: String = ""
+var encounter_description: String = ""
+var encounter_orac_returned: bool = false
+var items_gained: Array[String] = []
 var activity_id: String = ""
 var activity_level: int = 1
 var completed: bool = false

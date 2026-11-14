@@ -19,9 +19,10 @@ Decisoes do MVP
 |---------|-------|---------|
 | Calendario | Estado de progresso | Turnos concluidos, data derivada |
 | Atributos/Stress | Efeitos das escolhas | Atributos, reputacoes, Stress, doenca |
-| Economia | Calendario, atividades, lojas, eventos | Creditos e transacoes |
+| Economia | Calendario,atividades, lojas, eventos | Creditos e transacoes |
 | Atividades | Calendario, stats, economia, eventos | XP, streaks, recompensas, contagens |
 | Combate | Stats, equipamento, missao | Resultado e Stress de combate |
+| Monstros | Dados de missao | Dificuldade por missao |
 | Eventos | Calendario, stats, economia | Flags, escolhas, IDs concluidos |
 | Lojas/itens | Economia, combate, Stress | Inventario e equipamento |
 | Save | Estado dos sistemas | Estado serializado e validado |

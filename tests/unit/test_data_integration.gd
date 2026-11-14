@@ -8,7 +8,9 @@ const DATA_FILES: Array[String] = [
 	"items.json",
 	"events.json",
 	"endings.json",
-	"missions.json"
+	"missions.json",
+	"monsters.json",
+	"encounter_rules.json"
 ]
 
 var _fixture_paths: Array[String] = []
@@ -42,8 +44,10 @@ func test_real_data_loads_without_errors() -> void:
 	assert_int(loader.events.size()).is_equal(12)
 	assert_int(loader.random_events.size()).is_equal(3)
 	assert_int(loader.endings.size()).is_equal(15)
-	assert_int(loader.missions.size()).is_equal(3)
+	assert_int(loader.missions.size()).is_equal(5)
+	assert_int(loader.monsters.size()).is_equal(3)
 	assert_int(loader.stats.size()).is_equal(6)
+	assert_bool(loader.encounter_rules.has("encounter_rules")).is_true()
 
 
 func test_all_data_files_are_utf8_json() -> void:
@@ -143,13 +147,38 @@ func test_endings_match_the_approved_count_and_reachable_thresholds() -> void:
 
 func test_missions_match_gdd_success_effects() -> void:
 	var loader: DataLoader = DataLoader.load_all()
-	assert_int(loader.missions.size()).is_equal(3)
+	assert_int(loader.missions.size()).is_equal(5)
 
-	var physical: MissionDef = _find_mission(loader.missions, "missao_fisica")
-	assert_object(physical).is_not_null()
-	assert_float(float(physical.success_effects["str"])).is_equal(2.0)
-	assert_float(float(physical.success_effects["fighter_rep"])).is_equal(5.0)
-	assert_bool(physical.success_effects.has("int")).is_false()
+	var physical_ruins: MissionDef = _find_mission(loader.missions, "missao_fisica_ruinas")
+	assert_object(physical_ruins).is_not_null()
+	assert_float(float(physical_ruins.success_effects["str"])).is_equal(2.0)
+	assert_float(float(physical_ruins.success_effects["fighter_rep"])).is_equal(5.0)
+	assert_bool(physical_ruins.success_effects.has("int")).is_false()
+
+	var physical_drones: MissionDef = _find_mission(loader.missions, "missao_fisica_drones")
+	assert_object(physical_drones).is_not_null()
+	assert_int(physical_drones.difficulty).is_equal(50)
+	assert_int(physical_drones.minimum_attribute).is_equal(27)
+	assert_array(physical_drones.required_equipment).contains_exactly_in_any_order(
+		"kit_ferramentas"
+	)
+
+	var physical_infil: MissionDef = _find_mission(loader.missions, "missao_fisica_infiltracao")
+	assert_object(physical_infil).is_not_null()
+	assert_int(physical_infil.difficulty).is_equal(60)
+	assert_float(float(physical_infil.success_effects["credits"])).is_equal(35.0)
+	assert_int(physical_infil.minimum_attribute).is_equal(25)
+	assert_array(physical_infil.required_equipment).contains_exactly_in_any_order(
+		"kit_ferramentas", "casaco_acolchoado"
+	)
+	var encounter_rules: Dictionary = loader.encounter_rules["encounter_rules"]
+	var chance: Dictionary = encounter_rules["chance"]
+	assert_float(float(chance["base"])).is_equal(50.0)
+	assert_float(float(chance["minimum"])).is_equal(5.0)
+	assert_float(float(chance["maximum"])).is_equal(95.0)
+	assert_float(float(chance["equipment_bonus_per_item"])).is_equal(5.0)
+	assert_float(float(chance["maximum_equipment_bonus"])).is_equal(10.0)
+	assert_float(float(encounter_rules["drop"]["chance_percent"])).is_equal(25.0)
 
 
 func test_duplicate_id_in_json_fixture_is_rejected() -> void:

@@ -12,6 +12,140 @@ func test_main_screen_builds_six_focusable_destinations() -> void:
 		assert_int(button.focus_mode).is_equal(Control.FOCUS_ALL)
 
 
+func test_new_campaign_button_is_visible_without_active_campaign() -> void:
+	# Arrange
+	var screen: MainScreen = auto_free(MainScreen.new())
+	add_child(screen)
+
+	# Assert
+	var new_campaign_button: Button = screen.find_child(
+		"NewCampaignButton", true, false
+	) as Button
+	assert_object(new_campaign_button).is_not_null()
+	assert_bool(new_campaign_button.visible).is_true()
+	assert_bool(screen._menu_buttons[5].disabled).is_true()
+	assert_bool(screen._schedule_button.disabled).is_true()
+
+
+func test_mission_menu_opens_schedule_with_missions_visible() -> void:
+	# Arrange
+	var game_manager: GameManager = get_node("/root/Game") as GameManager
+	var previous_simulation: SimulationCore = game_manager.simulation
+	var previous_state: GameManager.GameState = game_manager.current_state
+	var previous_data: Dictionary = Data.get_current_data()
+	var screen: MainScreen = auto_free(MainScreen.new())
+	add_child(screen)
+	var new_campaign_button: Button = screen.find_child(
+		"NewCampaignButton", true, false
+	) as Button
+
+	# Act
+	new_campaign_button.pressed.emit()
+	screen._on_menu_pressed("missao")
+
+	# Assert
+	var schedule_screen: ScheduleScreen = screen.find_child(
+		"MonthlyScheduleScreen", true, false
+	) as ScheduleScreen
+	assert_object(schedule_screen).is_not_null()
+	assert_bool(schedule_screen.visible).is_true()
+	assert_str(schedule_screen._active_category).is_equal("mission")
+	var mission_cards: VBoxContainer = schedule_screen._selection_host._cards
+	assert_int(mission_cards.get_child_count()).is_equal(5)
+	var ruins_card: Button = mission_cards.get_node_or_null(
+		"Card_missao_fisica_ruinas"
+	) as Button
+	var drones_card: Button = mission_cards.get_node_or_null(
+		"Card_missao_fisica_drones"
+	) as Button
+	var infiltration_card: Button = mission_cards.get_node_or_null(
+		"Card_missao_fisica_infiltracao"
+	) as Button
+	assert_object(ruins_card).is_not_null()
+	assert_object(drones_card).is_not_null()
+	assert_object(infiltration_card).is_not_null()
+	assert_bool(ruins_card.disabled).is_false()
+	assert_bool(drones_card.disabled).is_true()
+	assert_bool(infiltration_card.disabled).is_true()
+	assert_str(ruins_card.text).contains("Ruínas Industriais")
+
+	game_manager.simulation = previous_simulation
+	game_manager.transition_to(previous_state)
+	Data.set_data(previous_data)
+
+
+func test_physical_mission_opens_encounter_screen_with_four_choices() -> void:
+	# Arrange
+	var game_manager: GameManager = get_node("/root/Game") as GameManager
+	var previous_simulation: SimulationCore = game_manager.simulation
+	var previous_state: GameManager.GameState = game_manager.current_state
+	var previous_data: Dictionary = Data.get_current_data()
+	var screen: MainScreen = auto_free(MainScreen.new())
+	add_child(screen)
+	var new_campaign_button: Button = screen.find_child(
+		"NewCampaignButton", true, false
+	) as Button
+	new_campaign_button.pressed.emit()
+	var simulation: SimulationCore = game_manager.simulation
+	var encounter_seed: int = 0
+	for seed_value: int in range(1, 1001):
+		simulation.start_new_game()
+		simulation.set_seed(seed_value)
+		var result: PeriodResult = simulation.advance_period(
+			"mission_missao_fisica_ruinas", seed_value
+		)
+		if result.is_encounter_pending:
+			encounter_seed = seed_value
+			break
+	assert_int(encounter_seed).is_greater(0)
+	simulation.start_new_game()
+	simulation.set_seed(encounter_seed)
+	screen.update_simulation(simulation)
+
+	# Act
+	screen._on_menu_pressed("missao")
+	var schedule_screen: ScheduleScreen = screen.find_child(
+		"MonthlyScheduleScreen", true, false
+	) as ScheduleScreen
+	var choices_by_category: Dictionary = screen._schedule_flow._build_activity_choices()
+	var mission_choice: Dictionary = (
+		choices_by_category["mission"][0].duplicate(true)
+	)
+	mission_choice["period_index"] = 0
+	schedule_screen._on_activity_selected(mission_choice)
+	var leisure_choice: Dictionary = choices_by_category["leisure"][0].duplicate(true)
+	leisure_choice["period_index"] = 1
+	schedule_screen._on_activity_selected(leisure_choice)
+	leisure_choice["period_index"] = 2
+	schedule_screen._on_activity_selected(leisure_choice)
+	schedule_screen._on_confirm_pressed()
+
+	# Assert
+	var encounter_screen: EncounterScreen = screen.find_child(
+		"EncounterScreen", true, false
+	) as EncounterScreen
+	assert_object(encounter_screen).is_not_null()
+	assert_bool(encounter_screen.visible).is_true()
+	assert_str(encounter_screen._monster_label.text).is_not_empty()
+	assert_int(encounter_screen._options_container.get_child_count()).is_equal(4)
+	assert_str(
+		(encounter_screen._options_container.get_child(0) as Button).text
+	).is_equal("Lutar")
+	assert_str(
+		(encounter_screen._options_container.get_child(1) as Button).text
+	).is_equal("Conversar")
+	assert_str(
+		(encounter_screen._options_container.get_child(2) as Button).text
+	).is_equal("Fugir")
+	assert_str(
+		(encounter_screen._options_container.get_child(3) as Button).text
+	).is_equal("Esconder")
+
+	game_manager.simulation = previous_simulation
+	game_manager.transition_to(previous_state)
+	Data.set_data(previous_data)
+
+
 func test_schedule_request_does_not_advance_simulation() -> void:
 	# Arrange
 	var simulation: SimulationCore = SimulationCore.new()
@@ -252,6 +386,7 @@ func test_disease_invalidating_pending_mission_preserves_resolved_periods() -> v
 	# Arrange
 	var simulation: SimulationCore = SimulationCore.new()
 	assert_bool(simulation.initialize()).is_true()
+	simulation.set_seed(456)
 	simulation.stats.set_stress(64)
 	var screen: MainScreen = auto_free(MainScreen.new())
 	add_child(screen)

@@ -19,12 +19,18 @@ static func validate_all(data: DataLoader) -> Array[String]:
 	errors.append_array(validate_unique_ids(data.events + data.random_events, "events"))
 	errors.append_array(validate_unique_ids(data.endings, "endings"))
 	errors.append_array(validate_unique_ids(data.missions, "missions"))
+	errors.append_array(validate_unique_ids(data.monsters, "monsters"))
 	errors.append_array(validate_stats_ranges(data.stats))
 	errors.append_array(validate_calendar_structure(data.calendar))
 	errors.append_array(validate_activity_gains(data.activities))
 	errors.append_array(validate_events(data.events, data.random_events, data.items))
 	errors.append_array(validate_endings(data.endings))
 	errors.append_array(validate_missions(data.missions))
+	errors.append_array(validate_monsters(data.monsters, data.missions))
+	errors.append_array(validate_mission_requirements(data.missions, data.items))
+	errors.append_array(validate_encounter_rules(
+		data.encounter_rules, data.missions, data.items
+	))
 	return errors
 
 
@@ -125,7 +131,7 @@ static func validate_activity_gains(activities: Array) -> Array[String]:
 
 
 static func validate_events(
-	events: Array, random_events: Array, items: Array
+		events: Array, random_events: Array, items: Array
 ) -> Array[String]:
 	var errors: Array[String] = []
 	var item_ids: Dictionary = {}
@@ -195,14 +201,18 @@ static func validate_endings(endings: Array) -> Array[String]:
 
 static func validate_missions(missions: Array) -> Array[String]:
 	var errors: Array[String] = []
-	if missions.size() != 3:
-		errors.append("missions: expected 3 mission types, got %d." % missions.size())
+	if missions.size() != 5:
+		errors.append("missions: expected 5 mission types, got %d." % missions.size())
 	for mission in missions:
 		if not mission is MissionDef:
 			errors.append("missions: expected MissionDef records.")
 			continue
 		if mission.stat_id not in STAT_IDS:
 			errors.append("missions: '%s' references unknown stat '%s'." % [mission.id, mission.stat_id])
+		if mission.minimum_attribute < 0 or mission.minimum_attribute > 100:
+			errors.append(
+				"missions: '%s' has minimum_attribute outside 0-100." % mission.id
+			)
 		if mission.stress < 0 or mission.stress > 100:
 			errors.append("missions: '%s' has stress outside 0-100." % mission.id)
 		if mission.success_effects.is_empty():
@@ -216,6 +226,197 @@ static func _item_id(item: Variant) -> String:
 	if item is Object:
 		return str(item.get("id"))
 	return ""
+
+
+static func validate_monsters(monsters: Array, missions: Array) -> Array[String]:
+	var errors: Array[String] = []
+	if monsters.size() != 3:
+		errors.append("monsters: expected 3 monsters, got %d." % monsters.size())
+		return errors
+
+	var mission_ids: Dictionary = {}
+	for mission in missions:
+		if mission is MissionDef:
+			mission_ids[mission.id] = true
+
+	for monster in monsters:
+		if not monster is MonsterDef:
+			errors.append("monsters: expected MonsterDef records.")
+			continue
+		if monster.difficulty < 0 or monster.difficulty > 100:
+			errors.append("monsters: '%s' has difficulty outside 0-100." % monster.id)
+		if not mission_ids.has(monster.mission_id):
+			errors.append("monsters: '%s' references unknown mission '%s'." % [monster.id, monster.mission_id])
+		if monster.name.is_empty() or monster.description.is_empty():
+			errors.append("monsters: '%s' must define a name and description." % monster.id)
+		for mission in missions:
+			if mission is MissionDef and mission.id == monster.mission_id:
+				if monster.difficulty != mission.difficulty:
+					errors.append(
+						"monsters: '%s' difficulty does not match mission '%s'."
+						% [monster.id, mission.id]
+					)
+	return errors
+
+
+static func validate_mission_requirements(missions: Array, items: Array) -> Array[String]:
+	var errors: Array[String] = []
+	var item_ids: Dictionary = {}
+	for item in items:
+		item_ids[_item_id(item)] = true
+	for mission in missions:
+		if not mission is MissionDef:
+			continue
+		if mission.type == "physical" and mission.minimum_attribute <= 0:
+			errors.append("missions: physical mission '%s' must define a minimum attribute." % mission.id)
+		for item_id: String in mission.required_equipment:
+			if not item_ids.has(item_id):
+				errors.append(
+					"missions: '%s' requires unknown item '%s'." % [mission.id, item_id]
+				)
+	return errors
+
+
+static func validate_encounter_rules(
+	rules_data: Dictionary, missions: Array, items: Array
+) -> Array[String]:
+	var errors: Array[String] = []
+	var rules: Variant = rules_data.get("encounter_rules")
+	if not rules is Dictionary:
+		return ["encounter_rules: expected an object."]
+	var chance: Variant = rules.get("chance")
+	var options: Variant = rules.get("options")
+	var stress: Variant = rules.get("stress")
+	var drop: Variant = rules.get("drop")
+	var talk_rewards: Variant = rules.get("talk_rewards")
+	if not chance is Dictionary or not options is Dictionary:
+		return ["encounter_rules: chance and options must be objects."]
+	if not stress is Dictionary or not stress.get("options") is Dictionary:
+		return ["encounter_rules: stress and stress.options must be objects."]
+	if not drop is Dictionary or not talk_rewards is Dictionary:
+		return ["encounter_rules: drop and talk_rewards must be objects."]
+
+	for key: String in [
+		"base", "minimum", "maximum", "roll_minimum", "roll_maximum", "attribute_divisor",
+		"support_divisor", "equipment_bonus_per_item", "maximum_equipment_bonus"
+	]:
+		if not _is_number(chance.get(key)):
+			errors.append("encounter_rules.chance: missing numeric '%s'." % key)
+	if errors.is_empty():
+		var approved_chance_values: Dictionary = {
+			"base": 50,
+			"minimum": 5,
+			"maximum": 95,
+			"roll_minimum": 0,
+			"roll_maximum": 99,
+			"attribute_divisor": 2,
+			"support_divisor": 10,
+			"equipment_bonus_per_item": 5,
+			"maximum_equipment_bonus": 10
+		}
+		for key: String in approved_chance_values:
+			if int(chance[key]) != int(approved_chance_values[key]):
+				errors.append(
+					"encounter_rules.chance.%s does not match the approved value."
+					% key
+				)
+
+	var option_ids: Array[String] = ["fight", "talk", "flee", "hide"]
+	var approved_stat_pairs: Dictionary = {
+		"fight": ["str", "sta"],
+		"talk": ["cha", "int"],
+		"flee": ["sta", "ref"],
+		"hide": ["int", "cha"]
+	}
+	var approved_stress: Dictionary = {
+		"fight": [3, 6],
+		"talk": [2, 4],
+		"flee": [2, 6],
+		"hide": [1, 6]
+	}
+	for option_id: String in option_ids:
+		var option: Variant = options.get(option_id)
+		var option_stress: Variant = stress["options"].get(option_id)
+		if not option is Dictionary:
+			errors.append("encounter_rules.options: missing '%s'." % option_id)
+			continue
+		if str(option.get("primary_stat", "")) not in STAT_IDS:
+			errors.append("encounter_rules.options.%s: invalid primary_stat." % option_id)
+		if str(option.get("support_stat", "")) not in STAT_IDS:
+			errors.append("encounter_rules.options.%s: invalid support_stat." % option_id)
+		if (
+			str(option.get("primary_stat", "")) != approved_stat_pairs[option_id][0]
+			or str(option.get("support_stat", "")) != approved_stat_pairs[option_id][1]
+		):
+			errors.append("encounter_rules.options.%s: stat pair is not approved." % option_id)
+		if not option_stress is Dictionary:
+			errors.append("encounter_rules.stress.options: missing '%s'." % option_id)
+			continue
+		for outcome: String in ["success", "failure"]:
+			if not _is_number(option_stress.get(outcome)) or int(option_stress[outcome]) < 0:
+				errors.append(
+					"encounter_rules.stress.options.%s: invalid %s stress."
+					% [option_id, outcome]
+				)
+			elif int(option_stress[outcome]) != int(
+				approved_stress[option_id][0 if outcome == "success" else 1]
+			):
+				errors.append(
+					"encounter_rules.stress.options.%s.%s does not match the approved value."
+					% [option_id, outcome]
+				)
+	if not _is_number(stress.get("physical_activity")) or int(stress["physical_activity"]) < 0:
+		errors.append("encounter_rules.stress: physical_activity must be nonnegative.")
+	elif int(stress["physical_activity"]) != 4:
+		errors.append("encounter_rules.stress.physical_activity must be 4.")
+
+	var item_ids: Dictionary = {}
+	for item in items:
+		item_ids[_item_id(item)] = true
+	var drop_item: String = str(drop.get("item_id", ""))
+	var drop_chance: Variant = drop.get("chance_percent")
+	if not item_ids.has(drop_item):
+		errors.append("encounter_rules.drop: references unknown item '%s'." % drop_item)
+	if not _is_number(drop_chance) or drop_chance < 0 or drop_chance > 100:
+		errors.append("encounter_rules.drop: chance_percent must be within 0-100.")
+	elif int(drop_chance) != 25 or drop_item != "adesivo_recuperacao":
+		errors.append("encounter_rules.drop: item and chance do not match approved values.")
+	var eligible_options: Variant = drop.get("eligible_options")
+	if not eligible_options is Array or eligible_options != ["fight", "talk"]:
+		errors.append("encounter_rules.drop: only fight and talk may be eligible.")
+	for key: String in ["credit_fraction", "charisma", "social_rep"]:
+		if not _is_number(talk_rewards.get(key)):
+			errors.append("encounter_rules.talk_rewards: missing numeric '%s'." % key)
+	if (
+		_is_number(talk_rewards.get("credit_fraction"))
+		and float(talk_rewards["credit_fraction"]) != 0.5
+	):
+		errors.append("encounter_rules.talk_rewards.credit_fraction must be 0.5.")
+	if (
+		_is_number(talk_rewards.get("charisma"))
+		and int(talk_rewards["charisma"]) != 1
+	):
+		errors.append("encounter_rules.talk_rewards.charisma must be 1.")
+	if (
+		_is_number(talk_rewards.get("social_rep"))
+		and int(talk_rewards["social_rep"]) != 2
+	):
+		errors.append("encounter_rules.talk_rewards.social_rep must be 2.")
+	if not rules.get("orac_return_description") is String or str(
+		rules.get("orac_return_description", "")
+	).is_empty():
+		errors.append("encounter_rules: missing ORAC return description.")
+
+	var physical_mission_count: int = 0
+	for mission in missions:
+		if mission is MissionDef and mission.type == "physical":
+			physical_mission_count += 1
+	if physical_mission_count != 3:
+		errors.append(
+			"encounter_rules: expected three physical missions, got %d."
+			% physical_mission_count
+		)
+	return errors
 
 
 static func _is_number(value: Variant) -> bool:

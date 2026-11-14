@@ -148,7 +148,8 @@ func open_schedule(
 	active_period_index: int = 0,
 	cancel_allowed: bool = true,
 	first_editable_period: int = 0,
-	recovery_blocked: bool = false
+	recovery_blocked: bool = false,
+	initial_category: String = "study"
 ) -> void:
 	_simulation = simulation
 	_schedule = draft.duplicate_schedule()
@@ -157,7 +158,7 @@ func open_schedule(
 	)
 	_choices_by_category = choices_by_category.duplicate(true)
 	_active_period = clampi(active_period_index, 0, PERIOD_COUNT - 1)
-	_active_category = "study"
+	_active_category = initial_category if CATEGORY_IDS.has(initial_category) else "study"
 	_cancel_allowed = cancel_allowed
 	_first_editable_period = clampi(first_editable_period, 0, PERIOD_COUNT - 1)
 	_recovery_blocked = recovery_blocked
@@ -174,8 +175,20 @@ func open_schedule(
 	if is_node_ready() and not _period_buttons.is_empty():
 		if _recovery_blocked:
 			_status_label.grab_focus()
+		elif _active_category == "mission":
+			_focus_first_available_mission()
 		else:
 			_period_buttons[_first_editable_period].grab_focus()
+
+
+func _focus_first_available_mission() -> void:
+	var cards: VBoxContainer = _selection_host._cards
+	for child: Node in cards.get_children():
+		var card: Button = child as Button
+		if card != null and not card.disabled:
+			card.grab_focus()
+			return
+	_category_buttons["mission"].grab_focus()
 
 
 func get_draft() -> MonthSchedule:

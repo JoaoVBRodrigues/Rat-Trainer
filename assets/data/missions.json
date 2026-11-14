@@ -2,14 +2,47 @@
 	"schema_version": 1,
 	"missions": [
 		{
-			"id": "missao_fisica",
+			"id": "missao_fisica_ruinas",
 			"type": "physical",
-			"name": "Missão Física/Proteção",
+			"name": "Ruínas Industriais",
 			"stat_test": "str",
+			"minimum_attribute": 15,
+			"required_equipment": [],
 			"difficulty": 35,
 			"stress": 4,
 			"success_effects": {
 				"credits": 25,
+				"str": 2,
+				"fighter_rep": 5
+			}
+		},
+		{
+			"id": "missao_fisica_drones",
+			"type": "physical",
+			"name": "Drones",
+			"stat_test": "int",
+			"minimum_attribute": 27,
+			"required_equipment": ["kit_ferramentas"],
+			"difficulty": 50,
+			"stress": 4,
+			"success_effects": {
+				"credits": 30,
+				"int": 2,
+				"hacker_rep": 5,
+				"missoes_tecnicas_concluidas": 1
+			}
+		},
+		{
+			"id": "missao_fisica_infiltracao",
+			"type": "physical",
+			"name": "Infiltração",
+			"stat_test": "str",
+			"minimum_attribute": 25,
+			"required_equipment": ["kit_ferramentas", "casaco_acolchoado"],
+			"difficulty": 60,
+			"stress": 4,
+			"success_effects": {
+				"credits": 35,
 				"str": 2,
 				"fighter_rep": 5
 			}

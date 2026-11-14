@@ -4,6 +4,8 @@ class_name SimulationCore
 const DEFAULT_CALENDAR_PATH: String = "res://assets/data/calendar.json"
 const DEFAULT_ACTIVITIES_PATH: String = "res://assets/data/activities.json"
 const DEFAULT_MISSIONS_PATH: String = "res://assets/data/missions.json"
+const DEFAULT_MONSTERS_PATH: String = "res://assets/data/monsters.json"
+const DEFAULT_ENCOUNTER_RULES_PATH: String = "res://assets/data/encounter_rules.json"
 const DEFAULT_EVENTS_PATH: String = "res://assets/data/events.json"
 
 var calendar: CalendarSystem
@@ -14,6 +16,9 @@ var events: EventSystem = EventSystem.new()
 var completed_events: Array[String] = []
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _pending_event: Dictionary = {}  # Event waiting for player choice
+var _pending_encounter: Dictionary = {}  # Encounter waiting for player choice
+var _pending_encounter_result: PeriodResult
+var inventory_counts: Dictionary = {}
 var _last_random_event_check_turn: int = -1
 var tech_experiments: bool = false
 var criminal_record: bool = false
@@ -23,6 +28,8 @@ var _missions_technical_completed: int = 0
 var _calendar_config_path: String = DEFAULT_CALENDAR_PATH
 var _activities_path: String = DEFAULT_ACTIVITIES_PATH
 var _missions_path: String = DEFAULT_MISSIONS_PATH
+var _monsters_path: String = DEFAULT_MONSTERS_PATH
+var _encounter_rules_path: String = DEFAULT_ENCOUNTER_RULES_PATH
 var _events_path: String = DEFAULT_EVENTS_PATH
 
 
@@ -30,11 +37,15 @@ func initialize(
 	calendar_config_path: String = DEFAULT_CALENDAR_PATH,
 	activities_path: String = DEFAULT_ACTIVITIES_PATH,
 	missions_path: String = DEFAULT_MISSIONS_PATH,
-	events_path: String = DEFAULT_EVENTS_PATH
+	events_path: String = DEFAULT_EVENTS_PATH,
+	monsters_path: String = DEFAULT_MONSTERS_PATH,
+	encounter_rules_path: String = DEFAULT_ENCOUNTER_RULES_PATH
 ) -> bool:
 	_calendar_config_path = calendar_config_path
 	_activities_path = activities_path
 	_missions_path = missions_path
+	_monsters_path = monsters_path
+	_encounter_rules_path = encounter_rules_path
 	_events_path = events_path
 	calendar = CalendarSystem.new()
 	stats = StatsSystem.new()
@@ -51,6 +62,10 @@ func initialize(
 		return false
 	if not activities.load_missions(_missions_path):
 		return false
+	if not activities.load_monsters(_monsters_path):
+		return false
+	if not activities.load_encounter_rules(_encounter_rules_path):
+		return false
 	if not events.load_events(_events_path):
 		return false
 	start_new_game()
@@ -62,6 +77,10 @@ func start_new_game() -> void:
 	stats.initialize()
 	economy.start_new_game(calendar.years)
 	activities.reset()
+	inventory_counts.clear()
+	_pending_event.clear()
+	_pending_encounter.clear()
+	_pending_encounter_result = null
 	completed_events.clear()
 	_last_random_event_check_turn = -1
 	_reset_campaign_flags()
@@ -83,6 +102,9 @@ func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
 		return result
 	if calendar.is_campaign_complete():
 		result.error_message = "Campaign already completed."
+		return result
+	if not _pending_encounter.is_empty():
+		result.error_message = "An encounter is pending; resolve it before advancing."
 		return result
 	if period_seed != 0:
 		rng.seed = period_seed
@@ -173,6 +195,25 @@ func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
 	result.success_chance = int(activity_result.get("success_chance", 0))
 	result.mission_success = bool(activity_result.get("success", false))
 
+	if bool(activity_result.get("encounter_pending", false)):
+		_pending_encounter = {
+			"encounter_monster_id": str(activity_result.get("encounter_monster_id", "")),
+			"encounter_monster_name": str(activity_result.get("encounter_monster_name", "")),
+			"encounter_monster_description": str(
+				activity_result.get("encounter_monster_description", "")
+			),
+			"mission_id": result.activity_id,
+			"encounter_difficulty": int(activity_result.get("encounter_difficulty", 0)),
+			"encounter_stress": int(activity_result.get("encounter_stress", 0)),
+			"encounter_effects": activity_result.get("encounter_effects", {}).duplicate(true)
+		}
+		result.is_encounter_pending = true
+		result.encounter_monster_id = _pending_encounter["encounter_monster_id"]
+		result.encounter_monster_name = _pending_encounter["encounter_monster_name"]
+		result.encounter_description = _pending_encounter["encounter_monster_description"]
+		_pending_encounter_result = result
+		return result
+
 	if cost > 0:
 		economy.pay(cost)
 		result.credits_change -= cost
@@ -183,12 +224,17 @@ func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
 		result.credits_change += income
 
 	_apply_activity_effects(parsed_choice, activity_result, result)
+
+	_complete_period(result)
+	return result
+
+
+func _complete_period(result: PeriodResult) -> void:
 	if calendar.is_month_end():
 		var month_result: Dictionary = activities.close_month()
 		result.month_end_processed = true
 		result.streaks_incremented = month_result["streaks_incremented"]
 		result.promotion_unlocked = not month_result["promotions"].is_empty()
-
 	stats.check_and_update_disease()
 	result.is_diseased_after = stats.is_diseased
 	calendar.advance_period()
@@ -197,8 +243,8 @@ func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
 		result.year_stipend_given = true
 		result.credits_change += next_year_stipend
 	result.completed = true
+	result.is_encounter_pending = false
 	result.post_period_state = get_state()
-	return result
 
 
 func _resolve_pending_event(option_id: String) -> PeriodResult:
@@ -378,7 +424,7 @@ func _event_flag_granted(flag_id: String) -> void:
 
 
 func get_state() -> Dictionary:
-	if not _systems_are_initialized():
+	if not _systems_are_initialized() or not _pending_encounter.is_empty():
 		return {}
 	return {
 		"calendar": calendar.get_calendar_state().to_dict(),
@@ -392,23 +438,34 @@ func get_state() -> Dictionary:
 		"criminal_record": criminal_record,
 		"community_help": community_help,
 		"disappear_from_society": disappear_from_society,
-		"missions_technical_completed": _missions_technical_completed
+		"missions_technical_completed": _missions_technical_completed,
+		"inventory_counts": inventory_counts.duplicate(true)
 	}
 
 
 func load_state(state: Dictionary) -> bool:
-	if not _systems_are_initialized():
+	if not _systems_are_initialized() or not _pending_encounter.is_empty():
 		return false
 	var saved_calendar: Variant = state.get("calendar")
 	var saved_stats: Variant = state.get("stats")
 	var saved_economy: Variant = state.get("economy")
 	var saved_activities: Variant = state.get("activities", {})
 	var saved_events: Variant = state.get("events", {})
+	var saved_inventory: Variant = state.get("inventory_counts", {})
 	var saved_random_event_check_turn: Variant = state.get("random_event_check_turn", -1)
 	if not saved_calendar is Dictionary or not saved_stats is Dictionary:
 		return false
 	if not saved_economy is Dictionary or not saved_activities is Dictionary:
 		return false
+	if not saved_inventory is Dictionary:
+		return false
+	var loaded_inventory: Dictionary = {}
+	for item_id: Variant in saved_inventory:
+		var count: Variant = saved_inventory[item_id]
+		if not item_id is String or str(item_id).is_empty() or not count is int or count < 0:
+			return false
+		if count > 0:
+			loaded_inventory[item_id] = count
 	if not saved_random_event_check_turn is int or saved_random_event_check_turn < -1:
 		return false
 
@@ -424,6 +481,10 @@ func load_state(state: Dictionary) -> bool:
 		return false
 	if not activities_copy.load_missions(_missions_path):
 		return false
+	if not activities_copy.load_monsters(_monsters_path):
+		return false
+	if not activities_copy.load_encounter_rules(_encounter_rules_path):
+		return false
 	if not calendar_copy.load_state(saved_calendar):
 		return false
 	if not stats_copy.load_state(saved_stats):
@@ -437,6 +498,7 @@ func load_state(state: Dictionary) -> bool:
 	stats = stats_copy
 	economy = economy_copy
 	activities = activities_copy
+	inventory_counts = loaded_inventory
 	_last_random_event_check_turn = saved_random_event_check_turn
 	activities.rng = rng
 	events.rng = rng
@@ -459,6 +521,22 @@ func load_state(state: Dictionary) -> bool:
 	_missions_technical_completed = mission_count
 	_credit_stipend_if_due()
 	return true
+
+
+func set_equipped_item_ids(item_ids: Array[String]) -> bool:
+	if not _systems_are_initialized():
+		return false
+	return activities.set_equipped_item_ids(item_ids)
+
+
+func get_equipped_item_ids() -> Array[String]:
+	if not _systems_are_initialized():
+		return []
+	return activities.get_equipped_item_ids()
+
+
+func get_item_count(item_id: String) -> int:
+	return int(inventory_counts.get(item_id, 0))
 
 
 func is_campaign_complete() -> bool:
@@ -489,6 +567,14 @@ func get_available_activities() -> Dictionary:
 
 func is_mission_available() -> bool:
 	return _systems_are_initialized() and not stats.is_mission_blocked_by_disease()
+
+
+func get_mission_availability_error(mission_id: String) -> String:
+	if not _systems_are_initialized():
+		return "SimulationCore must be initialized before checking missions."
+	if stats.is_mission_blocked_by_disease():
+		return "Missions are unavailable while diseased."
+	return activities.get_mission_availability_error(mission_id, stats.get_base_stats())
 
 
 func _credit_stipend_if_due() -> int:
@@ -536,6 +622,103 @@ func get_pending_event() -> Dictionary:
 
 func has_pending_event() -> bool:
 	return not _pending_event.is_empty()
+
+
+func get_pending_encounter() -> Dictionary:
+	if _pending_encounter.is_empty():
+		return {}
+	return _pending_encounter.duplicate(true)
+
+
+func has_pending_encounter() -> bool:
+	return not _pending_encounter.is_empty()
+
+
+## Finalizes one original period as specified in design/gdd/auto-combat.md.
+func resolve_pending_encounter(option: int) -> PeriodResult:
+	if _pending_encounter.is_empty() or _pending_encounter_result == null:
+		var error_result: PeriodResult = PeriodResult.new()
+		error_result.error_message = "No pending encounter."
+		return error_result
+
+	var monster_id: String = str(_pending_encounter.get("encounter_monster_id", ""))
+	var encounter_result: Dictionary = activities.resolve_encounter(
+		option, monster_id, stats.get_base_stats()
+	)
+	if encounter_result.has("error"):
+		return _encounter_resolution_error(str(encounter_result["error"]))
+	if (
+		not encounter_result.get("success") is bool
+		or not encounter_result.get("success_chance") is int
+		or not encounter_result.get("stress_delta") is int
+		or not encounter_result.get("success_effects") is Dictionary
+	):
+		return _encounter_resolution_error("Encounter resolution returned malformed data.")
+
+	var succeeded: bool = bool(encounter_result["success"])
+	var effects: Dictionary = encounter_result["success_effects"]
+	if succeeded and not _mission_effects_are_valid(effects):
+		return _encounter_resolution_error("Encounter rewards are malformed.")
+
+	var result: PeriodResult = _pending_encounter_result
+	result.mission_success = succeeded
+	result.success_chance = int(encounter_result["success_chance"])
+	result.stress_change = stats.add_stress(int(encounter_result["stress_delta"]))
+	result.stress_final = stats.get_stress()
+	result.encounter_description = str(
+		_pending_encounter.get("encounter_monster_description", "")
+	)
+	if succeeded:
+		_apply_mission_effects(effects, result)
+		var item_id: String = activities.roll_encounter_item_drop(option)
+		if not item_id.is_empty():
+			inventory_counts[item_id] = get_item_count(item_id) + 1
+			result.items_gained.append(item_id)
+	else:
+		result.encounter_orac_returned = true
+		result.encounter_description = activities.get_orac_return_description()
+
+	_pending_encounter.clear()
+	_complete_period(result)
+	_pending_encounter_result = null
+	return result
+
+
+func _encounter_resolution_error(message: String) -> PeriodResult:
+	var error_result: PeriodResult = PeriodResult.new()
+	if _pending_encounter_result != null:
+		error_result.period = _pending_encounter_result.period
+		error_result.year = _pending_encounter_result.year
+		error_result.month = _pending_encounter_result.month
+		error_result.period_num = _pending_encounter_result.period_num
+		error_result.age = _pending_encounter_result.age
+		error_result.activity_type = _pending_encounter_result.activity_type
+		error_result.activity_id = _pending_encounter_result.activity_id
+		error_result.encounter_monster_id = _pending_encounter_result.encounter_monster_id
+		error_result.encounter_monster_name = _pending_encounter_result.encounter_monster_name
+	error_result.is_encounter_pending = not _pending_encounter.is_empty()
+	error_result.error_message = message
+	return error_result
+
+
+func _mission_effects_are_valid(effects: Dictionary) -> bool:
+	var numeric_keys: Array[String] = [
+		"credits", "str", "int", "cha", "ref", "sta", "eth",
+		"fighter_rep", "social_rep", "hacker_rep", "missoes_tecnicas_concluidas"
+	]
+	for key: String in numeric_keys:
+		if effects.has(key) and not _is_number(effects[key]):
+			return false
+	for flag_id: String in [
+		"community_help", "criminal_record", "disappear_from_society", "tech_experiments"
+	]:
+		if effects.has(flag_id) and not effects[flag_id] is bool:
+			return false
+	return true
+
+
+static func _is_number(value: Variant) -> bool:
+	return value is int or value is float
 
 
 func _parse_choice(choice: String) -> Dictionary:
@@ -591,13 +774,7 @@ func _resolve_activity(parsed_choice: Dictionary) -> Dictionary:
 		return activities.execute_work(activity_id, level)
 	if activity_type == "mission":
 		if not activities.get_mission(activity_id).is_empty():
-			var mission_result: Dictionary = activities.resolve_mission(
-				activity_id, stats.get_base_stats()
-			)
-			if not mission_result.has("error") and bool(mission_result.get("success", false)):
-				var effects: Dictionary = mission_result.get("success_effects", {})
-				mission_result["income"] = int(effects.get("credits", 0))
-			return mission_result
+			return activities.resolve_mission(activity_id, stats.get_base_stats())
 		return {"error": "Unknown mission '%s'." % activity_id}
 	return activities.execute_leisure(activity_id)
 
@@ -632,18 +809,15 @@ func _apply_activity_effects(
 		var effects: Dictionary = activity_result.get("success_effects", {})
 		if bool(activity_result.get("success", false)):
 			_apply_mission_effects(effects, result)
-			if activity_id == "missao_tecnica":
-				_missions_technical_completed += 1
-				result.mission_count = 1
-				if bool(parsed_choice["experiment"]):
-					tech_experiments = true
-					result.flags_set["tech_experiments"] = true
-				if bool(effects.get("community_help", false)):
-					community_help = true
-					result.flags_set["community_help"] = true
+			if bool(parsed_choice["experiment"]) and activity_id == "missao_tecnica":
+				tech_experiments = true
+				result.flags_set["tech_experiments"] = true
 
 
 func _apply_mission_effects(effects: Dictionary, result: PeriodResult) -> void:
+	var credits: int = int(effects.get("credits", 0))
+	if credits > 0 and economy.receive_income(credits):
+		result.credits_change += credits
 	for stat_id: String in ["str", "int", "cha", "ref", "sta"]:
 		var delta: int = int(effects.get(stat_id, 0))
 		if delta != 0:
@@ -665,6 +839,15 @@ func _apply_mission_effects(effects: Dictionary, result: PeriodResult) -> void:
 			var actual_delta: int = stats.add_reputation(reputation_id, delta)
 			if actual_delta != 0:
 				result.rep_gained[reputation_id] = actual_delta
+	var technical_mission_delta: int = int(effects.get("missoes_tecnicas_concluidas", 0))
+	if technical_mission_delta > 0:
+		_missions_technical_completed += technical_mission_delta
+		activities.add_technical_mission_count(technical_mission_delta)
+		result.mission_count += technical_mission_delta
+	for flag_id: String in ["community_help", "criminal_record", "disappear_from_society", "tech_experiments"]:
+		if bool(effects.get(flag_id, false)):
+			_set_campaign_flag(flag_id, true)
+			result.flags_set[flag_id] = true
 
 
 func _systems_are_initialized() -> bool:

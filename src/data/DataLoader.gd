@@ -11,6 +11,8 @@ var items: Array = []
 var events: Array = []
 var endings: Array = []
 var missions: Array = []
+var monsters: Array = []
+var encounter_rules: Dictionary = {}
 var random_events: Array = []
 var load_errors: Array[String] = []
 var validation_errors: Array[String] = []
@@ -44,6 +46,10 @@ static func load_all(path: String = "res://assets/data") -> DataLoader:
 	)
 	loader.endings = loader._load_models(path, "endings.json", "endings", EndingDef)
 	loader.missions = loader._load_models(path, "missions.json", "missions", MissionDef)
+	loader.monsters = loader._load_models(path, "monsters.json", "monsters", MonsterDef)
+	loader.encounter_rules = loader._read_data_object(
+		path, "encounter_rules.json", "encounter_rules"
+	)
 
 	loader.validation_errors = DataValidator.validate_all(loader)
 	loader.validation_errors.append_array(loader.load_errors)

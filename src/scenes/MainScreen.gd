@@ -28,10 +28,12 @@ var _name_label: Label
 var _age_label: Label
 var _credits_label: Label
 var _status_button: Button
+var _new_campaign_button: Button
 var _schedule_button: Button
 var _menu_buttons: Array[Button] = []
 var _status_panel: StatusPanel
 var _schedule_flow: MonthlyScheduleFlow
+var _game_manager: GameManager
 
 
 func _ready() -> void:
@@ -41,7 +43,14 @@ func _ready() -> void:
 	add_child(_schedule_flow)
 	_schedule_flow.bind_main_screen(self)
 	schedule_requested.connect(_schedule_flow.on_schedule_requested)
+	_game_manager = get_node_or_null("/root/Game") as GameManager
+	if _game_manager == null:
+		push_error("GameManager autoload is unavailable; a campaign cannot be started.")
+	else:
+		_game_manager.game_started.connect(_on_game_started)
 	update_simulation(simulation)
+	if simulation == null and _new_campaign_button != null:
+		_new_campaign_button.grab_focus()
 
 
 func update_simulation(sim: SimulationCore, profile: Dictionary = {}) -> void:
@@ -149,6 +158,14 @@ func _build_character_card() -> void:
 	_status_button.focus_mode = Control.FOCUS_ALL
 	_status_button.pressed.connect(_on_status_toggle_pressed)
 	content.add_child(_status_button)
+
+	_new_campaign_button = Button.new()
+	_new_campaign_button.name = "NewCampaignButton"
+	_new_campaign_button.text = Localization.text("ui.nova_campanha")
+	_new_campaign_button.custom_minimum_size = Vector2(0.0, 42.0)
+	_new_campaign_button.focus_mode = Control.FOCUS_ALL
+	_new_campaign_button.pressed.connect(_on_new_campaign_pressed)
+	content.add_child(_new_campaign_button)
 
 
 func _build_status_panel() -> void:
@@ -345,6 +362,11 @@ func _update_calendar() -> void:
 func _update_character_card() -> void:
 	if _name_label == null:
 		return
+	var has_campaign: bool = simulation != null
+	_age_label.visible = has_campaign
+	_credits_label.visible = has_campaign
+	_status_button.visible = has_campaign
+	_new_campaign_button.visible = not has_campaign
 	if simulation == null:
 		_name_label.text = Localization.text("ui.sem_campanha")
 		_age_label.text = Localization.text("ui.indisponivel")
@@ -378,8 +400,10 @@ func _update_availability() -> void:
 		button.disabled = not has_campaign
 		if MENU_IDS[index] == "agenda":
 			button.disabled = not can_plan_month
-		elif has_campaign and MENU_IDS[index] == "missao":
-			button.disabled = not simulation.is_mission_available()
+		elif MENU_IDS[index] == "missao":
+			button.disabled = (
+				not can_plan_month or not has_campaign or not simulation.is_mission_available()
+			)
 	_schedule_button.disabled = not can_plan_month
 
 
@@ -404,9 +428,28 @@ func _on_schedule_pressed() -> void:
 	schedule_requested.emit("primary")
 
 
+func _on_new_campaign_pressed() -> void:
+	if _game_manager == null:
+		push_error("Cannot start a campaign because GameManager is unavailable.")
+		return
+	_game_manager.start_new_game()
+
+
+func _on_game_started() -> void:
+	if _game_manager == null or _game_manager.simulation == null:
+		push_error("GameManager reported a started campaign without a simulation.")
+		return
+	update_simulation(_game_manager.simulation)
+	if not _schedule_button.disabled:
+		_schedule_button.grab_focus()
+
+
 func _on_menu_pressed(destination: String) -> void:
 	if destination == "agenda":
 		schedule_requested.emit("agenda")
+		return
+	if destination == "missao":
+		schedule_requested.emit("mission")
 		return
 	destination_requested.emit(destination)
 

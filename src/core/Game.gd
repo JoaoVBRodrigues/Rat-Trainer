@@ -1,4 +1,5 @@
 extends Node
+class_name GameManager
 
 signal game_started
 signal game_saved
@@ -16,16 +17,24 @@ enum GameState {
 }
 
 var current_state: GameState = GameState.BOOT
+var simulation: SimulationCore
 
 
 func _ready() -> void:
 	transition_to(GameState.MAIN_MENU)
 
 
-func start_new_game() -> void:
+func start_new_game() -> bool:
+	var new_simulation: SimulationCore = SimulationCore.new()
+	if not new_simulation.initialize():
+		push_error("Could not initialize a new campaign simulation.")
+		return false
+
 	Data.initialize_new_save()
+	simulation = new_simulation
 	transition_to(GameState.PLAYING)
 	game_started.emit()
+	return true
 
 
 func save_game(slot: int) -> bool:

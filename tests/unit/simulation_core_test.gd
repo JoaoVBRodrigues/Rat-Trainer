@@ -86,6 +86,227 @@ func test_advance_period_applies_mission_technical_on_success() -> void:
 	assert_int(result.activity_type).is_equal(PeriodResult.ActivityType.MISSION)
 
 
+func test_physical_encounter_loads_monster_display_name() -> void:
+	# Arrange
+	var sim: SimulationCore = SimulationCore.new()
+	assert_bool(sim.initialize()).is_true()
+
+	# Act
+	var monster: Dictionary = sim.activities.get_monster_for_mission("missao_fisica_drones")
+
+	# Assert
+	assert_str(monster.get("name", "")).is_equal("Drone Patrulha")
+
+
+func test_invalid_encounter_option_preserves_pending_encounter() -> void:
+	# Arrange
+	var encounter: Dictionary = _find_open_physical_encounter("missao_fisica_ruinas")
+	assert_bool(encounter.is_empty()).is_false()
+	var sim: SimulationCore = encounter["simulation"]
+	var pending: PeriodResult = encounter["result"]
+	assert_bool(pending.is_encounter_pending).is_true()
+
+	# Act
+	var invalid_result: PeriodResult = sim.resolve_pending_encounter(-1)
+
+	# Assert
+	assert_bool(invalid_result.error_message.is_empty()).is_false()
+	assert_bool(sim.has_pending_encounter()).is_true()
+	assert_int(sim.calendar.completed_periods).is_equal(0)
+	assert_bool(sim.get_state().is_empty()).is_true()
+
+
+func test_encounter_completion_preserves_original_period_and_advances_once() -> void:
+	# Arrange
+	var encounter: Dictionary = _find_open_physical_encounter("missao_fisica_ruinas")
+	assert_bool(encounter.is_empty()).is_false()
+	var sim: SimulationCore = encounter["simulation"]
+	var pending: PeriodResult = encounter["result"]
+	assert_int(sim.calendar.completed_periods).is_equal(0)
+
+	# Act
+	var result: PeriodResult = sim.resolve_pending_encounter(
+		ActivitySystem.EncounterOption.FLEE
+	)
+
+	# Assert
+	assert_bool(result.completed).is_true()
+	assert_int(result.period).is_equal(pending.period)
+	assert_int(result.year).is_equal(pending.year)
+	assert_int(result.month).is_equal(pending.month)
+	assert_int(result.period_num).is_equal(pending.period_num)
+	assert_str(result.activity_id).is_equal("missao_fisica_ruinas")
+	assert_int(sim.calendar.completed_periods).is_equal(1)
+	assert_bool(sim.has_pending_encounter()).is_false()
+
+
+func test_fight_defeat_applies_only_stress_and_no_stat_or_crime_loss() -> void:
+	# Arrange
+	var found_defeat: bool = false
+	for seed_value: int in range(1, 301):
+		var encounter: Dictionary = _open_physical_encounter(
+			"missao_fisica_ruinas", ActivitySystem.EncounterOption.FIGHT, seed_value
+		)
+		if encounter.is_empty():
+			continue
+		var sim: SimulationCore = encounter["simulation"]
+		var result: PeriodResult = sim.resolve_pending_encounter(
+			ActivitySystem.EncounterOption.FIGHT
+		)
+		if result.mission_success:
+			continue
+
+		# Assert
+		found_defeat = true
+		assert_int(result.stress_change).is_equal(10)
+		assert_int(sim.stats.get_stress()).is_equal(10)
+		assert_bool(result.stat_changes.is_empty()).is_true()
+		assert_int(sim.stats.get_stat("str")).is_equal(15)
+		assert_bool(sim.criminal_record).is_false()
+		assert_bool(result.encounter_orac_returned).is_true()
+		assert_int(result.items_gained.size()).is_equal(0)
+		assert_int(sim.calendar.completed_periods).is_equal(1)
+		break
+	assert_bool(found_defeat).is_true()
+
+
+func test_failed_non_fight_encounter_also_returns_nyx_home() -> void:
+	# Arrange
+	var found_failure: bool = false
+	for seed_value: int in range(1, 301):
+		var encounter: Dictionary = _open_physical_encounter(
+			"missao_fisica_ruinas", ActivitySystem.EncounterOption.TALK, seed_value
+		)
+		if encounter.is_empty():
+			continue
+		var sim: SimulationCore = encounter["simulation"]
+		sim.stats.set_stat("cha", 0)
+		sim.stats.set_stat("int", 0)
+
+		# Act
+		var result: PeriodResult = sim.resolve_pending_encounter(
+			ActivitySystem.EncounterOption.TALK
+		)
+		if result.mission_success:
+			continue
+
+		# Assert
+		found_failure = true
+		assert_bool(result.encounter_orac_returned).is_true()
+		assert_bool(result.encounter_description.is_empty()).is_false()
+		assert_int(result.stress_change).is_equal(8)
+		assert_int(sim.calendar.completed_periods).is_equal(1)
+		break
+	assert_bool(found_failure).is_true()
+
+
+func test_conversation_success_grants_half_reward_and_exact_stress() -> void:
+	# Arrange
+	var found_success: bool = false
+	for seed_value: int in range(1, 301):
+		var encounter: Dictionary = _open_physical_encounter(
+			"missao_fisica_ruinas", ActivitySystem.EncounterOption.TALK, seed_value
+		)
+		if encounter.is_empty():
+			continue
+		var sim: SimulationCore = encounter["simulation"]
+		sim.stats.set_stat("cha", 70)
+		sim.stats.set_stat("int", 100)
+		var result: PeriodResult = sim.resolve_pending_encounter(
+			ActivitySystem.EncounterOption.TALK
+		)
+		if not result.mission_success:
+			continue
+
+		# Assert
+		found_success = true
+		assert_int(result.credits_change).is_equal(12)
+		assert_int(result.stat_changes.get("cha", 0)).is_equal(1)
+		assert_int(result.rep_gained.get("social", 0)).is_equal(2)
+		assert_int(result.stress_change).is_equal(6)
+		assert_bool(result.stat_changes.has("str")).is_false()
+		break
+	assert_bool(found_success).is_true()
+
+
+func test_successful_fight_rewards_and_recovery_drop_are_applied_once() -> void:
+	# Arrange
+	var found_reward_and_drop: bool = false
+	for seed_value: int in range(1, 1001):
+		var encounter: Dictionary = _open_physical_encounter(
+			"missao_fisica_ruinas", ActivitySystem.EncounterOption.FIGHT, seed_value
+		)
+		if encounter.is_empty():
+			continue
+		var sim: SimulationCore = encounter["simulation"]
+		var result: PeriodResult = sim.resolve_pending_encounter(
+			ActivitySystem.EncounterOption.FIGHT
+		)
+		if not result.mission_success or not result.items_gained.has("adesivo_recuperacao"):
+			continue
+
+		# Assert
+		found_reward_and_drop = true
+		assert_int(result.credits_change).is_equal(25)
+		assert_int(result.stat_changes.get("str", 0)).is_equal(2)
+		assert_int(result.rep_gained.get("fighter", 0)).is_equal(5)
+		assert_int(result.items_gained.size()).is_equal(1)
+		assert_int(sim.get_item_count("adesivo_recuperacao")).is_equal(1)
+		var duplicate_resolution: PeriodResult = sim.resolve_pending_encounter(
+			ActivitySystem.EncounterOption.FIGHT
+		)
+		assert_bool(duplicate_resolution.error_message.is_empty()).is_false()
+		assert_int(sim.get_item_count("adesivo_recuperacao")).is_equal(1)
+		break
+	assert_bool(found_reward_and_drop).is_true()
+
+
+func test_drones_success_applies_counter_effect_from_mission_data() -> void:
+	# Arrange
+	var found_success: bool = false
+	for seed_value: int in range(1, 501):
+		var encounter: Dictionary = _open_physical_encounter(
+			"missao_fisica_drones", ActivitySystem.EncounterOption.FIGHT, seed_value
+		)
+		if encounter.is_empty():
+			continue
+		var sim: SimulationCore = encounter["simulation"]
+		var result: PeriodResult = sim.resolve_pending_encounter(
+			ActivitySystem.EncounterOption.FIGHT
+		)
+		if not result.mission_success:
+			continue
+
+		# Assert
+		found_success = true
+		assert_int(sim.get_state()["missions_technical_completed"]).is_equal(1)
+		assert_int(sim.get_state()["activities"]["missions_technical_completed"]).is_equal(1)
+		assert_int(result.mission_count).is_equal(1)
+		assert_int(result.credits_change).is_equal(30)
+		break
+	assert_bool(found_success).is_true()
+
+
+func test_equipped_item_ids_default_empty_and_round_trip_in_simulation_state() -> void:
+	# Arrange
+	var sim: SimulationCore = SimulationCore.new()
+	assert_bool(sim.initialize()).is_true()
+	assert_int(sim.get_equipped_item_ids().size()).is_equal(0)
+	assert_bool(sim.set_equipped_item_ids(["kit_ferramentas"])).is_true()
+	var snapshot: Dictionary = sim.get_state()
+	var restored: SimulationCore = SimulationCore.new()
+	assert_bool(restored.initialize()).is_true()
+
+	# Act
+	var loaded: bool = restored.load_state(snapshot)
+
+	# Assert
+	assert_bool(loaded).is_true()
+	assert_array(restored.get_equipped_item_ids()).contains_exactly_in_any_order(
+		"kit_ferramentas"
+	)
+
+
 func test_successful_technical_mission_credits_its_reward() -> void:
 	# Arrange / Act
 	for seed_value: int in range(1, 101):
@@ -239,6 +460,7 @@ func test_disease_rejects_mission_without_consuming_period() -> void:
 	# Arrange
 	var sim: SimulationCore = SimulationCore.new()
 	assert_bool(sim.initialize()).is_true()
+	sim.set_seed(42)
 	sim.stats.set_stress(80)
 	sim.stats.check_and_update_disease()
 
@@ -327,7 +549,7 @@ func test_get_available_activities_changes_with_disease() -> void:
 	var available = sim.get_available_activities()
 
 	# Assert - Missions available
-	assert_int(available.mission.size()).is_equal(3)
+	assert_int(available.mission.size()).is_equal(5)
 
 	# Act - Make player diseased
 	sim.stats.set_stress(80)
@@ -536,6 +758,39 @@ func test_two_year_campaign_contains_varied_fixed_and_random_events() -> void:
 		if event_counts.has(event_id):
 			random_event_types += 1
 	assert_bool(random_event_types >= 2).is_true()
+
+
+func _find_open_physical_encounter(mission_id: String) -> Dictionary:
+	for seed_value: int in range(1, 1001):
+		var encounter: Dictionary = _open_physical_encounter(
+			mission_id, ActivitySystem.EncounterOption.FIGHT, seed_value
+		)
+		if not encounter.is_empty():
+			return encounter
+	return {}
+
+
+func _open_physical_encounter(
+	mission_id: String, _option: int, seed_value: int
+) -> Dictionary:
+	var sim: SimulationCore = SimulationCore.new()
+	if not sim.initialize():
+		return {}
+	if mission_id == "missao_fisica_drones":
+		sim.stats.set_stat("int", 27)
+		if not sim.set_equipped_item_ids(["kit_ferramentas"]):
+			return {}
+	elif mission_id == "missao_fisica_infiltracao":
+		sim.stats.set_stat("str", 25)
+		if not sim.set_equipped_item_ids(["kit_ferramentas", "casaco_acolchoado"]):
+			return {}
+	sim.set_seed(seed_value)
+	var pending: PeriodResult = sim.advance_period(
+		"mission_%s" % mission_id, seed_value
+	)
+	if pending.is_event_pending or not pending.is_encounter_pending:
+		return {}
+	return {"simulation": sim, "result": pending}
 
 
 func _simulation_at_first_year_festival(ref_value: int) -> SimulationCore:

@@ -162,8 +162,15 @@ func display_result(result: PeriodResult, simulation: SimulationCore) -> void:
 	var activity_name: String = _activity_name(result, record)
 	_title_label.text = activity_name
 	_placeholder_label.text = activity_name
+	if not result.encounter_monster_name.is_empty():
+		_placeholder_label.text = "%s\n%s" % [
+			result.encounter_monster_name,
+			result.encounter_description
+		]
+		_description_label.text = result.encounter_description
 	_period_label.text = _format_period(result)
-	_description_label.text = str(record.get("description", ""))
+	if result.encounter_monster_name.is_empty():
+		_description_label.text = str(record.get("description", ""))
 	_build_changes(result)
 	_build_resulting_values(result)
 	activity_completed.emit()

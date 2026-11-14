@@ -16,6 +16,7 @@ var _simulation: SimulationCore
 var _schedule_screen: ScheduleScreen
 var _result_screen: ActivityResultScreen
 var _summary_screen: MonthSummaryScreen
+var _encounter_screen: EncounterScreen
 var _draft: MonthSchedule
 var _previous_schedule: MonthSchedule
 var _previous_schedule_calendar: CalendarSystem
@@ -41,7 +42,7 @@ func update_simulation(simulation: SimulationCore) -> void:
 	_simulation = simulation
 
 
-func on_schedule_requested(_source: String) -> void:
+func on_schedule_requested(source: String) -> void:
 	if _simulation == null or _active:
 		return
 	if _simulation.is_campaign_complete() or _simulation.calendar.period != 1:
@@ -52,7 +53,16 @@ func on_schedule_requested(_source: String) -> void:
 	_draft.credits_at_start = _simulation.economy.get_credits()
 	_ensure_screens()
 	_schedule_screen.open_schedule(
-		_simulation, _draft, _available_previous_schedule(), _build_activity_choices()
+		_simulation,
+		_draft,
+		_available_previous_schedule(),
+		_build_activity_choices(),
+		"",
+		0,
+		true,
+		0,
+		false,
+		"mission" if source == "mission" else "study"
 	)
 	_schedule_screen.visible = true
 
@@ -78,6 +88,12 @@ func _ensure_screens() -> void:
 		_summary_screen.summary_finished.connect(_on_summary_finished)
 		_main_screen.add_child(_summary_screen)
 		_summary_screen.visible = false
+	if _encounter_screen == null:
+		_encounter_screen = EncounterScreen.new()
+		_encounter_screen.name = "EncounterScreen"
+		_encounter_screen.encounter_resolved.connect(_on_encounter_resolved)
+		_main_screen.add_child(_encounter_screen)
+		_encounter_screen.visible = false
 
 
 func _build_activity_choices() -> Dictionary:
@@ -144,12 +160,13 @@ func _build_activity_choice(category: String, activity_id: String) -> Dictionary
 			if activity_record.is_empty():
 				return _activity_data_error_choice(category, activity_id, "missing_record")
 			preview = {"stress": int(activity_record.get("stress", 0))}
-			can_afford = _simulation.is_mission_available()
+			var availability_error: String = _simulation.get_mission_availability_error(activity_id)
+			can_afford = availability_error.is_empty()
 			if not can_afford:
 				reason = (
 					"disease"
 					if _simulation.stats.is_mission_blocked_by_disease()
-					else "blocked"
+					else "mission_requirements"
 				)
 		"leisure":
 			var execution: Dictionary = activity_system.execute_leisure(activity_id)
@@ -328,7 +345,7 @@ func _refresh_schedule_values(schedule: MonthSchedule, start_index: int = 0) -> 
 			MonthSchedule.ActivityPeriod.MISSION:
 				if not _simulation.activities.get_available_missions().has(activity_id):
 					return false
-				if not _simulation.is_mission_available():
+				if not _simulation.get_mission_availability_error(activity_id).is_empty():
 					return false
 			MonthSchedule.ActivityPeriod.LEISURE:
 				if not _simulation.activities.get_available_leisure().has(activity_id):
@@ -371,7 +388,7 @@ func _selection_is_available(selection: Dictionary) -> bool:
 		MonthSchedule.ActivityPeriod.MISSION:
 			return (
 				_simulation.activities.get_available_missions().has(activity_id)
-				and _simulation.is_mission_available()
+				and _simulation.get_mission_availability_error(activity_id).is_empty()
 			)
 		MonthSchedule.ActivityPeriod.LEISURE:
 			return _simulation.activities.get_available_leisure().has(activity_id)
@@ -391,19 +408,25 @@ func _resolve_next_period() -> void:
 		_show_schedule_error(_next_period_index, false)
 		return
 
-	var before_periods: int = _simulation.calendar.completed_periods
 	var result: PeriodResult = _simulation.advance_period(_choice_string(selection))
-	var after_periods: int = _simulation.calendar.completed_periods
-	if not result.completed:
-		if after_periods != before_periods:
-			_recovery_blocked = true
-			_pause_execution()
-		else:
-			_show_schedule_error(_next_period_index, false)
+
+	# Physical missions may trigger an encounter that requires player choice before
+	# the period completes. The encounter resolution itself advances the calendar.
+	if has_pending_encounter():
+		if _test_mode:
+			# Deterministic test route resolves the encounter automatically.
+			var encounter_result: PeriodResult = resolve_pending_encounter(0)
+			if not encounter_result.error_message.is_empty():
+				_show_schedule_error(_next_period_index, false)
+				return
+			_results.append(encounter_result)
+			_next_period_index += 1
+			return
+		_show_encounter_screen()
 		return
-	if after_periods != before_periods + 1:
-		_recovery_blocked = true
-		_pause_execution()
+
+	if not result.completed:
+		_show_schedule_error(_next_period_index, false)
 		return
 
 	_results.append(result)
@@ -463,6 +486,44 @@ func _build_report(pre_state: Dictionary, post_state: Dictionary) -> Dictionary:
 		"stress_delta": int(post_stats.get("stress", 0)) - int(pre_stats.get("stress", 0)),
 		"stress_final": int(post_stats.get("stress", 0))
 	}
+
+
+func _show_encounter_screen() -> void:
+	if _encounter_screen == null:
+		_ensure_screens()
+	if _encounter_screen == null:
+		return
+	var encounter: Dictionary = get_pending_encounter()
+	var monster_id: String = str(encounter.get("encounter_monster_id", ""))
+	var monster_name: String = str(encounter.get("encounter_monster_name", ""))
+	var monster_description: String = str(
+		encounter.get("encounter_monster_description", "")
+	)
+	if monster_name.is_empty():
+		monster_name = Localization.text("ui.indisponivel")
+	if _result_screen != null:
+		_result_screen.hide_result()
+	_encounter_screen.open_encounter(monster_id, monster_name, monster_description)
+	_encounter_screen.visible = true
+
+
+func _on_encounter_resolved(option: int) -> void:
+	var result: PeriodResult = resolve_pending_encounter(option)
+	if not result.error_message.is_empty():
+		push_error("encounter_resolution_failed:%s" % result.error_message)
+		if _encounter_screen != null:
+			_encounter_screen.show_resolution_error(result.error_message)
+			_encounter_screen.visible = true
+		return
+	if result.completed:
+		_encounter_screen.hide_encounter()
+		_results.append(result)
+		_next_period_index += 1
+		if _test_mode:
+			return
+		if _result_screen != null:
+			_result_screen.show_result(result, _simulation)
+		return
 
 
 func _show_schedule_error(period_index: int, can_cancel: bool) -> void:
@@ -580,3 +641,23 @@ func run_month_for_test(schedule: MonthSchedule, seed: int) -> Dictionary:
 		}
 	_test_mode = false
 	return get_last_report()
+
+
+func get_pending_encounter() -> Dictionary:
+	if _simulation == null:
+		return {}
+	return _simulation.get_pending_encounter()
+
+
+func has_pending_encounter() -> bool:
+	if _simulation == null:
+		return false
+	return _simulation.has_pending_encounter()
+
+
+func resolve_pending_encounter(option: int) -> PeriodResult:
+	if _simulation == null:
+		var result: PeriodResult = PeriodResult.new()
+		result.error_message = "No simulation available."
+		return result
+	return _simulation.resolve_pending_encounter(option)

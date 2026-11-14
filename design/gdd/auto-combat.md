@@ -12,46 +12,79 @@ Nyx enfrenta riscos de forma taticamente legivel, com o equipamento e a preparac
 
 ### Resolucao
 
-1. Carregar STR, STA, equipamento equipado e dificuldade da missao.
-2. Calcular chance uma vez, limitada a 5-95%.
-3. Sortear um inteiro uniforme de 0 a 99. O combate e vencido se o resultado for menor que a chance.
-4. Em vitoria, conceder as recompensas da missao em `activities.md`.
-5. Em derrota, consumir o periodo e aplicar Stress; nao conceder recompensa ou `criminal_record`.
+1. Verificar os requisitos de atributo e equipamento da missao; se faltarem, bloquear o agendamento.
+2. Carregar os atributos relevantes, equipamento equipado e dificuldade da missao.
+3. Calcular a chance da opcao uma vez, limitada a 5-95%.
+4. Sortear um inteiro uniforme de 0 a 99. A opcao e bem-sucedida se o resultado for menor que a chance; igualdade falha.
+5. Em sucesso, aplicar somente a recompensa correspondente a opcao; em falha, nao conceder recompensa.
+6. Concluir o periodo uma vez, qualquer que seja o resultado.
 
-| Missao | Dificuldade |
-|--------|-------------|
-| Apoio fisico local | 35 |
-| Protecao de rota comunitaria | 50 |
-| Escolta de equipamento | 60 |
+| Missao | Dificuldade | Inimigo |
+|--------|-------------|---------|
+| Ruínas Industriais | 35 | Rastreador |
+| Drones | 50 | Drone Patrulha |
+| Infiltração | 60 | Sentinela |
 
-O equipamento da tabela em `items-and-shops.md` fornece bonus de chance; apenas uma ferramenta e uma protecao podem estar equipadas.
+O equipamento da tabela em `items-and-shops.md` fornece +5 pontos percentuais por item aplicavel, ate +10. Requisitos de equipamento nao sao satisfeitos por itens inexistentes; o equipamento inicial permanece vazio.
 
 ### Efeitos
 
-- O sistema de atividades acrescenta +4 Stress pela missao fisica, independentemente do resultado.
-- Este sistema retorna somente o delta adicional de combate: +3 Stress em vitoria e +6 em derrota.
-- Derrota mostra a cena nao grafica de ORAC levando Nyx para casa. STA e demais atributos nao diminuem.
-- Fugir ou esconder-se em uma tela de encontro evita a resolucao de combate, encerra a missao sem recompensa e nao altera ETH nem registros.
+- A atividade fisica acrescenta +4 Stress exatamente uma vez, qualquer que seja a opcao.
+- Deltas adicionais por opcao: Lutar +3 em sucesso/+6 em falha; Conversar +2/+4; Fugir +2/+6; Esconder +1/+6.
+- Derrota em Lutar mostra uma cena nao grafica de ORAC levando Nyx para casa. STA e demais atributos nao diminuem.
+- Falhas em qualquer opcao sao nao letais, nao alteram atributos ou registros, e ainda consomem um periodo.
+
+### Opcoes de Encontro
+
+A tela de encontro apresenta quatro opcoes. Cada opcao consome o periodo e retorna um resultado distinto.
+
+| Opcao | Resolucao | Recompensa | Penalidade |
+|-------|-----------|------------|------------|
+| Lutar | Teste STR/STA | Recompensas completas da missao em caso de sucesso | +6 Stress adicional em falha |
+| Conversar | Teste CHA/INT | Metade dos creditos, +1 CHA, +2 Social Rep | +4 Stress adicional em falha |
+| Fugir | Teste STA/REF | Nenhuma | +6 Stress adicional em falha |
+| Esconder | Teste INT/CHA | Nenhuma | +6 Stress adicional em falha |
+
+- Todas as opcoes usam uma rolagem uniforme de 0-99 e a mesma formula; cada opcao escolhe seu par de atributos.
+- Conversar concede metade dos creditos da missao arredondada para baixo, +1 CHA e +2 Social Rep somente em sucesso.
+- Somente sucesso em Lutar ou Conversar rola a chance de 25% para obter uma unidade de `adesivo_recuperacao`.
+- Qualquer opcao consome exatamente um periodo. Nenhuma opcao cria `criminal_record`.
 
 ## Formulas
 
 ### Chance de vitoria
 
-`chance = clamp(50 + floor((STR - dificuldade) / 2) + floor(STA / 10) + bonus_equipamento, 5, 95)%`
+`chance = clamp(50 + floor((primario - dificuldade) / 2) + floor(suporte / 10) + bonus_equipamento, 5, 95)%`
 
-- STR e STA: 0-100. Dificuldade: 35-60. Bonus: soma de bonus de equipamento, maximo 10 pontos percentuais.
-- Um resultado aleatorio uniforme de 0-99 vence se `resultado < chance`.
-- Exemplo: STR 60, STA 40, dificuldade 50, sem equipamento: `50 + floor(10/2) + 4 = 59%`.
-- Exemplo: STR 15, STA 20, dificuldade 60, bonus 10: `50 + floor(-45/2) + 2 + 10 = 39%` (floor(-22.5) = -23).
+- Pares: Lutar STR/STA; Conversar CHA/INT; Fugir STA/REF; Esconder INT/CHA. Atributos: 0-100; dificuldade: 35-60.
+- Cada item aplicavel equipado da +5 pontos percentuais, no maximo +10.
+- Um resultado aleatorio uniforme de 0-99 vence se `resultado < chance`; igualdade falha.
+- Exemplo: Lutar com STR 60, STA 40, dificuldade 50 e sem equipamento: `50 + floor(10/2) + 4 = 59%`.
+- Exemplo: Esconder com INT 15, CHA 20, dificuldade 60 e bonus 10: `50 + floor(-45/2) + 2 + 10 = 39%` (floor(-22.5) = -23).
 - Limites: o clamp impede chance menor que 5% ou maior que 95%; nenhum combate e garantido ou impossivel.
+
+### Recompensas e Penalidades por Opcao
+
+| Opcao | Sucesso | Falha |
+|-------|---------|-------|
+| Lutar | Recompensas completas da missao (ver activities.md) +3 Stress | +6 Stress adicional, sem recompensa |
+| Conversar | Metade dos creditos (piso), +1 CHA, +2 Social Rep, +2 Stress | +4 Stress adicional, sem recompensa |
+| Fugir | Nenhuma, +2 Stress | +6 Stress adicional, sem recompensa |
+| Esconder | Nenhuma, +1 Stress | +6 Stress adicional, sem recompensa |
+
+- A atividade soma +4 Stress a tabela. Stress final e limitado a 100.
+- Sucesso em Lutar ou Conversar tem chance de 25% de conceder uma unidade de `adesivo_recuperacao`; outras opcoes e falhas nunca concedem item.
+- Derrota nao reduz atributos, nao cria crime e consome exatamente um periodo.
 
 ## Edge Cases
 
-- Valores de STR e STA sao lidos apos os ganhos do periodo e antes da verificacao de doenca do fim do periodo.
+- O par de atributos da opcao e lido antes da rolagem, apos qualquer ganho ja aplicado no periodo.
 - Sem equipamento, `bonus_equipamento=0`.
 - Equipamento ausente ou nao equipado nunca recebe bonus.
-- Um erro de resolucao ou save nao pode conceder recompensas duplicadas; usar o ID do periodo/missao como idempotency key.
-- O resultado deste sistema e somente desfecho e delta adicional de Stress; nao aplica o +4 da atividade, nao paga recompensas e nao altera contadores.
+- Uma falha ou erro de resolucao nao consome o encontro pendente, nao concede recompensa e nao avanca o calendario.
+- O encontro pendente preserva o resultado e os metadados originais; uma conclusao aplica Stress/recompensas uma unica vez e avanca um periodo.
+- Salvar ou retomar durante um encontro aberto nao faz parte desta entrega.
+- O efeito de contador `missoes_tecnicas_concluidas` e aplicado a partir dos dados da missao bem-sucedida.
 - Stress resultante e limitado a 100; nao ha reducao permanente de STA ou HP.
 
 ## Dependencies
@@ -68,13 +101,13 @@ O equipamento da tabela em `items-and-shops.md` fornece bonus de chance; apenas 
 |------|-------|---------|
 | Dificuldade por missao | 35-60 | 35/50/60 |
 | Bonus total de equipamento | 0-10 pontos percentuais | Conforme equipamento |
-| Stress adicional em vitoria | 0-5 | 3 |
-| Stress adicional em derrota | 3-10 | 6 |
+| Stress adicional | 0-6 | Conforme opcao e resultado |
+| Chance de item | 0-100% | 25% em sucesso de Lutar/Conversar |
 
 ## Acceptance Criteria
 
-- A chance calculada e sempre um inteiro entre 5 e 95%.
-- O resultado usa `rng_state` persistido em `save-system.md`; uma recarga antes do autosave repete o mesmo resultado.
-- Vitoria concede recompensas de combate uma unica vez; derrota nao concede nenhuma.
-- Derrota nao reduz atributos, nao cria crime e consome exatamente um periodo.
-- Stress de combate e aplicado e limitado pelo sistema de Stress.
+- Todas as quatro opcoes usam os pares STR/STA, CHA/INT, STA/REF e INT/CHA com chance inteira entre 5 e 95%.
+- Uma rolagem igual a chance falha; seeds iguais produzem o mesmo resultado.
+- Cada opcao aplica o Stress aprovado; falha nao reduz atributos nem cria crime e consome exatamente um periodo.
+- Lutar e Conversar concedem as recompensas aprovadas e rolam uma unica chance de 25% para o adesivo.
+- Um encontro concluido avanca o calendario uma vez e mantem os metadados do periodo original.

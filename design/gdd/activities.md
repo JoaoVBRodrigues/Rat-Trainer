@@ -48,7 +48,31 @@ Ao resolver uma sessao de trabalho, marcar a tarefa em `job_tasks_used_current_m
 | Tecnica | Teste de sucesso | INT | +3 | 30 Cr, +2 INT, +5 Hacker Rep |
 | Apoio comunitario | Teste de sucesso | CHA | +3 | 20 Cr, +2 CHA, +5 Social Rep, +2 ETH e flag `community_help` |
 
-Uma missao falha ainda consome o periodo, mas nao concede salario, pontos de atributo, reputacao, contador de missao tecnica ou flag. Uma missao tecnica bem-sucedida incrementa `missoes_tecnicas_concluidas` em 1. Fugir de combate com sucesso tambem encerra a missao sem recompensa e nao cria `criminal_record`.
+### Missoes Fisicas Tematicas
+
+As missoes fisicas sao resolvidas por uma tela de encontro com quatro opcoes (Lutar, Conversar, Fugir, Esconder). Cada missao tem um inimigo especifico (ver `monsters.md`) que define a dificuldade.
+
+| Missao | Dificuldade | Inimigo | Atributo principal | Recompensas em caso de sucesso (Lutar) |
+|--------|-------------|---------|-------------------|----------------------------------------|
+| Ruínas Industriais | 35 | Rastreador | STR | 25 Cr, +2 STR, +5 Fighter Rep |
+| Drones | 50 | Drone Patrulha | INT | 30 Cr, +2 INT, +5 Hacker Rep |
+| Infiltração | 60 | Sentinela | STR | 35 Cr, +2 STR, +5 Fighter Rep |
+
+| Missao | Requisito minimo | Equipamento obrigatorio |
+|--------|------------------|------------------------|
+| Ruínas Industriais | STR >= 15 | Nenhum |
+| Drones | INT >= 27 | `kit_ferramentas` |
+| Infiltração | STR >= 25 | `kit_ferramentas` e `casaco_acolchoado` |
+
+Uma missao que nao cumpra o requisito de atributo ou de equipamento fica indisponivel; equipamento ausente nunca e concedido automaticamente. O equipamento inicial e vazio.
+
+- A opcao **Lutar** usa a formula de chance de combate de `auto-combat.md`.
+- A opcao **Conversar** usa a formula CHA/INT de `auto-combat.md` e concede metade dos creditos da missao (arredondada para baixo), +1 CHA, +2 Social Rep em caso de sucesso.
+- As opcoes **Fugir** e **Esconder** encerram a missao sem recompensa, sem alterar ETH ou registros.
+- Somente uma resolucao bem-sucedida de **Lutar** ou **Conversar** pode conceder, com chance deterministica de 25%, uma unidade de `adesivo_recuperacao`.
+- O efeito de dados `missoes_tecnicas_concluidas` incrementa o contador da campanha; ele se aplica a qualquer missao bem-sucedida que o declare, incluindo Drones.
+
+Uma missao falha ainda consome o periodo, mas nao concede salario, pontos de atributo, reputacao, contador ou flag. O contador `missoes_tecnicas_concluidas` e incrementado somente pelo efeito declarado nos dados de uma missao bem-sucedida; isso inclui missao tecnica e Drones. Fugir ou esconder-se nao cria `criminal_record`.
 
 ### Lazer: duas opcoes
 
@@ -107,12 +131,14 @@ Cada curso acompanha XP separadamente. Uma sessao concluida concede 10 XP; o niv
 
 ### Stress por atividade
 
-`stress_final = clamp(stress_inicial + stress_atividade + stress_combate + stress_evento, 0, 100)`
+`stress_final = clamp(stress_inicial + stress_atividade + stress_opcao + stress_evento, 0, 100)`
 
-- Estudo: +2; trabalho: valor da tabela; lazer: valor da tabela; missao tecnica/comunitaria: +3; fisica: +4 antes do delta de combate. Valores nao especificados sao 0.
+- Estudo: +2; trabalho: valor da tabela; lazer: valor da tabela; missao tecnica/comunitaria: +3; missao fisica: +4 uma unica vez, mais o delta da opcao. Valores nao especificados sao 0.
 - Exemplo: Stress 20, curso +2 resulta em 22.
 - Exemplo: Stress 57, missao tecnica +3 resulta em 60; a verificacao de doenca usa este estado final.
 - Exemplo: Stress 58, missao fisica vencida (+4 atividade e +3 combate) resulta em 65 antes do clamp.
+
+Os deltas de opcao fisica sao: Lutar +3 em sucesso/+6 em falha; Conversar +2/+4; Fugir +2/+6; Esconder +1/+6. Cada opcao consome um periodo; falhas sao nao letais, nao reduzem atributos nem criam crime, e ORAC leva Nyx para casa apos derrota em Lutar.
 
 ## Edge Cases
 
@@ -121,7 +147,7 @@ Cada curso acompanha XP separadamente. Uma sessao concluida concede 10 XP; o niv
 - Uma tarefa usada em dois periodos do mesmo mes conta como um mes, nao dois; o marcador do mes e persistido a cada autosave.
 - XP que ultrapasse 250 e limitado a 250.
 - Ganhos de atributos sao limitados a 100; ganhos de reputacao seguem o clamp de 0-100.
-- `missoes_tecnicas_concluidas` incrementa somente em uma missao tecnica bem-sucedida; falhas e fugas nao incrementam.
+- `missoes_tecnicas_concluidas` incrementa somente pelo efeito de uma missao bem-sucedida que o declara; falhas nao incrementam.
 - `tech_experiments` e definida somente ao concluir uma sessao de Tecnologia marcada como Experimentacao tecnica ou uma missao explicitamente rotulada como experimental.
 - Stress de estudo e missao segue a tabela e a formula; efeitos nao especificados sao zero.
 - Se Nyx estiver doente, a categoria Missao fica indisponivel ate Stress cair abaixo do limiar.
@@ -155,6 +181,7 @@ Cada curso acompanha XP separadamente. Uma sessao concluida concede 10 XP; o niv
 - Recarregar um save entre periodos e fechar o mes produz a mesma streak que concluir o mes sem recarregar.
 - Cada tipo de atividade aplica exatamente o delta de Stress especificado; valores ausentes aplicam zero.
 - Uma missao fisica usa combate; uma missao tecnica/comunitaria usa a formula limitada de sucesso.
-- Cada missao tecnica bem-sucedida incrementa a contagem persistente exatamente uma vez.
+- Cada missao bem-sucedida aplica os efeitos de dados uma vez; o contador `missoes_tecnicas_concluidas` e aplicado tambem para Drones.
+- Requisitos de atributo e equipamento bloqueiam missoes fisicas; equipamento inicial permanece vazio.
 - Uma sessao de Tecnologia marcada como Experimentacao tecnica conclui o periodo e define a flag `tech_experiments`.
 - Missoes falhas nao concedem recompensas, e fuga nunca cria `criminal_record`.

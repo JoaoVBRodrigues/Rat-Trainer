@@ -21,19 +21,22 @@ The UI presents choices and results; it never mutates `SimulationCore`. A flow/c
 
 `design/player-journey.md` is absent. Assumption: the player is at the campaign hub at the start of an eligible month, has just reviewed the current date and status, and is ready to make three consequential but unhurried choices. Show the month and relevant current resources immediately; do not assume the player remembers their previous schedule.
 
+When no campaign is active, the hub offers `Nova campanha`; starting it initializes the default campaign before schedule actions become available.
+
 This flow assumes a normal schedule-eligible month. Before opening planning, the owner checks the requested month's periods. An event-owned period is excluded from normal activity selection and routed to its owner when integrated; this flow does not define the event or sequence it. If an event-owned period exists and no owner integration is available, do not start normal agenda execution for that month. No event or flee content is designed here.
 
 ## Navigation Position
 
 `Campaign -> MainScreen -> Monthly Schedule Flow -> three period results -> monthly summary -> MainScreen`
 
-The flow opens from Agenda or AGENDAR through `MainScreen.schedule_requested(source)`. It can be entered only when the calendar is at the start of a schedule-eligible month and all three periods are normal activity periods. An event-owned period is not represented as a normal activity slot; when event integration exists, the owner receives the handoff. Without that integration, the normal agenda is unavailable for that month rather than silently consuming or skipping an event-owned period. Cancel before confirmation returns to the hub without changing campaign state. After execution, the player continues through all results and the monthly summary before returning.
+The flow opens from Agenda or AGENDAR through `MainScreen.schedule_requested(source)`. The Missão hub action opens the same flow with the mission category selected. It can be entered only when the calendar is at the start of a schedule-eligible month and all three periods are normal activity periods. An event-owned period is not represented as a normal activity slot; when event integration exists, the owner receives the handoff. Without that integration, the normal agenda is unavailable for that month rather than silently consuming or skipping an event-owned period. Cancel before confirmation returns to the hub without changing campaign state. After execution, the player continues through all results and the monthly summary before returning.
 
 ## Entry & Exit Points
 
 | Entry Source | Trigger | Player carries this context |
 |---|---|---|
 | MainScreen | Agenda or AGENDAR emits `schedule_requested(source)` | Current month, period-1 calendar state, credits, stats, Stress/disease, activity data |
+| MainScreen | Missão emits `schedule_requested("mission")` | Same campaign context, with the mission category preselected |
 | Integration test harness | Programmatic monthly-flow test route | Isolated simulation, complete test schedule, explicit RNG seed |
 | Event owner | Typed handoff when one or more requested month periods are event-owned | Owner-provided event context; normal agenda does not present those periods as activity choices |
 

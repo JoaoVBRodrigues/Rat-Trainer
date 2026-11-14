@@ -13,6 +13,8 @@ extends Node
 # it - the runtime Engine.is_editor_hint() guard never gets a chance.
 const _NOTIFICATION_EDITOR_SETTINGS_CHANGED := 10000
 
+static var _reported_missing_settings: Dictionary = {}
+
 static var text_color := Color.WEB_GRAY
 static var folder_color := Color.LIGHT_SKY_BLUE
 static var function_definition_color := Color.ANTIQUE_WHITE
@@ -46,16 +48,63 @@ static func setup() -> void:
 	# see the parse-time note above; on template builds the defaults apply.
 	var editor_interface: Object = Engine.get_singleton("EditorInterface")
 	var settings: Object = editor_interface.call("get_editor_settings")
-	text_color = settings.call("get_setting", "text_editor/theme/highlighting/text_color")
-	folder_color = settings.call("get_setting", "text_editor/theme/highlighting/member_variable_color")
-	function_definition_color = settings.call("get_setting", "text_editor/theme/highlighting/gdscript/function_definition_color")
-	engine_type_color = settings.call("get_setting", "text_editor/theme/highlighting/engine_type_color")
-	value_color = settings.call("get_setting", "text_editor/theme/highlighting/function_color")
+	text_color = _get_editor_color(
+		settings, "text_editor/theme/highlighting/text_color", Color.WEB_GRAY
+	)
+	folder_color = _get_editor_color(
+		settings, "text_editor/theme/highlighting/member_variable_color", Color.LIGHT_SKY_BLUE
+	)
+	function_definition_color = _get_editor_color(
+		settings,
+		"text_editor/theme/highlighting/gdscript/function_definition_color",
+		Color.ANTIQUE_WHITE
+	)
+	engine_type_color = _get_editor_color(
+		settings, "text_editor/theme/highlighting/engine_type_color", Color.ANTIQUE_WHITE
+	)
+	value_color = _get_editor_color(
+		settings, "text_editor/theme/highlighting/function_color", Color.DODGER_BLUE
+	)
 	# init test state colors
 	state_initial = text_color
-	state_success = settings.call("get_setting", "editors/animation/onion_layers_future_color")
-	state_warning = settings.call("get_setting", "text_editor/theme/highlighting/comment_markers/warning_color")
-	state_flaky = settings.call("get_setting", "text_editor/theme/highlighting/gdscript/node_reference_color")
-	state_failure = settings.call("get_setting", "text_editor/theme/highlighting/comment_markers/critical_color")
-	state_error = settings.call("get_setting", "editors/2d/smart_snapping_line_color")
-	state_orphan = settings.call("get_setting", "text_editor/theme/highlighting/string_placeholder_color")
+	state_success = _get_editor_color(
+		settings, "editors/animation/onion_layers_future_color", Color.WEB_GREEN
+	)
+	state_warning = _get_editor_color(
+		settings,
+		"text_editor/theme/highlighting/comment_markers/warning_color",
+		Color.DARK_GOLDENROD
+	)
+	state_flaky = _get_editor_color(
+		settings,
+		"text_editor/theme/highlighting/gdscript/node_reference_color",
+		Color.GREEN_YELLOW
+	)
+	state_failure = _get_editor_color(
+		settings,
+		"text_editor/theme/highlighting/comment_markers/critical_color",
+		Color.ORANGE_RED
+	)
+	state_error = _get_editor_color(
+		settings, "editors/2d/smart_snapping_line_color", Color.DARK_RED
+	)
+	state_orphan = _get_editor_color(
+		settings,
+		"text_editor/theme/highlighting/string_placeholder_color",
+		Color.DARK_GOLDENROD
+	)
+
+
+static func _get_editor_color(
+	settings: Object, setting_path: String, fallback: Color
+) -> Color:
+	var setting_value: Variant = settings.call("get_setting", setting_path)
+	if setting_value is Color:
+		return setting_value
+	if not _reported_missing_settings.has(setting_path):
+		push_warning(
+			"Godot editor setting '%s' is missing or is not a Color; using the default color."
+			% setting_path
+		)
+		_reported_missing_settings[setting_path] = true
+	return fallback
