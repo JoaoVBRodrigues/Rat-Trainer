@@ -1,0 +1,24 @@
+{
+	"schema_version": 1,
+	"inventory_limit": 10,
+	"shops": [
+		{
+			"id": "workshop",
+			"name_key": "shops.names.workshop",
+			"description_key": "shops.descriptions.workshop",
+			"items": ["kit_ferramentas"]
+		},
+		{
+			"id": "general",
+			"name_key": "shops.names.general",
+			"description_key": "shops.descriptions.general",
+			"items": ["casaco_acolchoado"]
+		},
+		{
+			"id": "clinic",
+			"name_key": "shops.names.clinic",
+			"description_key": "shops.descriptions.clinic",
+			"items": ["adesivo_recuperacao"]
+		}
+	]
+}

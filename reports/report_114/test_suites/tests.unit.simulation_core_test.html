@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="x-ua-compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>GdUnit4 Testsuite</title>
+	<link rel="stylesheet" href="../css/styles.css">
+	<link href="../css/breadcrumb.css" rel="stylesheet" type="text/css" />
+
+	<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+	<script>
+		$(document).ready(function () {
+			var report_view = $('#report_area').find('.report-column')
+
+			$('#report-table tr').click(function () {
+				var report = $(this).find('.report-column').html();
+				report_view.html(report)
+				$('.selected').removeClass('selected');
+				$(this).addClass('selected');
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<header>
+		<div class="logo">
+			<img src="../css/logo.png" alt="GdUnit4 Logo">
+			<span>GdUnit4</span>
+		</div>
+		<div class="report-container">
+			<h1>Testsuite Report</h1>
+			<div>
+				<span class="label">res://tests/unit/simulation_core_test.gd</span>
+			</div>
+			<div class="summary">
+				<div class="summary-item">
+					<span class="label">Tests</span>
+					<span class="value">35</span>
+				</div>
+				<div class="summary-item">
+					<span class="label">Skipped</span>
+					<span class="value">0</span>
+				</div>
+				<div class="summary-item">
+					<span class="label">Flaky</span>
+					<span class="value">0</span>
+				</div>
+				<div class="summary-item">
+					<span class="label">Failures</span>
+					<span class="value">76</span>
+				</div>
+				<div class="summary-item">
+					<span class="label">Orphans</span>
+					<span class="value">0</span>
+				</div>
+				<div class="summary-item">
+					<span class="label">Duration</span>
+					<span class="value">56s 986ms</span>
+				</div>
+				<div class="success-rate">
+					<div class="check-icon status-error">✓</div>
+					<div class="rate-text">
+						<span class="label">Success Rate</span>
+						<span class="value">0%</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="breadcrumb">
+			<a href="../index.html"><span>All</span></a>
+			<a href="../path/tests.unit.html"><span>tests/unit</span></a>
+			<a class="active" href="#"><span>simulation_core_test</span></a>
+		</div>
+	</header>
+
+	<main>
+		<div class="tab-report-grid">
+			<div class="grid-item tab">
+				<table id="report-table">
+					<thead>
+						<tr>
+							<th>Testcase</th>
+							<th>Result</th>
+							<th>Skipped</th>
+							<th>Orphans</th>
+							<th>Duration</th>
+							<th class="report-column">Report</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+								<tr class="testcase-group">
+									<td>test_initialize_creates_all_systems</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>21ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_initialize_creates_all_systems&#39; in res://tests/unit/simulation_core_test.gd:15
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_start_new_game_resets_all_state</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>15ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_initial_stipend_is_available_before_first_choice</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>27ms</td>
+									<td class="report-column">
+										<pre>
+Expecting:
+ 200
+ but was
+ 0
+	at &#39;test_initial_stipend_is_available_before_first_choice&#39; in res://tests/unit/simulation_core_test.gd:37
+Expecting:
+ 200
+ but was
+ 0
+	at &#39;test_initial_stipend_is_available_before_first_choice&#39; in res://tests/unit/simulation_core_test.gd:45
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_advance_period_applies_study_activity</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>24ms</td>
+									<td class="report-column">
+										<pre>
+Expecting:
+ 12
+ but was
+ 0
+	at &#39;test_advance_period_applies_study_activity&#39; in res://tests/unit/simulation_core_test.gd:57
+Expecting:
+ 192
+ but was
+ 0
+	at &#39;test_advance_period_applies_study_activity&#39; in res://tests/unit/simulation_core_test.gd:58
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_advance_period_applies_work_activity</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>21ms</td>
+									<td class="report-column">
+										<pre>
+Expecting:
+ 215
+ but was
+ 15
+	at &#39;test_advance_period_applies_work_activity&#39; in res://tests/unit/simulation_core_test.gd:71
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_advance_period_applies_mission_technical_on_success</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>24ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_physical_encounter_loads_monster_display_name</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_physical_encounter_loads_monster_display_name&#39; in res://tests/unit/simulation_core_test.gd:92
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_invalid_encounter_option_preserves_pending_encounter</td>
+									<td><span class="status status-error">ERROR</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>10s 985ms</td>
+									<td class="report-column">
+										<pre>
+Godot Runtime Error !
+  &#39;Invalid access to property or key &#39;simulation&#39; on a base object of type &#39;Dictionary&#39;.&#39;
+	at &#39;test_invalid_encounter_option_preserves_pending_encounter&#39; in res://tests/unit/simulation_core_test.gd:105
+Expecting: &#39;false&#39; but is &#39;true&#39;
+	at &#39;test_invalid_encounter_option_preserves_pending_encounter&#39; in res://tests/unit/simulation_core_test.gd:104
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_encounter_completion_preserves_original_period_and_advances_once</td>
+									<td><span class="status status-error">ERROR</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>12s 640ms</td>
+									<td class="report-column">
+										<pre>
+Godot Runtime Error !
+  &#39;Invalid access to property or key &#39;simulation&#39; on a base object of type &#39;Dictionary&#39;.&#39;
+	at &#39;test_encounter_completion_preserves_original_period_and_advances_once&#39; in res://tests/unit/simulation_core_test.gd:123
+Expecting: &#39;false&#39; but is &#39;true&#39;
+	at &#39;test_encounter_completion_preserves_original_period_and_advances_once&#39; in res://tests/unit/simulation_core_test.gd:122
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_fight_defeat_applies_only_stress_and_no_stat_or_crime_loss</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>3s 861ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_fight_defeat_applies_only_stress_and_no_stat_or_crime_loss&#39; in res://tests/unit/simulation_core_test.gd:170
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_failed_non_fight_encounter_also_returns_nyx_home</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>3s 217ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_failed_non_fight_encounter_also_returns_nyx_home&#39; in res://tests/unit/simulation_core_test.gd:200
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_conversation_success_grants_half_reward_and_exact_stress</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>3s 940ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_conversation_success_grants_half_reward_and_exact_stress&#39; in res://tests/unit/simulation_core_test.gd:229
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_successful_fight_rewards_and_recovery_drop_are_applied_once</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13s 600ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_successful_fight_rewards_and_recovery_drop_are_applied_once&#39; in res://tests/unit/simulation_core_test.gd:261
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_drones_success_applies_counter_effect_from_mission_data</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>7s 90ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_drones_success_applies_counter_effect_from_mission_data&#39; in res://tests/unit/simulation_core_test.gd:287
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_equipped_item_ids_default_empty_and_round_trip_in_simulation_state</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>76ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_equipped_item_ids_default_empty_and_round_trip_in_simulation_state&#39; in res://tests/unit/simulation_core_test.gd:293
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_equipped_item_ids_default_empty_and_round_trip_in_simulation_state&#39; in res://tests/unit/simulation_core_test.gd:295
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_equipped_item_ids_default_empty_and_round_trip_in_simulation_state&#39; in res://tests/unit/simulation_core_test.gd:296
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_equipped_item_ids_default_empty_and_round_trip_in_simulation_state&#39; in res://tests/unit/simulation_core_test.gd:299
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_equipped_item_ids_default_empty_and_round_trip_in_simulation_state&#39; in res://tests/unit/simulation_core_test.gd:305
+Expecting contains exactly elements:
+ &#39;&lt;empty&gt;&#39;
+ do contains exactly (in any order)
+ &#39;[&quot;kit_ferramentas&quot;]&#39;
+but could not find elements:
+ &#39;[&quot;kit_ferramentas&quot;]&#39;
+	at &#39;test_equipped_item_ids_default_empty_and_round_trip_in_simulation_state&#39; in res://tests/unit/simulation_core_test.gd:306
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_successful_technical_mission_credits_its_reward</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>48ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_successful_technical_mission_credits_its_reward&#39; in res://tests/unit/simulation_core_test.gd:315
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_successful_technical_mission_credits_its_reward&#39; in res://tests/unit/simulation_core_test.gd:315
+Expecting:
+ 230
+ but was
+ 30
+	at &#39;test_successful_technical_mission_credits_its_reward&#39; in res://tests/unit/simulation_core_test.gd:325
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_advance_period_applies_leisure</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>26ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_balanced_strategy_first_three_months_match_gdd_values</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>39ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_balanced_strategy_first_three_months_match_gdd_values&#39; in res://tests/unit/simulation_core_test.gd:349
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_balanced_strategy_first_three_months_match_gdd_values&#39; in res://tests/unit/simulation_core_test.gd:376
+Expecting:
+ 33
+ but was
+ 21
+	at &#39;test_balanced_strategy_first_three_months_match_gdd_values&#39; in res://tests/unit/simulation_core_test.gd:384
+Expecting:
+ 25
+ but was
+ 23
+	at &#39;test_balanced_strategy_first_three_months_match_gdd_values&#39; in res://tests/unit/simulation_core_test.gd:385
+Expecting:
+ 226
+ but was
+ 34
+	at &#39;test_balanced_strategy_first_three_months_match_gdd_values&#39; in res://tests/unit/simulation_core_test.gd:387
+Expecting:
+ 53
+ but was
+ 50
+	at &#39;test_balanced_strategy_first_three_months_match_gdd_values&#39; in res://tests/unit/simulation_core_test.gd:388
+Expecting:
+ 9
+ but was
+ 8
+	at &#39;test_balanced_strategy_first_three_months_match_gdd_values&#39; in res://tests/unit/simulation_core_test.gd:389
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_campaign_completes_after_108_periods_deterministic</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>41ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_one_year_configuration_completes_after_36_periods</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>35ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_one_year_configuration_completes_after_36_periods&#39; in res://tests/unit/simulation_core_test.gd:421
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_disease_blocks_missions</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>30ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_disease_rejects_mission_without_consuming_period</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>29ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_disease_rejects_mission_without_consuming_period&#39; in res://tests/unit/simulation_core_test.gd:463
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_year_2_stipend_comes_at_period_37</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>37ms</td>
+									<td class="report-column">
+										<pre>
+Expecting:
+ 400
+ but was
+ 200
+	at &#39;test_year_2_stipend_comes_at_period_37&#39; in res://tests/unit/simulation_core_test.gd:506
+Expecting:
+ 400
+ but was
+ 200
+	at &#39;test_year_2_stipend_comes_at_period_37&#39; in res://tests/unit/simulation_core_test.gd:513
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_stat_clamp_applied_after_activity</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>46ms</td>
+									<td class="report-column">
+										<pre>
+Expecting:
+ 100
+ but was
+ 99
+	at &#39;test_stat_clamp_applied_after_activity&#39; in res://tests/unit/simulation_core_test.gd:528
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_stress_never_goes_negative</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>42ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_get_available_activities_changes_with_disease</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>33ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_state_can_be_saved_and_loaded</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>63ms</td>
+									<td class="report-column">
+										<pre>
+Expecting:
+ 1
+ but was
+ 0
+	at &#39;test_state_can_be_saved_and_loaded&#39; in res://tests/unit/simulation_core_test.gd:580
+Expecting:
+ 3
+ but was
+ 0
+	at &#39;test_state_can_be_saved_and_loaded&#39; in res://tests/unit/simulation_core_test.gd:581
+Expecting:
+ 15
+ but was
+ 0
+	at &#39;test_state_can_be_saved_and_loaded&#39; in res://tests/unit/simulation_core_test.gd:582
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_three_full_campaigns_complete_deterministically</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>195ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_three_full_campaigns_complete_deterministically&#39; in res://tests/unit/simulation_core_test.gd:590
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_three_full_campaigns_complete_deterministically&#39; in res://tests/unit/simulation_core_test.gd:590
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_three_full_campaigns_complete_deterministically&#39; in res://tests/unit/simulation_core_test.gd:590
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_same_seed_reproduces_identical_campaign_state</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>94ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_event_eth_applied_only_once_per_choice</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>49ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_event_eth_applied_only_once_per_choice&#39; in res://tests/unit/simulation_core_test.gd:644
+Expecting:
+ &#39;e01&#39;
+ but was
+ &#39;e01&#39;
+	at &#39;test_event_eth_applied_only_once_per_choice&#39; in res://tests/unit/simulation_core_test.gd:645
+Expecting:
+ 3
+ but was
+ 0
+	at &#39;test_event_eth_applied_only_once_per_choice&#39; in res://tests/unit/simulation_core_test.gd:654
+Expecting:
+ 3
+ but was
+ 0
+	at &#39;test_event_eth_applied_only_once_per_choice&#39; in res://tests/unit/simulation_core_test.gd:655
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_festival_presentation_fails_below_ref_threshold</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>45ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;_simulation_at_first_year_festival&#39; in res://tests/unit/simulation_core_test.gd:807
+	at &#39;test_festival_presentation_fails_below_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:660
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_festival_presentation_fails_below_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:664
+Expecting:
+ &#39;e04&#39;
+ but was
+ &#39;e04&#39;
+	at &#39;test_festival_presentation_fails_below_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:665
+Expecting:
+ &#39;failure&#39;
+ but was
+ &#39;failure&#39;
+	at &#39;test_festival_presentation_fails_below_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:669
+Expecting:
+ 2
+ but was
+ 0
+	at &#39;test_festival_presentation_fails_below_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:670
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_festival_presentation_succeeds_at_ref_threshold</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>45ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;_simulation_at_first_year_festival&#39; in res://tests/unit/simulation_core_test.gd:807
+	at &#39;test_festival_presentation_succeeds_at_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:676
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_festival_presentation_succeeds_at_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:680
+Expecting:
+ &#39;e04&#39;
+ but was
+ &#39;e04&#39;
+	at &#39;test_festival_presentation_succeeds_at_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:681
+Expecting:
+ &#39;success&#39;
+ but was
+ &#39;success&#39;
+	at &#39;test_festival_presentation_succeeds_at_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:685
+Expecting:
+ 2
+ but was
+ 0
+	at &#39;test_festival_presentation_succeeds_at_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:686
+Expecting:
+ 5
+ but was
+ 0
+	at &#39;test_festival_presentation_succeeds_at_ref_threshold&#39; in res://tests/unit/simulation_core_test.gd:687
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_random_event_check_is_not_repeated_for_invalid_choice</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>45ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_random_event_check_is_not_repeated_for_invalid_choice&#39; in res://tests/unit/simulation_core_test.gd:694
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_random_event_check_is_not_repeated_for_invalid_choice&#39; in res://tests/unit/simulation_core_test.gd:704
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_random_event_check_is_not_repeated_for_invalid_choice&#39; in res://tests/unit/simulation_core_test.gd:705
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_random_event_check_is_not_repeated_for_invalid_choice&#39; in res://tests/unit/simulation_core_test.gd:715
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_fixed_event_debug_log_explains_random_check_skip</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>36ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;_simulation_at_first_year_festival&#39; in res://tests/unit/simulation_core_test.gd:807
+	at &#39;test_fixed_event_debug_log_explains_random_check_skip&#39; in res://tests/unit/simulation_core_test.gd:723
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_fixed_event_debug_log_explains_random_check_skip&#39; in res://tests/unit/simulation_core_test.gd:729
+Expecting:
+ &#39;e04&#39;
+ but was
+ &#39;e04&#39;
+	at &#39;test_fixed_event_debug_log_explains_random_check_skip&#39; in res://tests/unit/simulation_core_test.gd:730
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_fixed_event_debug_log_explains_random_check_skip&#39; in res://tests/unit/simulation_core_test.gd:731
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>test_two_year_campaign_contains_varied_fixed_and_random_events</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>58ms</td>
+									<td class="report-column">
+										<pre>
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:737
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:756
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:756
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:756
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:756
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:756
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:756
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:756
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:756
+Expecting: &#39;true&#39; but is &#39;false&#39;
+	at &#39;test_two_year_campaign_contains_varied_fixed_and_random_events&#39; in res://tests/unit/simulation_core_test.gd:761
+
+										</pre>
+									</td>
+								</tr>
+
+					</tbody>
+				</table>
+			</div>
+			<div id="report_area" class="grid-item tab">
+				<h4>Failure Report</h4>
+				<div class="report-column"></div>
+			</div>
+		</div>
+	</main>
+
+	<footer>
+		<p>Generated by <a href="https://github.com/MikeSchulze/gdUnit4">GdUnit4</a> at 2026-11-14 17:28:38</p>
+		<div class="status-legend">
+			<span class="status-legend-item">
+				<span class="status-box status-skipped"></span> Skipped
+			</span>
+			<span class="status-legend-item">
+				<span class="status-box status-passed"></span> Passed
+			</span>
+			<span class="status-legend-item">
+				<span class="status-box status-flaky"></span> Flaky
+			</span>
+			<span class="status-legend-item">
+				<span class="status-box status-warning"></span> Warning
+			</span>
+			<span class="status-legend-item">
+				<span class="status-box status-failed"></span> Failed
+			</span>
+			<span class="status-legend-item">
+				<span class="status-box status-error"></span> Error
+			</span>
+		</div>
+	</footer>
+</body>
+
+<script>
+	function groupTableRows() {
+		const table = document.getElementById('report-table');
+		const rows = table.querySelectorAll('tbody tr');
+
+		let previousTestCase = '';
+		let groupStartIndex = 0;
+		let groupColorToggle = true; // Toggle between two colors
+
+		rows.forEach((row, index) => {
+			const testCaseName = row.cells[0].textContent.trim();
+
+			if (testCaseName !== previousTestCase) {
+				// Close the previous group
+				if (index > 0 && groupStartIndex !== index - 1) {
+					// Apply background color to the group
+					const groupClass = groupColorToggle ? 'group-bg-1' : 'group-bg-2';
+					for (let i = groupStartIndex; i <= index - 1; i++) {
+						rows[i].classList.add(groupClass);
+					}
+
+					// Toggle background color for the next group
+					groupColorToggle = !groupColorToggle;
+				}
+
+				// Start a new group
+				groupStartIndex = index;
+			}
+
+			previousTestCase = testCaseName;
+		});
+
+		// Handle the last group
+		if (groupStartIndex !== rows.length - 1) {
+			// Apply background color to the last group
+			const groupClass = groupColorToggle ? 'group-bg-1' : 'group-bg-2';
+			for (let i = groupStartIndex; i < rows.length; i++) {
+				rows[i].classList.add(groupClass);
+			}
+		}
+	}
+
+	// Call the function to group table rows after the DOM loads
+	document.addEventListener('DOMContentLoaded', groupTableRows);
+</script>
+
+</html>

@@ -26,6 +26,38 @@
     "reputacoes": "Reputações",
     "habilidades": "Habilidades",
     "stress": "Stress",
+    "lojas": "Lojas",
+    "oficina_comunitaria": "Oficina comunitária",
+    "loja_geral": "Loja geral",
+    "clinica_comunitaria": "Clínica comunitária",
+    "sem_requisitos": "Sem requisitos",
+    "comprar": "Comprar",
+    "equipar": "Equipar",
+    "desequipar": "Desequipar",
+    "usar": "Usar",
+    "inventario": "Inventário",
+    "inventario_limite_format": "Itens: {used}/{limit}",
+    "item_quantidade_format": "No inventário: {count}",
+    "item_slot_hand": "Equipamento de mão",
+    "item_slot_protection": "Proteção",
+    "item_slot_vazio": "Vazio",
+    "item_compra_sucesso": "Compra realizada: {item}.",
+    "item_creditos_insuficientes_format": "Créditos insuficientes: {available} disponíveis; {cost} necessários.",
+    "item_inventario_cheio": "Inventário cheio: limite de {limit} itens.",
+    "item_ja_possuido": "Este equipamento já está na sua coleção.",
+    "item_nao_disponivel": "Este item não está disponível nesta loja.",
+    "item_nao_encontrado": "Item inválido.",
+    "item_nao_possuido": "Este item não está no inventário.",
+    "item_nao_equipavel": "Este item não pode ser equipado.",
+    "item_ja_equipado": "Este item já está equipado.",
+    "item_equipado_format": "{item} equipado.",
+    "item_desequipado_format": "{item} voltou ao inventário.",
+    "item_slot_ja_vazio": "Este espaço já está vazio.",
+    "item_usado_format": "{item} usado. Stress: {stress}.",
+    "item_nao_utilizavel": "Este item não pode ser usado.",
+    "item_requisito_nao_atendido": "Os requisitos deste item não foram atendidos.",
+    "item_loot_nao_guardado": "Não foi possível guardar o item: inventário cheio.",
+    "voltar": "Voltar",
     "doenca": "Doença",
     "doenca_ativa": "Missões indisponíveis durante a doença.",
     "repetir_agenda": "Repetir agenda anterior",
@@ -103,5 +135,33 @@
     "curso_tecnologia": "Tecnologia",
     "curso_comunicacao": "Comunicação e escrita",
     "curso_artes": "Artes e projeto"
+  },
+  "items": {
+    "names": {
+      "kit_ferramentas": "Kit de ferramentas",
+      "casaco_acolchoado": "Casaco acolchoado",
+      "adesivo_recuperacao": "Adesivo de recuperação"
+    },
+    "descriptions": {
+      "kit_ferramentas": "Ferramentas compactas para apoiar reparos e trabalhos de proteção.",
+      "casaco_acolchoado": "Casaco fechado e acolchoado para proteção em atividades de campo.",
+      "adesivo_recuperacao": "Adesivo terapêutico simples para aliviar o stress."
+    },
+    "effects": {
+      "equipment_bonus": "+5 pontos percentuais na chance de missão enquanto equipado.",
+      "stress_recovery": "Reduz Stress em até 15 pontos e é consumido ao usar."
+    }
+  },
+  "shops": {
+    "names": {
+      "workshop": "Oficina comunitária",
+      "general": "Loja geral",
+      "clinic": "Clínica comunitária"
+    },
+    "descriptions": {
+      "workshop": "Ferramentas e suprimentos para reparos locais.",
+      "general": "Equipamento básico para atividades cotidianas.",
+      "clinic": "Cuidados comunitários e itens simples de recuperação."
+    }
   }
 }

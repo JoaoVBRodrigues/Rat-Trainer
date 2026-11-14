@@ -160,14 +160,12 @@ func get_equipped_item_ids() -> Array[String]:
 
 func get_mission_equipment_bonus(mission_id: String) -> int:
 	var mission: Dictionary = get_mission(mission_id)
+	if mission.is_empty():
+		return 0
 	var chance_config: Dictionary = _encounter_rules.get("chance", {})
 	var per_item: int = int(chance_config.get("equipment_bonus_per_item", 0))
 	var maximum: int = int(chance_config.get("maximum_equipment_bonus", 0))
-	var applicable_count: int = 0
-	for item_id: Variant in mission.get("required_equipment", []):
-		if item_id is String and _equipped_item_ids.has(item_id):
-			applicable_count += 1
-	return mini(applicable_count * per_item, maximum)
+	return mini(_equipped_item_ids.size() * per_item, maximum)
 
 
 func get_orac_return_description() -> String:

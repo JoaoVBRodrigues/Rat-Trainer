@@ -8,6 +8,8 @@ var calendar: Dictionary = {}
 var stats: Array = []
 var activities: Array = []
 var items: Array = []
+var shops: Array = []
+var inventory_limit: int = 0
 var events: Array = []
 var endings: Array = []
 var missions: Array = []
@@ -38,6 +40,18 @@ static func load_all(path: String = "res://assets/data") -> DataLoader:
 	loader.stats = loader._read_data_array(path, "stats.json", "stats")
 	loader.activities = loader._load_models(path, "activities.json", "activities", ActivityDef)
 	loader.items = loader._load_models(path, "items.json", "items", ItemDef)
+	var shop_data: Dictionary = loader._read_data_object(path, "shops.json", "shops")
+	loader.shops = loader._models_from_array(
+		shop_data, "shops", path.path_join("shops.json"), ShopDef
+	)
+	var inventory_limit: Variant = shop_data.get("inventory_limit")
+	if _is_number(inventory_limit) and int(inventory_limit) > 0 and float(inventory_limit) == floorf(float(inventory_limit)):
+		loader.inventory_limit = int(inventory_limit)
+	else:
+		loader.load_errors.append(
+			"%s: inventory_limit must be a positive integer."
+			% path.path_join("shops.json")
+		)
 
 	var event_data: Dictionary = loader._read_data_object(path, "events.json", "events")
 	loader.events = loader._models_from_array(event_data, "events", path.path_join("events.json"), EventDef)

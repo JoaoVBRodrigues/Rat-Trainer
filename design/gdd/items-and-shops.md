@@ -18,7 +18,7 @@ O jogador escolhe investimentos pequenos que apoiam estudo, seguranca e recupera
 | Casaco acolchoado | Loja geral | 20 Cr | +5 pontos percentuais em missoes fisicas/protecao; protecao fechada e apropriada para a idade |
 | Adesivo de recuperacao | Clinica comunitaria | 10 Cr | Consumido ao usar; -15 Stress |
 
-Cada personagem pode equipar no maximo um item de mao e uma protecao. Os consumiveis sao guardados em inventario. Nao ha bonus passivos de roupa, requisitos de atributo, venda de itens, durabilidade ou quebra.
+Cada personagem pode equipar no maximo um item de mao e uma protecao. O inventario comporta 10 unidades no total, incluindo os itens equipados. Os consumiveis sao guardados em inventario. Nao ha bonus passivos de roupa, requisitos de atributo, venda de itens, durabilidade ou quebra.
 
 ### Compras e uso
 
@@ -27,6 +27,8 @@ Cada personagem pode equipar no maximo um item de mao e uma protecao. Os consumi
 - Comprar um equipamento ja possuido e recusado antes do debito; itens unicos equipados contam como possuidos.
 - Trocar equipamento equipado nao custa creditos; o equipamento anterior volta ao inventario.
 - Usar o adesivo reduz Stress em 15, limitado ao minimo 0, e consome uma unidade.
+- A capacidade de 10 unidades conta consumiveis no inventario e equipamentos carregados ou equipados; equipar, trocar ou desequipar nao altera a quantidade total possuida.
+- Cada loja lista seu estoque por IDs de item em `shops.json`; precos, efeitos e requisitos ficam em `items.json`. No MVP os requisitos sao vazios e os itens de equipamento sao unicos.
 
 ## Formulas
 
@@ -76,6 +78,7 @@ Cada personagem pode equipar no maximo um item de mao e uma protecao. Os consumi
 | Bonus por equipamento | 0-5 pontos percentuais | 5 |
 | Precos | 10-25 Cr | Conforme catalogo |
 | Recuperacao por adesivo | 10-20 Stress | 15 |
+| Capacidade do inventario | 10 unidades no MVP | 10 |
 
 ## Acceptance Criteria
 
@@ -84,3 +87,5 @@ Cada personagem pode equipar no maximo um item de mao e uma protecao. Os consumi
 - Um equipamento de cada slot pode ser usado simultaneamente e o bonus total nunca excede 10 pontos percentuais.
 - Usar um adesivo consome uma unidade e reduz Stress em ate 15.
 - Comprar ou equipar itens nao avanca o calendario.
+- Inventario, equipamentos e consumiveis respeitam a capacidade total de 10 unidades.
+- Cada item e loja possui nome/descricao localizados e icone servido por `Assets`; os placeholders do MVP sao genericos e nao representam modificacoes corporais.

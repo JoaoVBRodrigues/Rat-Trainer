@@ -7,11 +7,14 @@ const DEFAULT_MISSIONS_PATH: String = "res://assets/data/missions.json"
 const DEFAULT_MONSTERS_PATH: String = "res://assets/data/monsters.json"
 const DEFAULT_ENCOUNTER_RULES_PATH: String = "res://assets/data/encounter_rules.json"
 const DEFAULT_EVENTS_PATH: String = "res://assets/data/events.json"
+const DEFAULT_ITEMS_PATH: String = "res://assets/data/items.json"
+const DEFAULT_SHOPS_PATH: String = "res://assets/data/shops.json"
 
 var calendar: CalendarSystem
 var stats: StatsSystem
 var economy: EconomySystem
 var activities: ActivitySystem
+var item_shop_system: ItemShopSystem
 var events: EventSystem = EventSystem.new()
 var completed_events: Array[String] = []
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -19,6 +22,7 @@ var _pending_event: Dictionary = {}  # Event waiting for player choice
 var _pending_encounter: Dictionary = {}  # Encounter waiting for player choice
 var _pending_encounter_result: PeriodResult
 var inventory_counts: Dictionary = {}
+var equipment_slots: Dictionary = {"hand": "", "protection": ""}
 var _last_random_event_check_turn: int = -1
 var tech_experiments: bool = false
 var criminal_record: bool = false
@@ -31,6 +35,8 @@ var _missions_path: String = DEFAULT_MISSIONS_PATH
 var _monsters_path: String = DEFAULT_MONSTERS_PATH
 var _encounter_rules_path: String = DEFAULT_ENCOUNTER_RULES_PATH
 var _events_path: String = DEFAULT_EVENTS_PATH
+var _items_path: String = DEFAULT_ITEMS_PATH
+var _shops_path: String = DEFAULT_SHOPS_PATH
 
 
 func initialize(
@@ -39,7 +45,9 @@ func initialize(
 	missions_path: String = DEFAULT_MISSIONS_PATH,
 	events_path: String = DEFAULT_EVENTS_PATH,
 	monsters_path: String = DEFAULT_MONSTERS_PATH,
-	encounter_rules_path: String = DEFAULT_ENCOUNTER_RULES_PATH
+	encounter_rules_path: String = DEFAULT_ENCOUNTER_RULES_PATH,
+	items_path: String = DEFAULT_ITEMS_PATH,
+	shops_path: String = DEFAULT_SHOPS_PATH
 ) -> bool:
 	_calendar_config_path = calendar_config_path
 	_activities_path = activities_path
@@ -47,10 +55,13 @@ func initialize(
 	_monsters_path = monsters_path
 	_encounter_rules_path = encounter_rules_path
 	_events_path = events_path
+	_items_path = items_path
+	_shops_path = shops_path
 	calendar = CalendarSystem.new()
 	stats = StatsSystem.new()
 	economy = EconomySystem.new()
 	activities = ActivitySystem.new()
+	item_shop_system = ItemShopSystem.new()
 	events = EventSystem.new()
 	if not calendar.initialize_from_config(_calendar_config_path):
 		return false
@@ -66,6 +77,8 @@ func initialize(
 		return false
 	if not activities.load_encounter_rules(_encounter_rules_path):
 		return false
+	if not item_shop_system.load_data(_items_path, _shops_path):
+		return false
 	if not events.load_events(_events_path):
 		return false
 	start_new_game()
@@ -78,6 +91,7 @@ func start_new_game() -> void:
 	economy.start_new_game(calendar.years)
 	activities.reset()
 	inventory_counts.clear()
+	equipment_slots = {"hand": "", "protection": ""}
 	_pending_event.clear()
 	_pending_encounter.clear()
 	_pending_encounter_result = null
@@ -269,6 +283,13 @@ func _resolve_pending_event(option_id: String) -> PeriodResult:
 		if event_resolution.has("error"):
 			result.error_message = str(event_resolution["error"])
 			return result
+		var resolved_effects: Dictionary = event_resolution["effects"]
+		var event_item_id: String = str(resolved_effects.get("item", ""))
+		if not event_item_id.is_empty() and item_shop_system.get_item(event_item_id) == null:
+			result.error_message = "Event '%s' references unknown item '%s'." % [
+				event_id, event_item_id
+			]
+			return result
 
 		# Mark event as completed
 		if not event_id.is_empty():
@@ -319,6 +340,12 @@ func _resolve_pending_event(option_id: String) -> PeriodResult:
 		var stress_delta: int = int(effects.get("stress", 0))
 		result.stress_change = stats.add_stress(stress_delta)
 		result.stress_final = stats.get_stress()
+
+		if not event_item_id.is_empty():
+			if _try_add_item(event_item_id):
+				result.items_gained.append(event_item_id)
+			else:
+				result.inventory_warning_key = "ui.item_loot_nao_guardado"
 
 		# Reputation (handle both short and long keys)
 		var reputation_keys: Dictionary = {
@@ -439,7 +466,8 @@ func get_state() -> Dictionary:
 		"community_help": community_help,
 		"disappear_from_society": disappear_from_society,
 		"missions_technical_completed": _missions_technical_completed,
-		"inventory_counts": inventory_counts.duplicate(true)
+		"inventory_counts": inventory_counts.duplicate(true),
+		"equipment_slots": equipment_slots.duplicate(true)
 	}
 
 
@@ -452,6 +480,7 @@ func load_state(state: Dictionary) -> bool:
 	var saved_activities: Variant = state.get("activities", {})
 	var saved_events: Variant = state.get("events", {})
 	var saved_inventory: Variant = state.get("inventory_counts", {})
+	var saved_equipment: Variant = state.get("equipment_slots")
 	var saved_random_event_check_turn: Variant = state.get("random_event_check_turn", -1)
 	if not saved_calendar is Dictionary or not saved_stats is Dictionary:
 		return false
@@ -459,13 +488,39 @@ func load_state(state: Dictionary) -> bool:
 		return false
 	if not saved_inventory is Dictionary:
 		return false
+	var item_shop_copy: ItemShopSystem = ItemShopSystem.new()
+	if not item_shop_copy.load_data(_items_path, _shops_path):
+		return false
 	var loaded_inventory: Dictionary = {}
 	for item_id: Variant in saved_inventory:
 		var count: Variant = saved_inventory[item_id]
-		if not item_id is String or str(item_id).is_empty() or not count is int or count < 0:
+		if (
+			not item_id is String
+			or item_shop_copy.get_item(str(item_id)) == null
+			or not count is int
+			or count < 0
+		):
 			return false
 		if count > 0:
 			loaded_inventory[item_id] = count
+	var loaded_equipment: Dictionary = _load_equipment_slots(
+		saved_equipment, saved_activities, item_shop_copy
+	)
+	if loaded_equipment.is_empty():
+		return false
+	var loaded_equipped_ids: Array[String] = _equipment_ids_from_slots(loaded_equipment)
+	for item_id: Variant in loaded_inventory:
+		var item: ItemDef = item_shop_copy.get_item(str(item_id))
+		if item.category != "consumable" and (
+			int(loaded_inventory[item_id]) > 1 or loaded_equipped_ids.has(str(item_id))
+		):
+			return false
+	var loaded_item_total: int = _count_inventory_items(loaded_inventory)
+	for slot: String in ["hand", "protection"]:
+		if not str(loaded_equipment.get(slot, "")).is_empty():
+			loaded_item_total += 1
+	if loaded_item_total > item_shop_copy.inventory_limit:
+		return false
 	if not saved_random_event_check_turn is int or saved_random_event_check_turn < -1:
 		return false
 
@@ -485,6 +540,9 @@ func load_state(state: Dictionary) -> bool:
 		return false
 	if not activities_copy.load_encounter_rules(_encounter_rules_path):
 		return false
+	var saved_equipped_ids: Variant = saved_activities.get("equipped_item_ids", [])
+	if not _same_string_ids(saved_equipped_ids, loaded_equipped_ids):
+		return false
 	if not calendar_copy.load_state(saved_calendar):
 		return false
 	if not stats_copy.load_state(saved_stats):
@@ -498,7 +556,9 @@ func load_state(state: Dictionary) -> bool:
 	stats = stats_copy
 	economy = economy_copy
 	activities = activities_copy
+	item_shop_system = item_shop_copy
 	inventory_counts = loaded_inventory
+	equipment_slots = loaded_equipment
 	_last_random_event_check_turn = saved_random_event_check_turn
 	activities.rng = rng
 	events.rng = rng
@@ -526,17 +586,291 @@ func load_state(state: Dictionary) -> bool:
 func set_equipped_item_ids(item_ids: Array[String]) -> bool:
 	if not _systems_are_initialized():
 		return false
-	return activities.set_equipped_item_ids(item_ids)
+	var next_slots: Dictionary = {"hand": "", "protection": ""}
+	for item_id: String in item_ids:
+		var item: ItemDef = item_shop_system.get_item(item_id)
+		if item == null or item.slot not in ["hand", "protection"]:
+			return false
+		if not str(next_slots[item.slot]).is_empty():
+			return false
+		if get_item_count(item_id) <= 0 and not _equipment_ids_from_slots(equipment_slots).has(item_id):
+			return false
+		next_slots[item.slot] = item_id
+
+	var next_inventory: Dictionary = inventory_counts.duplicate(true)
+	for slot: String in ["hand", "protection"]:
+		var previous_id: String = str(equipment_slots.get(slot, ""))
+		var next_id: String = str(next_slots[slot])
+		if previous_id == next_id:
+			continue
+		if not previous_id.is_empty():
+			next_inventory[previous_id] = get_item_count(previous_id) + 1
+		if not next_id.is_empty():
+			var count: int = int(next_inventory.get(next_id, 0))
+			if count <= 0:
+				return false
+			next_inventory[next_id] = count - 1
+			if int(next_inventory[next_id]) == 0:
+				next_inventory.erase(next_id)
+	var next_ids: Array[String] = _equipment_ids_from_slots(next_slots)
+	if not activities.set_equipped_item_ids(next_ids):
+		return false
+	equipment_slots = next_slots
+	inventory_counts = next_inventory
+	return true
 
 
 func get_equipped_item_ids() -> Array[String]:
-	if not _systems_are_initialized():
-		return []
-	return activities.get_equipped_item_ids()
+	return _equipment_ids_from_slots(equipment_slots)
 
 
 func get_item_count(item_id: String) -> int:
 	return int(inventory_counts.get(item_id, 0))
+
+
+func get_item(item_id: String) -> ItemDef:
+	return item_shop_system.get_item(item_id) if item_shop_system != null else null
+
+
+func get_item_shops() -> Array[Dictionary]:
+	return item_shop_system.get_shops() if item_shop_system != null else []
+
+
+func get_shop_item_ids(shop_id: String) -> Array[String]:
+	var shop: Dictionary = item_shop_system.get_shop(shop_id) if item_shop_system != null else {}
+	var raw_items: Variant = shop.get("items", [])
+	var item_ids: Array[String] = []
+	if raw_items is Array:
+		for item_id: Variant in raw_items:
+			if item_id is String:
+				item_ids.append(item_id)
+	return item_ids
+
+
+func get_inventory_used_count() -> int:
+	var total: int = _count_inventory_items(inventory_counts)
+	for slot: String in ["hand", "protection"]:
+		if not str(equipment_slots.get(slot, "")).is_empty():
+			total += 1
+	return total
+
+
+func get_inventory_limit() -> int:
+	return item_shop_system.inventory_limit if item_shop_system != null else 0
+
+
+func get_equipped_item(slot: String) -> String:
+	if slot not in ["hand", "protection"]:
+		push_error("Unknown equipment slot '%s'." % slot)
+		return ""
+	return str(equipment_slots.get(slot, ""))
+
+
+func buy_item(item_id: String) -> Dictionary:
+	if not _systems_are_initialized():
+		return {"success": false, "error_key": "ui.item_nao_encontrado"}
+	var item: ItemDef = item_shop_system.get_item(item_id)
+	if item == null:
+		return {"success": false, "error_key": "ui.item_nao_encontrado"}
+	var shop: Dictionary = item_shop_system.get_shop(item.shop_type)
+	if not get_shop_item_ids(item.shop_type).has(item_id):
+		return {"success": false, "error_key": "ui.item_nao_disponivel"}
+	if not item.requirements.is_empty():
+		return {"success": false, "error_key": "ui.item_requisito_nao_atendido"}
+	if item.category != "consumable" and _owns_item(item_id):
+		return {"success": false, "error_key": "ui.item_ja_possuido"}
+	if get_inventory_used_count() >= get_inventory_limit():
+		return {
+			"success": false,
+			"error_key": "ui.item_inventario_cheio",
+			"limit": get_inventory_limit()
+		}
+	if not economy.can_afford(item.cost):
+		return {
+			"success": false,
+			"error_key": "ui.item_creditos_insuficientes_format",
+			"available": economy.get_credits(),
+			"cost": item.cost
+		}
+	if not economy.pay(item.cost):
+		push_error("Item purchase could not debit its validated price.")
+		return {"success": false, "error_key": "ui.item_nao_encontrado"}
+	inventory_counts[item_id] = get_item_count(item_id) + 1
+	return {
+		"success": true,
+		"error_key": "",
+		"item_id": item_id,
+		"cost": item.cost,
+		"credits": economy.get_credits(),
+		"shop_id": str(shop.get("id", ""))
+	}
+
+
+func use_item(item_id: String) -> Dictionary:
+	if not _systems_are_initialized():
+		return {"success": false, "error_key": "ui.item_nao_encontrado"}
+	var item: ItemDef = item_shop_system.get_item(item_id)
+	if item == null:
+		return {"success": false, "error_key": "ui.item_nao_encontrado"}
+	if item.category != "consumable":
+		return {"success": false, "error_key": "ui.item_nao_utilizavel"}
+	if get_item_count(item_id) <= 0:
+		return {"success": false, "error_key": "ui.item_nao_possuido"}
+	var effect_type: String = str(item.effect_data.get("type", ""))
+	var effect_value: Variant = item.effect_data.get("value")
+	if (
+		effect_type != "stress_recovery"
+		or not _is_number(effect_value)
+		or int(effect_value) <= 0
+		or float(effect_value) != float(int(effect_value))
+	):
+		push_error("Consumable '%s' has invalid recovery data." % item_id)
+		return {"success": false, "error_key": "ui.item_nao_utilizavel"}
+	var stress_change: int = stats.add_stress(-int(effect_value))
+	stats.check_and_update_disease()
+	_decrement_item_count(item_id)
+	return {
+		"success": true,
+		"error_key": "",
+		"item_id": item_id,
+		"stress_change": stress_change,
+		"stress": stats.get_stress()
+	}
+
+
+func equip_item(item_id: String) -> Dictionary:
+	if not _systems_are_initialized():
+		return {"success": false, "error_key": "ui.item_nao_encontrado"}
+	var item: ItemDef = item_shop_system.get_item(item_id)
+	if item == null:
+		return {"success": false, "error_key": "ui.item_nao_encontrado"}
+	if item.slot not in ["hand", "protection"]:
+		return {"success": false, "error_key": "ui.item_nao_equipavel"}
+	if get_item_count(item_id) <= 0:
+		return {"success": false, "error_key": "ui.item_nao_possuido"}
+	if get_equipped_item(item.slot) == item_id:
+		return {"success": false, "error_key": "ui.item_ja_equipado"}
+
+	var next_slots: Dictionary = equipment_slots.duplicate(true)
+	var previous_item_id: String = str(next_slots[item.slot])
+	next_slots[item.slot] = item_id
+	var next_inventory: Dictionary = inventory_counts.duplicate(true)
+	var incoming_count: int = int(next_inventory.get(item_id, 0)) - 1
+	if incoming_count > 0:
+		next_inventory[item_id] = incoming_count
+	else:
+		next_inventory.erase(item_id)
+	if not previous_item_id.is_empty():
+		next_inventory[previous_item_id] = int(next_inventory.get(previous_item_id, 0)) + 1
+	if not activities.set_equipped_item_ids(_equipment_ids_from_slots(next_slots)):
+		return {"success": false, "error_key": "ui.item_nao_equipavel"}
+	equipment_slots = next_slots
+	inventory_counts = next_inventory
+	return {
+		"success": true,
+		"error_key": "",
+		"item_id": item_id,
+		"previous_item_id": previous_item_id,
+		"slot": item.slot
+	}
+
+
+func unequip_item(slot: String) -> Dictionary:
+	if not _systems_are_initialized() or slot not in ["hand", "protection"]:
+		return {"success": false, "error_key": "ui.item_slot_ja_vazio"}
+	var item_id: String = str(equipment_slots.get(slot, ""))
+	if item_id.is_empty():
+		return {"success": false, "error_key": "ui.item_slot_ja_vazio"}
+	var next_slots: Dictionary = equipment_slots.duplicate(true)
+	next_slots[slot] = ""
+	if not activities.set_equipped_item_ids(_equipment_ids_from_slots(next_slots)):
+		return {"success": false, "error_key": "ui.item_nao_equipavel"}
+	equipment_slots = next_slots
+	inventory_counts[item_id] = get_item_count(item_id) + 1
+	return {"success": true, "error_key": "", "item_id": item_id, "slot": slot}
+
+
+func _owns_item(item_id: String) -> bool:
+	return get_item_count(item_id) > 0 or get_equipped_item_ids().has(item_id)
+
+
+func _try_add_item(item_id: String) -> bool:
+	if item_shop_system == null or item_shop_system.get_item(item_id) == null:
+		return false
+	if get_inventory_used_count() >= get_inventory_limit():
+		return false
+	inventory_counts[item_id] = get_item_count(item_id) + 1
+	return true
+
+
+func _decrement_item_count(item_id: String) -> void:
+	var next_count: int = get_item_count(item_id) - 1
+	if next_count > 0:
+		inventory_counts[item_id] = next_count
+	else:
+		inventory_counts.erase(item_id)
+
+
+func _count_inventory_items(items: Dictionary) -> int:
+	var total: int = 0
+	for item_id: Variant in items:
+		total += int(items[item_id])
+	return total
+
+
+func _equipment_ids_from_slots(slots: Dictionary) -> Array[String]:
+	var item_ids: Array[String] = []
+	for slot: String in ["hand", "protection"]:
+		var item_id: String = str(slots.get(slot, ""))
+		if not item_id.is_empty():
+			item_ids.append(item_id)
+	return item_ids
+
+
+func _load_equipment_slots(
+	saved_equipment: Variant,
+	saved_activities: Dictionary,
+	item_system: ItemShopSystem
+) -> Dictionary:
+	var slots: Dictionary = {"hand": "", "protection": ""}
+	if saved_equipment is Dictionary:
+		for slot: String in ["hand", "protection"]:
+			var item_id: Variant = saved_equipment.get(slot, "")
+			if not item_id is String:
+				return {}
+			if str(item_id).is_empty():
+				continue
+			var item: ItemDef = item_system.get_item(str(item_id))
+			if item == null or item.slot != slot:
+				return {}
+			slots[slot] = str(item_id)
+		for slot: Variant in saved_equipment:
+			if not ["hand", "protection"].has(str(slot)):
+				return {}
+		return slots
+
+	var legacy_ids: Variant = saved_activities.get("equipped_item_ids", [])
+	if not legacy_ids is Array:
+		return {}
+	for item_id: Variant in legacy_ids:
+		if not item_id is String:
+			return {}
+		var item: ItemDef = item_system.get_item(str(item_id))
+		if item == null or item.slot not in ["hand", "protection"]:
+			return {}
+		if not str(slots[item.slot]).is_empty():
+			return {}
+		slots[item.slot] = item.id
+	return slots
+
+
+func _same_string_ids(saved_ids: Variant, expected_ids: Array[String]) -> bool:
+	if not saved_ids is Array or saved_ids.size() != expected_ids.size():
+		return false
+	for item_id: Variant in saved_ids:
+		if not item_id is String or not expected_ids.has(item_id):
+			return false
+	return true
 
 
 func is_campaign_complete() -> bool:
@@ -672,8 +1006,10 @@ func resolve_pending_encounter(option: int) -> PeriodResult:
 		_apply_mission_effects(effects, result)
 		var item_id: String = activities.roll_encounter_item_drop(option)
 		if not item_id.is_empty():
-			inventory_counts[item_id] = get_item_count(item_id) + 1
-			result.items_gained.append(item_id)
+			if _try_add_item(item_id):
+				result.items_gained.append(item_id)
+			else:
+				result.inventory_warning_key = "ui.item_loot_nao_guardado"
 	else:
 		result.encounter_orac_returned = true
 		result.encounter_description = activities.get_orac_return_description()
@@ -851,7 +1187,14 @@ func _apply_mission_effects(effects: Dictionary, result: PeriodResult) -> void:
 
 
 func _systems_are_initialized() -> bool:
-	return calendar != null and stats != null and economy != null and activities != null and events != null
+	return (
+		calendar != null
+		and stats != null
+		and economy != null
+		and activities != null
+		and item_shop_system != null
+		and events != null
+	)
 
 
 func _reset_campaign_flags() -> void:

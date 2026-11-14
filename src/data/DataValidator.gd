@@ -16,6 +16,7 @@ static func validate_all(data: DataLoader) -> Array[String]:
 	errors.append_array(validate_unique_ids(data.stats, "stats"))
 	errors.append_array(validate_unique_ids(data.activities, "activities"))
 	errors.append_array(validate_unique_ids(data.items, "items"))
+	errors.append_array(validate_unique_ids(data.shops, "shops"))
 	errors.append_array(validate_unique_ids(data.events + data.random_events, "events"))
 	errors.append_array(validate_unique_ids(data.endings, "endings"))
 	errors.append_array(validate_unique_ids(data.missions, "missions"))
@@ -23,6 +24,8 @@ static func validate_all(data: DataLoader) -> Array[String]:
 	errors.append_array(validate_stats_ranges(data.stats))
 	errors.append_array(validate_calendar_structure(data.calendar))
 	errors.append_array(validate_activity_gains(data.activities))
+	errors.append_array(validate_items(data.items))
+	errors.append_array(validate_shops(data.shops, data.items, data.inventory_limit))
 	errors.append_array(validate_events(data.events, data.random_events, data.items))
 	errors.append_array(validate_endings(data.endings))
 	errors.append_array(validate_missions(data.missions))
@@ -31,6 +34,80 @@ static func validate_all(data: DataLoader) -> Array[String]:
 	errors.append_array(validate_encounter_rules(
 		data.encounter_rules, data.missions, data.items
 	))
+	return errors
+
+
+static func validate_items(items: Array) -> Array[String]:
+	var errors: Array[String] = []
+	var expected_categories: Dictionary = {
+		"kit_ferramentas": ["tool", "hand", 25, "mission_chance_bonus", 5],
+		"casaco_acolchoado": ["protection", "protection", 20, "mission_chance_bonus", 5],
+		"adesivo_recuperacao": ["consumable", "", 10, "stress_recovery", 15]
+	}
+	if items.size() != expected_categories.size():
+		errors.append("items: expected exactly the three approved MVP items.")
+	for item in items:
+		if not item is ItemDef:
+			errors.append("items: expected ItemDef records.")
+			continue
+		if not expected_categories.has(item.id):
+			errors.append("items: unexpected item '%s'." % item.id)
+			continue
+		var expected: Array = expected_categories[item.id]
+		if item.category != expected[0] or item.slot != expected[1]:
+			errors.append("items: '%s' has an unapproved category or equipment slot." % item.id)
+		if item.cost != expected[2] or item.cost <= 0:
+			errors.append("items: '%s' has an unapproved price." % item.id)
+		if item.effect_data.get("type") != expected[3]:
+			errors.append("items: '%s' has an invalid effect type." % item.id)
+		var effect_value: Variant = item.effect_data.get("value")
+		if not _is_integer(effect_value) or int(effect_value) != expected[4]:
+			errors.append("items: '%s' has an invalid effect value." % item.id)
+		if item.name_key.is_empty() or item.description_key.is_empty() or item.effect_key.is_empty():
+			errors.append("items: '%s' must define localized name, description and effect keys." % item.id)
+		if item.icon.is_empty() or not item.requirements.is_empty():
+			errors.append("items: '%s' must have an icon and no attribute requirements." % item.id)
+		if item.shop_type not in ["workshop", "general", "clinic"]:
+			errors.append("items: '%s' references an unknown shop." % item.id)
+	return errors
+
+
+static func validate_shops(
+	shops: Array, items: Array, inventory_limit: int
+) -> Array[String]:
+	var errors: Array[String] = []
+	var expected_shops: Array[String] = ["workshop", "general", "clinic"]
+	if shops.size() != expected_shops.size():
+		errors.append("shops: expected exactly three MVP stores.")
+	if inventory_limit != 10:
+		errors.append("shops: inventory_limit must be the approved capacity of 10 items.")
+
+	var item_by_id: Dictionary = {}
+	for item in items:
+		if item is ItemDef:
+			item_by_id[item.id] = item
+	var assigned_items: Dictionary = {}
+	for shop in shops:
+		if not shop is ShopDef:
+			errors.append("shops: expected ShopDef records.")
+			continue
+		if shop.id not in expected_shops:
+			errors.append("shops: unexpected store '%s'." % shop.id)
+		if shop.name_key.is_empty() or shop.description_key.is_empty() or shop.items.is_empty():
+			errors.append("shops: '%s' must define localized copy and stock." % shop.id)
+		for item_id: String in shop.items:
+			if not item_by_id.has(item_id):
+				errors.append("shops: '%s' stocks unknown item '%s'." % [shop.id, item_id])
+				continue
+			if assigned_items.has(item_id):
+				errors.append("shops: item '%s' is stocked more than once." % item_id)
+			assigned_items[item_id] = true
+			var item: ItemDef = item_by_id[item_id] as ItemDef
+			if item.shop_type != shop.id:
+				errors.append("shops: item '%s' shop_type does not match '%s'." % [item_id, shop.id])
+	for item_id: String in item_by_id:
+		if not assigned_items.has(item_id):
+			errors.append("shops: item '%s' is not stocked by any store." % item_id)
 	return errors
 
 
@@ -421,3 +498,7 @@ static func validate_encounter_rules(
 
 static func _is_number(value: Variant) -> bool:
 	return value is int or value is float
+
+
+static func _is_integer(value: Variant) -> bool:
+	return _is_number(value) and float(value) == floorf(float(value))

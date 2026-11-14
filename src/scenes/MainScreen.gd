@@ -33,6 +33,7 @@ var _schedule_button: Button
 var _menu_buttons: Array[Button] = []
 var _status_panel: StatusPanel
 var _schedule_flow: MonthlyScheduleFlow
+var _item_management_screen: ItemManagementScreen
 var _game_manager: GameManager
 
 
@@ -57,6 +58,8 @@ func update_simulation(sim: SimulationCore, profile: Dictionary = {}) -> void:
 	simulation = sim
 	if _schedule_flow != null:
 		_schedule_flow.update_simulation(sim)
+	if _item_management_screen != null:
+		_item_management_screen.update_simulation(sim)
 	_profile = profile.duplicate(true)
 	if _profile.is_empty():
 		var data_manager: DataManager = get_node_or_null("/root/Data") as DataManager
@@ -106,7 +109,18 @@ func _build_screen() -> void:
 	_build_status_panel()
 	_build_menu()
 	_build_schedule_button()
+	_build_item_management_screen()
 	_configure_focus_navigation()
+
+
+func _build_item_management_screen() -> void:
+	_item_management_screen = ItemManagementScreen.new()
+	_item_management_screen.name = "ItemManagementScreen"
+	_item_management_screen.set_asset_resolver(_assets)
+	_item_management_screen.visible = false
+	_item_management_screen.closed.connect(_on_item_management_screen_closed)
+	_item_management_screen.credits_changed.connect(refresh_credits)
+	add_child(_item_management_screen)
 
 
 func _build_background() -> void:
@@ -451,7 +465,23 @@ func _on_menu_pressed(destination: String) -> void:
 	if destination == "missao":
 		schedule_requested.emit("mission")
 		return
+	if destination == "cidade":
+		_item_management_screen.open("shops", simulation)
+		return
+	if destination == "equipamento":
+		_item_management_screen.open("equipment", simulation)
+		return
 	destination_requested.emit(destination)
+
+
+func _on_item_management_screen_closed() -> void:
+	_update_character_card()
+	_update_status()
+	var menu_index: int = MENU_IDS.find(
+		"cidade" if _item_management_screen._mode == "shops" else "equipamento"
+	)
+	if menu_index >= 0 and menu_index < _menu_buttons.size():
+		_menu_buttons[menu_index].grab_focus()
 
 
 func _unhandled_input(event: InputEvent) -> void:

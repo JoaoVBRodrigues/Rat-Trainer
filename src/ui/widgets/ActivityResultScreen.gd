@@ -24,6 +24,7 @@ var _title_label: Label
 var _outcome_label: Label
 var _period_label: Label
 var _description_label: Label
+var _inventory_warning_label: Label
 var _placeholder_label: Label
 var _changes_container: VBoxContainer
 var _values_container: VBoxContainer
@@ -73,6 +74,10 @@ func _build_ui() -> void:
 	_description_label.name = "SummaryLabel"
 	_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(_description_label)
+	_inventory_warning_label = Label.new()
+	_inventory_warning_label.name = "InventoryWarning"
+	_inventory_warning_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	layout.add_child(_inventory_warning_label)
 
 	var placeholder_panel: PanelContainer = PanelContainer.new()
 	placeholder_panel.name = "ActivityPlaceholderPanel"
@@ -169,6 +174,9 @@ func display_result(result: PeriodResult, simulation: SimulationCore) -> void:
 		]
 		_description_label.text = result.encounter_description
 	_period_label.text = _format_period(result)
+	_inventory_warning_label.visible = not result.inventory_warning_key.is_empty()
+	if _inventory_warning_label.visible:
+		_inventory_warning_label.text = Localization.text(result.inventory_warning_key)
 	if result.encounter_monster_name.is_empty():
 		_description_label.text = str(record.get("description", ""))
 	_build_changes(result)

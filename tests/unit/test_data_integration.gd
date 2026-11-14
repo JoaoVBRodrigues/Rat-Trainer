@@ -6,6 +6,7 @@ const DATA_FILES: Array[String] = [
 	"stats.json",
 	"activities.json",
 	"items.json",
+	"shops.json",
 	"events.json",
 	"endings.json",
 	"missions.json",
@@ -114,6 +115,8 @@ func test_items_match_the_three_mvp_items() -> void:
 	assert_array(item_ids).contains_exactly_in_any_order(
 		"kit_ferramentas", "casaco_acolchoado", "adesivo_recuperacao"
 	)
+	assert_int(loader.shops.size()).is_equal(3)
+	assert_int(loader.inventory_limit).is_equal(10)
 
 
 func test_fixed_events_use_the_approved_calendar() -> void:

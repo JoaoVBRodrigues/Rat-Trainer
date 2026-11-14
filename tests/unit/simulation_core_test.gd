@@ -292,7 +292,8 @@ func test_equipped_item_ids_default_empty_and_round_trip_in_simulation_state() -
 	var sim: SimulationCore = SimulationCore.new()
 	assert_bool(sim.initialize()).is_true()
 	assert_int(sim.get_equipped_item_ids().size()).is_equal(0)
-	assert_bool(sim.set_equipped_item_ids(["kit_ferramentas"])).is_true()
+	assert_bool(sim.buy_item("kit_ferramentas").get("success", false)).is_true()
+	assert_bool(sim.equip_item("kit_ferramentas").get("success", false)).is_true()
 	var snapshot: Dictionary = sim.get_state()
 	var restored: SimulationCore = SimulationCore.new()
 	assert_bool(restored.initialize()).is_true()
@@ -778,11 +779,19 @@ func _open_physical_encounter(
 		return {}
 	if mission_id == "missao_fisica_drones":
 		sim.stats.set_stat("int", 27)
-		if not sim.set_equipped_item_ids(["kit_ferramentas"]):
+		if not sim.buy_item("kit_ferramentas").get("success", false):
+			return {}
+		if not sim.equip_item("kit_ferramentas").get("success", false):
 			return {}
 	elif mission_id == "missao_fisica_infiltracao":
 		sim.stats.set_stat("str", 25)
-		if not sim.set_equipped_item_ids(["kit_ferramentas", "casaco_acolchoado"]):
+		if not sim.buy_item("kit_ferramentas").get("success", false):
+			return {}
+		if not sim.equip_item("kit_ferramentas").get("success", false):
+			return {}
+		if not sim.buy_item("casaco_acolchoado").get("success", false):
+			return {}
+		if not sim.equip_item("casaco_acolchoado").get("success", false):
 			return {}
 	sim.set_seed(seed_value)
 	var pending: PeriodResult = sim.advance_period(

@@ -28,6 +28,7 @@ var encounter_monster_id: String = ""
 var encounter_description: String = ""
 var encounter_orac_returned: bool = false
 var items_gained: Array[String] = []
+var inventory_warning_key: String = ""
 var activity_id: String = ""
 var activity_level: int = 1
 var completed: bool = false

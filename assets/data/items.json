@@ -4,26 +4,56 @@
 		{
 			"id": "kit_ferramentas",
 			"name": "Kit de ferramentas",
+			"name_key": "items.names.kit_ferramentas",
+			"description_key": "items.descriptions.kit_ferramentas",
+			"effect_key": "items.effects.equipment_bonus",
+			"icon": "item_generic",
 			"category": "tool",
+			"slot": "hand",
 			"shop_type": "workshop",
 			"cost": 25,
-			"effect": "+5 pontos percentuais de chance em missões físicas/proteção"
+			"effect": "+5 pontos percentuais de chance em missões físicas/proteção",
+			"effect_data": {
+				"type": "mission_chance_bonus",
+				"value": 5
+			},
+			"requirements": {}
 		},
 		{
 			"id": "casaco_acolchoado",
 			"name": "Casaco acolchoado",
+			"name_key": "items.names.casaco_acolchoado",
+			"description_key": "items.descriptions.casaco_acolchoado",
+			"effect_key": "items.effects.equipment_bonus",
+			"icon": "item_generic",
 			"category": "protection",
+			"slot": "protection",
 			"shop_type": "general",
 			"cost": 20,
-			"effect": "+5 pontos percentuais de chance em missões físicas/proteção"
+			"effect": "+5 pontos percentuais de chance em missões físicas/proteção",
+			"effect_data": {
+				"type": "mission_chance_bonus",
+				"value": 5
+			},
+			"requirements": {}
 		},
 		{
 			"id": "adesivo_recuperacao",
 			"name": "Adesivo de recuperação",
+			"name_key": "items.names.adesivo_recuperacao",
+			"description_key": "items.descriptions.adesivo_recuperacao",
+			"effect_key": "items.effects.stress_recovery",
+			"icon": "item_generic",
 			"category": "consumable",
+			"slot": "",
 			"shop_type": "clinic",
 			"cost": 10,
-			"effect": "Reduz Stress em 15"
+			"effect": "Reduz Stress em 15",
+			"effect_data": {
+				"type": "stress_recovery",
+				"value": 15
+			},
+			"requirements": {}
 		}
 	]
 }
