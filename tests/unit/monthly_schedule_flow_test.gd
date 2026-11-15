@@ -5,16 +5,15 @@ var _test_save_dir: String
 
 
 func after_test() -> void:
-	for save_suffix: String in ["", ".tmp", ".bak"]:
-		var save_path: String = _test_save_dir.path_join(
-			"slot_0.rat-save%s" % save_suffix
-		)
-		if not FileAccess.file_exists(save_path):
-			continue
-		var remove_error: Error = DirAccess.remove_absolute(
-			ProjectSettings.globalize_path(save_path)
-		)
-		assert_int(remove_error).is_equal(OK)
+	for save_name: String in ["slot_0.rat-save", "autosave.rat-save", "monthly_snapshot.rat-save"]:
+		for save_suffix: String in ["", ".tmp", ".bak"]:
+			var save_path: String = _test_save_dir.path_join(save_name + save_suffix)
+			if not FileAccess.file_exists(save_path):
+				continue
+			var remove_error: Error = DirAccess.remove_absolute(
+				ProjectSettings.globalize_path(save_path)
+			)
+			assert_int(remove_error).is_equal(OK)
 	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(_test_save_dir)):
 		var remove_dir_error: Error = DirAccess.remove_absolute(
 			ProjectSettings.globalize_path(_test_save_dir)

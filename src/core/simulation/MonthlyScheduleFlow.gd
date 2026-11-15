@@ -17,6 +17,7 @@ var _schedule_screen: ScheduleScreen
 var _result_screen: ActivityResultScreen
 var _summary_screen: MonthSummaryScreen
 var _encounter_screen: EncounterScreen
+var _event_choice_screen: EventChoiceScreen
 var _ending_screen: EndingScreen
 var _data_manager: DataManager
 var _ending_evaluator: EndingEvaluator = EndingEvaluator.new()
@@ -27,6 +28,7 @@ var _previous_schedule_completed_periods: int = -1
 var _initial_state: Dictionary = {}
 var _results: Array[PeriodResult] = []
 var _next_period_index: int = 0
+var _periods_resolved_before_resume: int = 0
 var _test_mode: bool = false
 var _active: bool = false
 var _recovery_blocked: bool = false
@@ -53,6 +55,33 @@ func update_simulation(simulation: SimulationCore) -> void:
 	_simulation = simulation
 
 
+func resume_saved_flow(saved_flow: Dictionary) -> void:
+	if _simulation == null or _simulation.is_campaign_complete():
+		return
+	if _simulation.calendar.period == 1 and not _simulation.has_pending_event():
+		return
+
+	var next_index: int = _simulation.calendar.period - 1
+	_draft = MonthSchedule.new()
+	var saved_schedule: Variant = saved_flow.get("schedule", {})
+	if saved_schedule is Dictionary and not saved_schedule.is_empty():
+		if not _draft.load_state(saved_schedule):
+			push_error("Saved monthly schedule is invalid; remaining periods must be replanned.")
+			_draft = MonthSchedule.new()
+	_next_period_index = next_index
+	_periods_resolved_before_resume = next_index
+
+	_initial_state = _simulation.get_state()
+	_results.clear()
+	_active = true
+	_recovery_blocked = false
+	_ensure_screens()
+	if _simulation.has_pending_event():
+		_show_pending_event()
+		return
+	_open_resumed_schedule()
+
+
 func on_schedule_requested(source: String) -> void:
 	if _simulation == null or _active:
 		return
@@ -60,6 +89,7 @@ func on_schedule_requested(source: String) -> void:
 		return
 	_active = true
 	_recovery_blocked = false
+	_periods_resolved_before_resume = 0
 	_draft = MonthSchedule.new()
 	_draft.credits_at_start = _simulation.economy.get_credits()
 	_ensure_screens()
@@ -111,6 +141,12 @@ func _ensure_screens() -> void:
 		_encounter_screen.encounter_resolved.connect(_on_encounter_resolved)
 		_main_screen.add_child(_encounter_screen)
 		_encounter_screen.visible = false
+	if _event_choice_screen == null:
+		_event_choice_screen = EventChoiceScreen.new()
+		_event_choice_screen.name = "EventChoiceScreen"
+		_event_choice_screen.option_selected.connect(_on_event_option_selected)
+		_main_screen.add_child(_event_choice_screen)
+		_event_choice_screen.visible = false
 
 
 func _build_activity_choices() -> Dictionary:
@@ -298,7 +334,7 @@ func _category_label(category: String, choices: Array) -> String:
 func _on_schedule_confirmed(schedule: MonthSchedule) -> void:
 	if _simulation == null or _recovery_blocked:
 		return
-	var resume_index: int = _next_period_index if not _results.is_empty() else 0
+	var resume_index: int = _next_period_index
 	var validated_schedule: MonthSchedule = schedule.duplicate_schedule()
 	if (
 		not _refresh_schedule_values(validated_schedule, resume_index)
@@ -312,6 +348,7 @@ func _on_schedule_confirmed(schedule: MonthSchedule) -> void:
 		_initial_state = _simulation.get_state()
 		_results.clear()
 		_next_period_index = 0
+		_periods_resolved_before_resume = 0
 	_test_mode = false
 	_schedule_screen.visible = false
 	_resolve_next_period()
@@ -427,6 +464,13 @@ func _resolve_next_period() -> void:
 
 	var result: PeriodResult = _simulation.advance_period(_choice_string(selection))
 
+	if result.is_event_pending:
+		if not _persist_checkpoint(false):
+			_show_schedule_error(_next_period_index, false)
+			return
+		_show_pending_event()
+		return
+
 	# Physical missions may trigger an encounter that requires player choice before
 	# the period completes. The encounter resolution itself advances the calendar.
 	if has_pending_encounter():
@@ -448,6 +492,9 @@ func _resolve_next_period() -> void:
 
 	_results.append(result)
 	_next_period_index += 1
+	if not _persist_checkpoint(result.month_end_processed):
+		_show_schedule_error(_next_period_index - 1, false)
+		return
 	if _test_mode:
 		return
 	_result_screen.show_result(result, _simulation)
@@ -466,6 +513,26 @@ func _choice_string(selection: Dictionary) -> String:
 		MonthSchedule.ActivityPeriod.LEISURE:
 			return "leisure_%s" % activity_id
 	return ""
+
+
+func _on_event_option_selected(option_id: String) -> void:
+	if _simulation == null or not _simulation.has_pending_event():
+		push_error("Cannot resolve an event because no event is pending.")
+		return
+	var result: PeriodResult = _simulation.advance_period(option_id)
+	if not result.completed:
+		push_error("event_resolution_failed:%s" % result.error_message)
+		return
+	if _event_choice_screen != null:
+		_event_choice_screen.close_event()
+	_results.append(result)
+	_next_period_index += 1
+	if not _persist_checkpoint(result.month_end_processed):
+		_show_schedule_error(_next_period_index - 1, false)
+		return
+	if _test_mode:
+		return
+	_result_screen.show_result(result, _simulation)
 
 
 func _on_result_continued() -> void:
@@ -508,6 +575,9 @@ func _finish_campaign() -> void:
 		push_error("Cannot persist the campaign ending because DataManager is unavailable.")
 	else:
 		_data_manager.record_ending(_ending_id)
+		if not _persist_checkpoint(true):
+			push_error("Could not save the selected campaign ending.")
+			return
 
 	_ensure_screens()
 	if _ending_screen == null:
@@ -527,7 +597,7 @@ func _build_report(pre_state: Dictionary, post_state: Dictionary) -> Dictionary:
 	var pre_economy: Dictionary = pre_state.get("economy", {})
 	var post_economy: Dictionary = post_state.get("economy", {})
 	return {
-		"completed": _results.size() == PERIOD_COUNT,
+		"completed": _periods_resolved_before_resume + _results.size() >= PERIOD_COUNT,
 		"results": _results.duplicate(),
 		"pre_state": pre_state.duplicate(true),
 		"post_state": post_state.duplicate(true),
@@ -558,6 +628,63 @@ func _show_encounter_screen() -> void:
 	_encounter_screen.visible = true
 
 
+func _show_pending_event() -> void:
+	if _simulation == null:
+		push_error("Cannot show an event without an active simulation.")
+		return
+	var pending_event: Dictionary = _simulation.get_pending_event()
+	if pending_event.is_empty():
+		push_error("Simulation reported a pending event without event data.")
+		return
+	if _event_choice_screen == null:
+		_ensure_screens()
+	if _event_choice_screen == null or not _event_choice_screen.open_event(pending_event):
+		push_error("Could not display the pending event.")
+
+
+func _open_resumed_schedule() -> void:
+	if _schedule_screen == null:
+		_ensure_screens()
+	if _schedule_screen == null:
+		return
+	_schedule_screen.open_schedule(
+		_simulation,
+		_draft,
+		null,
+		_build_activity_choices(),
+		"",
+		_next_period_index,
+		false,
+		_next_period_index,
+		false,
+		"study"
+	)
+	_schedule_screen.visible = true
+
+
+func _persist_checkpoint(month_ended: bool) -> bool:
+	if _test_mode:
+		return true
+	if _data_manager == null:
+		_data_manager = get_node_or_null("/root/Data") as DataManager
+	if _data_manager == null:
+		push_error("Cannot autosave because DataManager is unavailable.")
+		return false
+	if not _data_manager.set_simulation_state(_simulation.get_state()):
+		return false
+	if not _data_manager.set_flow_state(_build_flow_state()):
+		return false
+	if not _data_manager.save_autosave():
+		return false
+	return not month_ended or _data_manager.save_monthly_snapshot()
+
+
+func _build_flow_state() -> Dictionary:
+	return {
+		"schedule": _draft.get_state() if _draft != null else {}
+	}
+
+
 func _on_encounter_resolved(option: int) -> void:
 	var result: PeriodResult = resolve_pending_encounter(option)
 	if not result.error_message.is_empty():
@@ -570,6 +697,9 @@ func _on_encounter_resolved(option: int) -> void:
 		_encounter_screen.hide_encounter()
 		_results.append(result)
 		_next_period_index += 1
+		if not _persist_checkpoint(result.month_end_processed):
+			_show_schedule_error(_next_period_index - 1, false)
+			return
 		if _test_mode:
 			return
 		if _result_screen != null:
@@ -638,7 +768,11 @@ func _on_summary_finished() -> void:
 func _on_ending_finished() -> void:
 	if _ending_screen != null:
 		_ending_screen.hide_ending()
+	if _event_choice_screen != null:
+		_event_choice_screen.close_event()
 	_close_flow()
+	if _main_screen != null and _main_screen.has_signal("return_to_title_requested"):
+		_main_screen.emit_signal("return_to_title_requested")
 
 
 func _close_flow() -> void:
@@ -683,6 +817,7 @@ func run_month_for_test(schedule: MonthSchedule, seed: int) -> Dictionary:
 	_initial_state = _simulation.get_state()
 	_results.clear()
 	_next_period_index = 0
+	_periods_resolved_before_resume = 0
 	_test_mode = true
 	_recovery_blocked = false
 	while _next_period_index < PERIOD_COUNT and not _recovery_blocked:

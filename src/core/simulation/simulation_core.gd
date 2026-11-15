@@ -18,6 +18,7 @@ var item_shop_system: ItemShopSystem
 var events: EventSystem = EventSystem.new()
 var completed_events: Array[String] = []
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var character_name: String = "Nyx Volt"
 var _pending_event: Dictionary = {}  # Event waiting for player choice
 var _pending_encounter: Dictionary = {}  # Encounter waiting for player choice
 var _pending_encounter_result: PeriodResult
@@ -107,6 +108,10 @@ func set_seed(seed_value: int) -> void:
 		activities.rng = rng
 	if events != null:
 		events.rng = rng
+
+
+func get_character_name() -> String:
+	return character_name
 
 
 func advance_period(choice: String, period_seed: int = 0) -> PeriodResult:
@@ -460,7 +465,9 @@ func get_state() -> Dictionary:
 		"activities": activities.get_state(),
 		"events": events.get_state(),
 		"completed_events": completed_events.duplicate(),
+		"pending_event_id": str(_pending_event.get("id", "")),
 		"random_event_check_turn": _last_random_event_check_turn,
+		"rng_state": int(rng.state),
 		"tech_experiments": tech_experiments,
 		"criminal_record": criminal_record,
 		"community_help": community_help,
@@ -482,11 +489,16 @@ func load_state(state: Dictionary) -> bool:
 	var saved_inventory: Variant = state.get("inventory_counts", {})
 	var saved_equipment: Variant = state.get("equipment_slots")
 	var saved_random_event_check_turn: Variant = state.get("random_event_check_turn", -1)
+	var saved_rng_state: Variant = state.get("rng_state", 1)
+	var saved_pending_event_id: Variant = state.get("pending_event_id", "")
+	var saved_completed_events: Variant = state.get("completed_events", [])
 	if not saved_calendar is Dictionary or not saved_stats is Dictionary:
 		return false
 	if not saved_economy is Dictionary or not saved_activities is Dictionary:
 		return false
 	if not saved_inventory is Dictionary:
+		return false
+	if not saved_events is Dictionary or not saved_completed_events is Array:
 		return false
 	var item_shop_copy: ItemShopSystem = ItemShopSystem.new()
 	if not item_shop_copy.load_data(_items_path, _shops_path):
@@ -523,6 +535,28 @@ func load_state(state: Dictionary) -> bool:
 		return false
 	if not saved_random_event_check_turn is int or saved_random_event_check_turn < -1:
 		return false
+	if not saved_rng_state is int:
+		return false
+	if not saved_pending_event_id is String:
+		return false
+
+	var loaded_completed_events: Array[String] = []
+	for event_id: Variant in saved_completed_events:
+		if (
+			not event_id is String
+			or event_id.is_empty()
+			or loaded_completed_events.has(event_id)
+			or events.get_event_by_id(event_id).is_empty()
+		):
+			return false
+		loaded_completed_events.append(event_id)
+	var loaded_pending_event: Dictionary = {}
+	if not saved_pending_event_id.is_empty():
+		loaded_pending_event = events.get_event_by_id(saved_pending_event_id)
+		if loaded_pending_event.is_empty():
+			return false
+		if loaded_completed_events.has(saved_pending_event_id):
+			return false
 
 	var calendar_copy: CalendarSystem = CalendarSystem.new()
 	if not calendar_copy.initialize_from_config(_calendar_config_path):
@@ -560,16 +594,13 @@ func load_state(state: Dictionary) -> bool:
 	inventory_counts = loaded_inventory
 	equipment_slots = loaded_equipment
 	_last_random_event_check_turn = saved_random_event_check_turn
+	rng.state = saved_rng_state
 	activities.rng = rng
 	events.rng = rng
-	events.load_state(saved_events)
-
-	var saved_completed: Variant = state.get("completed_events", [])
-	if saved_completed is Array:
-		completed_events = []
-		for id in saved_completed:
-			if id is String and not completed_events.has(id):
-				completed_events.append(id)
+	if not events.load_state(saved_events):
+		return false
+	completed_events = loaded_completed_events
+	_pending_event = loaded_pending_event
 
 	tech_experiments = bool(state.get("tech_experiments", false))
 	criminal_record = bool(state.get("criminal_record", false))

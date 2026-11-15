@@ -60,7 +60,7 @@ Salvar e carregar deve ser previsivel e seguro: uma falha de arquivo nunca apaga
 ### Validacao e compatibilidade
 
 - Verificar JSON, `schema_version`, campos obrigatorios, tipos e faixas antes de carregar.
-- `turns_completed`: inteiro 0-108; atributos, reputacoes e Stress: inteiros 0-100; creditos e contadores: inteiros >=0; niveis de tarefa: 1-2; `rng_state`: inteiro positivo de 64 bits.
+- `turns_completed`: inteiro 0-108; atributos, reputacoes e Stress: inteiros 0-100; creditos e contadores: inteiros >=0; niveis de tarefa: 1-2; `rng_state`: inteiro assinado de 64 bits, preservado sem perda de precisao.
 - Uma versao de schema desconhecida ou arquivo corrompido e reportado; nunca deletar automaticamente.
 - Uma versao anterior so pode ser migrada por migracao explicita e testada. Sem migracao, preservar arquivo e oferecer voltar ao slot anterior ou iniciar novo jogo sem sobrescrever o original.
 - Hash criptografico e deteccao de trapaça nao sao requisitos do MVP; saves locais nao sao fronteira de seguranca.

@@ -3,6 +3,8 @@ class_name MainScreen
 
 signal schedule_requested(source: String)
 signal destination_requested(destination: String)
+signal return_to_title_requested
+signal save_requested
 
 const THEME_PATH: String = "res://src/ui/UITheme.tres"
 const CHARACTER_ASSET: StringName = &"char_rat_idle"
@@ -30,6 +32,7 @@ var _credits_label: Label
 var _status_button: Button
 var _new_campaign_button: Button
 var _schedule_button: Button
+var _save_button: Button
 var _menu_buttons: Array[Button] = []
 var _status_panel: StatusPanel
 var _schedule_flow: MonthlyScheduleFlow
@@ -79,6 +82,17 @@ func update_simulation(sim: SimulationCore, profile: Dictionary = {}) -> void:
 	_update_availability()
 
 
+func resume_saved_flow() -> void:
+	if _schedule_flow == null:
+		push_error("Cannot resume a campaign before the schedule flow is ready.")
+		return
+	var data_manager: DataManager = get_node_or_null("/root/Data") as DataManager
+	if data_manager == null:
+		push_error("Cannot resume a saved schedule because DataManager is unavailable.")
+		return
+	_schedule_flow.resume_saved_flow(data_manager.get_flow_state())
+
+
 func refresh_credits() -> void:
 	_update_character_card()
 
@@ -110,6 +124,7 @@ func _build_screen() -> void:
 	_build_status_panel()
 	_build_menu()
 	_build_schedule_button()
+	_build_save_button()
 	_build_item_management_screen()
 	_configure_focus_navigation()
 
@@ -265,6 +280,17 @@ func _build_schedule_button() -> void:
 	add_child(_schedule_button)
 
 
+func _build_save_button() -> void:
+	_save_button = Button.new()
+	_save_button.name = "SaveButton"
+	_save_button.position = Vector2(684.0, 612.0)
+	_save_button.size = Vector2(324.0, 44.0)
+	_save_button.text = Localization.text("ui.salvar_campanha")
+	_save_button.focus_mode = Control.FOCUS_ALL
+	_save_button.pressed.connect(func() -> void: save_requested.emit())
+	add_child(_save_button)
+
+
 func _configure_focus_navigation() -> void:
 	if _status_button == null or _schedule_button == null or _menu_buttons.size() != 6:
 		return
@@ -378,6 +404,9 @@ func _update_character_card() -> void:
 	if _name_label == null:
 		return
 	var has_campaign: bool = simulation != null
+	if _save_button != null:
+		_save_button.visible = has_campaign
+		_save_button.disabled = not has_campaign
 	_age_label.visible = has_campaign
 	_credits_label.visible = has_campaign
 	_status_button.visible = has_campaign

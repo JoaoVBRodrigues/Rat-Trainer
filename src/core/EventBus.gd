@@ -29,3 +29,4 @@ signal game_quit
 
 signal ui_opened(screen_name: String)
 signal ui_closed(screen_name: String)
+signal ui_audio_requested(event_id: String)

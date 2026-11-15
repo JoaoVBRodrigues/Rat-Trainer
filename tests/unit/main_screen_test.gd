@@ -1,5 +1,46 @@
 extends GdUnitTestSuite
 
+var _previous_save_dir: String
+var _test_save_dir: String
+var _previous_simulation: SimulationCore
+var _previous_game_state: GameManager.GameState
+var _previous_data: Dictionary
+
+
+func before_test() -> void:
+	var game_manager: GameManager = get_node("/root/Game") as GameManager
+	_previous_save_dir = Data.save_dir
+	_previous_simulation = game_manager.simulation
+	_previous_game_state = game_manager.current_state
+	_previous_data = Data.get_current_data()
+	_test_save_dir = "user://gdunit_main_screen_%d" % Time.get_ticks_usec()
+	Data.save_dir = _test_save_dir
+
+
+func after_test() -> void:
+	var game_manager: GameManager = get_node("/root/Game") as GameManager
+	Data.save_dir = _previous_save_dir
+	Data.set_data(_previous_data)
+	game_manager.simulation = _previous_simulation
+	game_manager.transition_to(_previous_game_state)
+	for save_name: String in [
+		"slot_0.rat-save", "slot_1.rat-save", "slot_2.rat-save",
+		"autosave.rat-save", "monthly_snapshot.rat-save"
+	]:
+		for suffix: String in ["", ".tmp", ".bak"]:
+			var save_path: String = _test_save_dir.path_join(save_name + suffix)
+			if not FileAccess.file_exists(save_path):
+				continue
+			var remove_error: Error = DirAccess.remove_absolute(
+				ProjectSettings.globalize_path(save_path)
+			)
+			assert_int(remove_error).is_equal(OK)
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(_test_save_dir)):
+		var remove_dir_error: Error = DirAccess.remove_absolute(
+			ProjectSettings.globalize_path(_test_save_dir)
+		)
+		assert_int(remove_dir_error).is_equal(OK)
+
 
 func test_main_screen_builds_six_focusable_destinations() -> void:
 	# Arrange
@@ -201,6 +242,7 @@ func test_agenda_and_primary_schedule_request_share_the_same_flow() -> void:
 
 func test_schedule_ui_resolves_three_results_then_returns_to_main_screen() -> void:
 	# Arrange
+	Data.initialize_new_save()
 	var simulation: SimulationCore = SimulationCore.new()
 	assert_bool(simulation.initialize()).is_true()
 	simulation.set_seed(456)
@@ -384,6 +426,7 @@ func test_cancelled_planning_leaves_campaign_state_unchanged() -> void:
 
 func test_disease_invalidating_pending_mission_preserves_resolved_periods() -> void:
 	# Arrange
+	Data.initialize_new_save()
 	var simulation: SimulationCore = SimulationCore.new()
 	assert_bool(simulation.initialize()).is_true()
 	simulation.set_seed(456)

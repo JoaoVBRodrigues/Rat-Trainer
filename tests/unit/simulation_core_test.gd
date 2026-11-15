@@ -116,6 +116,34 @@ func test_invalid_encounter_option_preserves_pending_encounter() -> void:
 	assert_bool(sim.get_state().is_empty()).is_true()
 
 
+func test_pending_event_save_restores_same_choice_and_rng_state() -> void:
+	# Arrange
+	var source: SimulationCore = SimulationCore.new()
+	assert_bool(source.initialize()).is_true()
+	var calendar_state: Dictionary = source.calendar.get_calendar_state().to_dict()
+	calendar_state["completed_periods"] = 8
+	assert_bool(source.calendar.load_state(calendar_state)).is_true()
+	var pending_result: PeriodResult = source.advance_period("leisure_descanso", 51)
+	assert_bool(pending_result.is_event_pending).is_true()
+	var pending_event: Dictionary = source.get_pending_event()
+	var option_id: String = str(pending_event.get("options", [])[0].get("id", ""))
+	var saved_state: Dictionary = source.get_state()
+
+	# Act
+	var restored: SimulationCore = SimulationCore.new()
+	assert_bool(restored.initialize()).is_true()
+	var loaded: bool = restored.load_state(saved_state)
+	var source_result: PeriodResult = source.advance_period(option_id)
+	var restored_result: PeriodResult = restored.advance_period(option_id)
+
+	# Assert
+	assert_bool(loaded).is_true()
+	assert_bool(source_result.completed).is_true()
+	assert_bool(restored_result.completed).is_true()
+	assert_bool(source.get_state() == restored.get_state()).is_true()
+	assert_int(restored.calendar.completed_periods).is_equal(9)
+
+
 func test_encounter_completion_preserves_original_period_and_advances_once() -> void:
 	# Arrange
 	var encounter: Dictionary = _find_open_physical_encounter("missao_fisica_ruinas")
@@ -564,6 +592,7 @@ func test_state_can_be_saved_and_loaded() -> void:
 	# Arrange
 	var sim1 = SimulationCore.new()
 	sim1.initialize()
+	sim1.events._random_events.clear()
 	sim1.set_seed(12345)
 	sim1.advance_period("study_curso_tecnologia_l1", 12345)
 	sim1.advance_period("work_trabalho_reparo_leve_l1", 12345 + 1)
@@ -574,9 +603,10 @@ func test_state_can_be_saved_and_loaded() -> void:
 	# Act - Load into new simulation
 	var sim2 = SimulationCore.new()
 	sim2.initialize()
-	sim2.load_state(state)
+	var loaded: bool = sim2.load_state(state)
 
 	# Assert - States match
+	assert_bool(loaded).is_true()
 	assert_int(sim2.calendar.completed_periods).is_equal(sim1.calendar.completed_periods)
 	assert_int(sim2.stats.get_stress()).is_equal(sim1.stats.get_stress())
 	assert_int(sim2.economy.get_credits()).is_equal(sim1.economy.get_credits())
