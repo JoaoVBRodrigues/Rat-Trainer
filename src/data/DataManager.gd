@@ -109,7 +109,9 @@ func initialize_new_save() -> void:
 			"month": 1,
 			"period": 1,
 			"turns_completed": 0,
-			"turns_total": 108
+			"turns_total": 108,
+			"ending_id": "",
+			"unlocked_endings": []
 		},
 		"activities": {
 			"courses": {"enrollment": [], "levels": {}},
@@ -140,6 +142,63 @@ func initialize_new_save() -> void:
 
 func set_data(data: Dictionary) -> void:
 	_current_data = data.duplicate(true)
+
+
+func record_ending(ending_id: String) -> bool:
+	if ending_id.is_empty():
+		push_error("Cannot record an empty ending ID.")
+		return false
+	var progress_value: Variant = _current_data.get("progress", null)
+	if not progress_value is Dictionary:
+		push_error("Cannot record an ending without valid campaign progress data.")
+		return false
+	var progress: Dictionary = progress_value
+	var unlocked_value: Variant = progress.get("unlocked_endings", [])
+	if not unlocked_value is Array:
+		push_error("Saved unlocked endings must be an array.")
+		return false
+
+	var unlocked_endings: Array[String] = []
+	for value: Variant in unlocked_value:
+		if not value is String or value.is_empty():
+			push_error("Saved unlocked endings contains an invalid ending ID.")
+			return false
+		if unlocked_endings.has(value):
+			push_error("Saved unlocked endings contains duplicate ID '%s'." % value)
+			return false
+		unlocked_endings.append(value)
+	if not unlocked_endings.has(ending_id):
+		unlocked_endings.append(ending_id)
+
+	progress["ending_id"] = ending_id
+	progress["unlocked_endings"] = unlocked_endings
+	_current_data["progress"] = progress
+	return true
+
+
+func get_unlocked_endings() -> Array[String]:
+	var result: Array[String] = []
+	if _current_data.is_empty():
+		return result
+	var progress_value: Variant = _current_data.get("progress", null)
+	if progress_value == null:
+		return result
+	if not progress_value is Dictionary:
+		push_error("Saved campaign progress must be an object.")
+		return result
+	var unlocked_value: Variant = progress_value.get("unlocked_endings", [])
+	if not unlocked_value is Array:
+		push_error("Saved unlocked endings must be an array.")
+		return result
+	for value: Variant in unlocked_value:
+		if not value is String or value.is_empty():
+			push_error("Saved unlocked endings contains an invalid ending ID.")
+			return []
+		if result.has(value):
+			push_error("Saved unlocked endings contains duplicate ID '%s'." % value)
+			return []
+		result.append(value)
+	return result
 
 
 func get_save_slots() -> Array[int]:

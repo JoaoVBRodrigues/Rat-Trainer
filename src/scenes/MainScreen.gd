@@ -43,6 +43,7 @@ func _ready() -> void:
 	_schedule_flow.name = "MonthlyScheduleFlow"
 	add_child(_schedule_flow)
 	_schedule_flow.bind_main_screen(self)
+	_schedule_flow.set_data_manager(get_node_or_null("/root/Data") as DataManager)
 	schedule_requested.connect(_schedule_flow.on_schedule_requested)
 	_game_manager = get_node_or_null("/root/Game") as GameManager
 	if _game_manager == null:

@@ -2,7 +2,7 @@ class_name AssetResolver
 extends Node
 
 const VALID_CATEGORIES: Array[StringName] = [
-	&"ui", &"characters", &"backgrounds", &"icons", &"items", &"monsters", &"fx"
+	&"ui", &"characters", &"backgrounds", &"icons", &"items", &"monsters", &"endings", &"fx"
 ]
 
 var art_root: String = "res://assets/art"

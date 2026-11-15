@@ -17,6 +17,9 @@ var _schedule_screen: ScheduleScreen
 var _result_screen: ActivityResultScreen
 var _summary_screen: MonthSummaryScreen
 var _encounter_screen: EncounterScreen
+var _ending_screen: EndingScreen
+var _data_manager: DataManager
+var _ending_evaluator: EndingEvaluator = EndingEvaluator.new()
 var _draft: MonthSchedule
 var _previous_schedule: MonthSchedule
 var _previous_schedule_calendar: CalendarSystem
@@ -28,10 +31,18 @@ var _test_mode: bool = false
 var _active: bool = false
 var _recovery_blocked: bool = false
 var _last_report: Dictionary = {}
+var _endings_loaded: bool = false
+var _ending_id: String = ""
 
 
 func bind_main_screen(screen: Control) -> void:
 	_main_screen = screen
+
+
+## Sets the active save manager before the campaign flow starts.
+## Usage: flow.set_data_manager(get_node("/root/Data") as DataManager)
+func set_data_manager(data_manager: DataManager) -> void:
+	_data_manager = data_manager
 
 
 func update_simulation(simulation: SimulationCore) -> void:
@@ -88,6 +99,12 @@ func _ensure_screens() -> void:
 		_summary_screen.summary_finished.connect(_on_summary_finished)
 		_main_screen.add_child(_summary_screen)
 		_summary_screen.visible = false
+	if _ending_screen == null:
+		_ending_screen = EndingScreen.new()
+		_ending_screen.name = "EndingScreen"
+		_ending_screen.ending_finished.connect(_on_ending_finished)
+		_main_screen.add_child(_ending_screen)
+		_ending_screen.visible = false
 	if _encounter_screen == null:
 		_encounter_screen = EncounterScreen.new()
 		_encounter_screen.name = "EncounterScreen"
@@ -462,9 +479,43 @@ func _finish_execution() -> void:
 	_previous_schedule = _draft.duplicate_schedule()
 	_previous_schedule_calendar = _simulation.calendar
 	_previous_schedule_completed_periods = _simulation.calendar.completed_periods
+	if _simulation.is_campaign_complete():
+		if not _test_mode:
+			_finish_campaign()
+		return
 	if not _test_mode:
 		_summary_screen.display_month_summary(_initial_state, final_state, _results)
 		_summary_screen.visible = true
+
+
+func _finish_campaign() -> void:
+	if not _simulation.is_event_completed("e12"):
+		push_error("Cannot evaluate the campaign ending before fixed event E12 completes.")
+		return
+	if _ending_id.is_empty():
+		if not _endings_loaded:
+			_endings_loaded = true
+			if not _ending_evaluator.load_endings("res://assets/data/endings.json"):
+				return
+		var selected: EndingDef = _ending_evaluator.evaluate_simulation(_simulation)
+		if selected == null:
+			return
+		_ending_id = selected.id
+
+	if _data_manager == null:
+		_data_manager = get_node_or_null("/root/Data") as DataManager
+	if _data_manager == null:
+		push_error("Cannot persist the campaign ending because DataManager is unavailable.")
+	else:
+		_data_manager.record_ending(_ending_id)
+
+	_ensure_screens()
+	if _ending_screen == null:
+		push_error("Cannot display the campaign ending because the ending screen is unavailable.")
+		return
+	if _summary_screen != null:
+		_summary_screen.visible = false
+	_ending_screen.show_ending(_ending_id, _simulation)
 
 
 func _build_report(pre_state: Dictionary, post_state: Dictionary) -> Dictionary:
@@ -584,6 +635,12 @@ func _on_summary_finished() -> void:
 			schedule_button.grab_focus()
 
 
+func _on_ending_finished() -> void:
+	if _ending_screen != null:
+		_ending_screen.hide_ending()
+	_close_flow()
+
+
 func _close_flow() -> void:
 	if _schedule_screen != null:
 		_schedule_screen.visible = false
@@ -591,6 +648,8 @@ func _close_flow() -> void:
 		_result_screen.hide_result()
 	if _summary_screen != null:
 		_summary_screen.visible = false
+	if _ending_screen != null:
+		_ending_screen.hide_ending()
 	_active = false
 	_test_mode = false
 

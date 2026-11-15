@@ -5,9 +5,25 @@ const PLACEHOLDER_DEFINITIONS: Array[Dictionary] = [
 	{"id": "ui_panel", "category": "ui", "size": Vector2i(256, 64)},
 	{"id": "char_rat_idle", "category": "characters", "size": Vector2i(96, 128)},
 	{"id": "bg_bedroom_day", "category": "backgrounds", "size": Vector2i(256, 192)},
+	{"id": "bg_ending", "category": "backgrounds", "size": Vector2i(256, 192)},
 	{"id": "icon_stat_str", "category": "icons", "size": Vector2i(48, 48)},
 	{"id": "item_generic", "category": "items", "size": Vector2i(48, 48)},
-	{"id": "monster_generic", "category": "monsters", "size": Vector2i(64, 64)}
+	{"id": "monster_generic", "category": "monsters", "size": Vector2i(64, 64)},
+	{"id": "evadida_do_sistema", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "aprendiz_de_ciborgues", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "tecnica_juvenil_da_cidade", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "guardia_da_rede", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "lider_comunitaria_jovem", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "promessa_corporativa", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "recruta_do_submundo", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "voz_das_ruas", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "mediadora_comunitaria", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "autora_emergente", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "mecanica_de_campo", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "defensora_das_ruas", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "hacker_de_elite", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "artista_emergente", "category": "endings", "size": Vector2i(96, 64)},
+	{"id": "caminho_equilibrado", "category": "endings", "size": Vector2i(96, 64)}
 ]
 
 const FONT_3X5: Dictionary = {
@@ -203,6 +219,8 @@ static func _size_for_category(category: String) -> Vector2i:
 			return Vector2i(48, 48)
 		"monsters":
 			return Vector2i(64, 64)
+		"endings":
+			return Vector2i(96, 64)
 		_:
 			return Vector2i(96, 64)
 
@@ -221,6 +239,8 @@ static func _base_color_for_category(category: String) -> Color:
 			return Color(0.2, 0.15, 0.08)
 		"monsters":
 			return Color(0.2, 0.08, 0.11)
+		"endings":
+			return Color(0.12, 0.1, 0.2)
 		_:
 			return Color(0.15, 0.15, 0.18)
 
@@ -239,5 +259,7 @@ static func _accent_color_for_category(category: String) -> Color:
 			return Color(0.93, 0.75, 0.38)
 		"monsters":
 			return Color(0.94, 0.4, 0.4)
+		"endings":
+			return Color(0.67, 0.48, 0.88)
 		_:
 			return Color(0.75, 0.75, 0.82)

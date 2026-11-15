@@ -1204,3 +1204,20 @@ func _reset_campaign_flags() -> void:
 	disappear_from_society = false
 	_missions_technical_completed = 0
 	_pending_event = {}
+
+
+# Returns a dictionary with the current state relevant for ending evaluation.
+# Used by EndingEvaluator and balance-run tools.
+func get_ending_state() -> Dictionary:
+	if not _systems_are_initialized() or not _pending_encounter.is_empty():
+		return {}
+	var stats_state: Dictionary = stats.get_state()
+	return {
+		"stats": stats_state.get("stats", {}),
+		"reputations": stats_state.get("reputations", {"hacker": 0, "social": 0, "fighter": 0}),
+		"tech_experiments": tech_experiments,
+		"criminal_record": criminal_record,
+		"community_help": community_help,
+		"disappear_from_society": disappear_from_society,
+		"missions_technical_completed": _missions_technical_completed
+	}

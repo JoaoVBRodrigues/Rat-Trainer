@@ -28,7 +28,7 @@ Salvar e carregar deve ser previsivel e seguro: uma falha de arquivo nunca apaga
       "disappear_from_society": false
     }
   },
-  "progress": {"turns_completed": 0, "completed_fixed_event_ids": [], "event_history": [], "stipend_years_paid": [1]},
+  "progress": {"turns_completed": 0, "completed_fixed_event_ids": [], "event_history": [], "stipend_years_paid": [1], "ending_id": "", "unlocked_endings": []},
   "rng_state": 736245197,
   "activities": {
     "course_xp": {"technology": 0, "communication": 0, "arts": 0},
@@ -43,6 +43,8 @@ Salvar e carregar deve ser previsivel e seguro: uma falha de arquivo nunca apaga
 ```
 
 `turns_completed` e a fonte de verdade do calendario. Idade, ano, mes, periodo e turno atual sao derivados conforme `calendar-and-turns.md`; nao armazenar contadores duplicados. `completed_fixed_event_ids` contem cada ID E01-E12 no maximo uma vez; `event_history` registra tambem os encontros aleatorios repetiveis com ID e periodo. `stipend_years_paid` impede pagamentos anuais duplicados. `job_streaks` rastreia meses consecutivos por tarefa, `job_tasks_used_current_month` registra o uso antes do fechamento do mes e `job_levels` persiste niveis promovidos. `rng_state` e o estado do gerador usado por encontros e combate, persistido com o resultado de cada periodo. O nome inicial e provisorio conforme `mvp-decisions.md`.
+
+`ending_id` fica vazio ate a avaliacao do periodo 108 e depois armazena o final selecionado. `unlocked_endings` guarda, sem duplicatas, os finais registrados neste save para exibir na galeria.
 
 ### Salvamento e slots
 
