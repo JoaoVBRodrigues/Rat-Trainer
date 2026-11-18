@@ -1,0 +1,398 @@
+[
+  {
+    "path": "assets/art/items/adesivo_recuperacao.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/aprendiz_de_ciborgues.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/artista_emergente.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/autora_emergente.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_bedroom_day.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_bedroom_day_b.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_bedroom_night.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_clinic.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_corp_lobby.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_ending.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_market.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_mission_factory.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_mission_rooftop.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_mission_subway.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_school.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_shop_black_market.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_shop_fashion.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_street_night.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/bg_workshop.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/caminho_equilibrado.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/items/casaco_acolchoado.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/cg_birthday.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/cg_chase.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/cg_defeat_carried.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/cg_festival_drones.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/cg_festival_hacking.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/cg_festival_parkour.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/cg_merchant.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_tired.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_idle.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_school_age12.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/reference/char_rat_sheet_base.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_work.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/defensora_das_ruas.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/monsters/drone_patrulha.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/evadida_do_sistema.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/guardia_da_rede.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/hacker_de_elite.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_agenda.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_city.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_credits.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/ui/icon_ending.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_equipment.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_menu_options.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_menu_rest.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_mission.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_profile.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/ui/icon_schedule.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_stat_cha.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_stat_eth.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_stat_int.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_stat_ref.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_stat_sta.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_stat_str.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_stress.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/ui/icon_success.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/icons/icon_talk.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/items/kit_ferramentas.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/lider_comunitaria_jovem.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/mecanica_de_campo.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/mediadora_comunitaria.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/portrait_rat_angry.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/portrait_rat_happy.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/portrait_rat_neutral.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/portrait_rat_sad.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/portrait_rat_shy.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/portrait_rat_sick.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/portrait_rat_surprised.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/portrait_rat_tired.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/promessa_corporativa.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/monsters/rastreador.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/recruta_do_submundo.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/scene_leisure_park.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/scene_rest_home.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/scene_study_combat.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/scene_study_etiquette.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/scene_study_tech.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/scene_work_clerk.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/scene_work_courier.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/backgrounds/scene_work_mechanic.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/monsters/sentinela.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/tecnica_juvenil_da_cidade.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/ui/ui_dialog_box.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/ui/ui_frame_mission.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/ui/ui_hex_button.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/ui/ui_panel.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/endings/voz_das_ruas.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age12.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age12_sick.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age12_tired.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age13.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age13_sick.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age13_tired.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age14.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age14_sick.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age14_tired.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age15.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age15_sick.png",
+    "matches_migration": true
+  },
+  {
+    "path": "assets/art/characters/char_rat_casual_a_age15_tired.png",
+    "matches_migration": true
+  }
+]

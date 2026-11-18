@@ -1,0 +1,3100 @@
+{
+  "files": [
+    {
+      "path": "assets/art/backgrounds/bg_bedroom_day.png",
+      "category": "backgrounds",
+      "id": "bg_bedroom_day",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        "FORMATO WebP com extensão PNG",
+        "DIMENSÕES",
+        "FORA DE 4:3"
+      ],
+      "bytes": 131708,
+      "alpha_max": 255,
+      "alpha_min": 255,
+      "height": 765,
+      "partial": 0,
+      "width": 1024,
+      "zero": 0,
+      "alpha": "255–255; zero=0; partial=0"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_bedroom_day_b.png",
+      "category": "backgrounds",
+      "id": "bg_bedroom_day_b",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 1877533,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_bedroom_night.png",
+      "category": "backgrounds",
+      "id": "bg_bedroom_night",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 1862379,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_clinic.png",
+      "category": "backgrounds",
+      "id": "bg_clinic",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 2027908,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_corp_lobby.png",
+      "category": "backgrounds",
+      "id": "bg_corp_lobby",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 2003805,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_ending.png",
+      "category": "backgrounds",
+      "id": "bg_ending",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2366511,
+      "color": 6,
+      "depth": 8,
+      "alpha": "255–255; zero=0; partial=0",
+      "alpha_min": 255
+    },
+    {
+      "path": "assets/art/backgrounds/bg_market.png",
+      "category": "backgrounds",
+      "id": "bg_market",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 2090074,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_mission_factory.png",
+      "category": "backgrounds",
+      "id": "bg_mission_factory",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 2000217,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_mission_rooftop.png",
+      "category": "backgrounds",
+      "id": "bg_mission_rooftop",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 1962446,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_mission_subway.png",
+      "category": "backgrounds",
+      "id": "bg_mission_subway",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 1956713,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_school.png",
+      "category": "backgrounds",
+      "id": "bg_school",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 2061460,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_shop_black_market.png",
+      "category": "backgrounds",
+      "id": "bg_shop_black_market",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 1997553,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_shop_fashion.png",
+      "category": "backgrounds",
+      "id": "bg_shop_fashion",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 2034855,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_street_night.png",
+      "category": "backgrounds",
+      "id": "bg_street_night",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 2082504,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/bg_workshop.png",
+      "category": "backgrounds",
+      "id": "bg_workshop",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": false,
+      "note": "cenário 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 768,
+      "bytes": 2005104,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/cg_birthday.png",
+      "category": "backgrounds",
+      "id": "cg_birthday",
+      "expected": [
+        1024,
+        640
+      ],
+      "requires_alpha": false,
+      "note": "CG; exceção documentada ao 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 640,
+      "bytes": 1757681,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/cg_chase.png",
+      "category": "backgrounds",
+      "id": "cg_chase",
+      "expected": [
+        1024,
+        640
+      ],
+      "requires_alpha": false,
+      "note": "CG; exceção documentada ao 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 640,
+      "bytes": 1847096,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/cg_defeat_carried.png",
+      "category": "backgrounds",
+      "id": "cg_defeat_carried",
+      "expected": [
+        1024,
+        640
+      ],
+      "requires_alpha": false,
+      "note": "CG; exceção documentada ao 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 640,
+      "bytes": 1736060,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/cg_festival_drones.png",
+      "category": "backgrounds",
+      "id": "cg_festival_drones",
+      "expected": [
+        1024,
+        640
+      ],
+      "requires_alpha": false,
+      "note": "CG; exceção documentada ao 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 640,
+      "bytes": 1777176,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/cg_festival_hacking.png",
+      "category": "backgrounds",
+      "id": "cg_festival_hacking",
+      "expected": [
+        1024,
+        640
+      ],
+      "requires_alpha": false,
+      "note": "CG; exceção documentada ao 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 640,
+      "bytes": 1787750,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/cg_festival_parkour.png",
+      "category": "backgrounds",
+      "id": "cg_festival_parkour",
+      "expected": [
+        1024,
+        640
+      ],
+      "requires_alpha": false,
+      "note": "CG; exceção documentada ao 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 640,
+      "bytes": 1780302,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/cg_merchant.png",
+      "category": "backgrounds",
+      "id": "cg_merchant",
+      "expected": [
+        1024,
+        640
+      ],
+      "requires_alpha": false,
+      "note": "CG; exceção documentada ao 4:3",
+      "warnings": [
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 640,
+      "bytes": 1818736,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/scene_leisure_park.png",
+      "category": "backgrounds",
+      "id": "scene_leisure_park",
+      "expected": [
+        640,
+        260
+      ],
+      "requires_alpha": false,
+      "note": "vinheta; exceção documentada ao 4:3",
+      "warnings": [],
+      "width": 640,
+      "height": 260,
+      "bytes": 463644,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/scene_rest_home.png",
+      "category": "backgrounds",
+      "id": "scene_rest_home",
+      "expected": [
+        640,
+        260
+      ],
+      "requires_alpha": false,
+      "note": "vinheta; exceção documentada ao 4:3",
+      "warnings": [],
+      "width": 640,
+      "height": 260,
+      "bytes": 454913,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/scene_study_combat.png",
+      "category": "backgrounds",
+      "id": "scene_study_combat",
+      "expected": [
+        640,
+        260
+      ],
+      "requires_alpha": false,
+      "note": "vinheta; exceção documentada ao 4:3",
+      "warnings": [],
+      "width": 640,
+      "height": 260,
+      "bytes": 465418,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/scene_study_etiquette.png",
+      "category": "backgrounds",
+      "id": "scene_study_etiquette",
+      "expected": [
+        640,
+        260
+      ],
+      "requires_alpha": false,
+      "note": "vinheta; exceção documentada ao 4:3",
+      "warnings": [],
+      "width": 640,
+      "height": 260,
+      "bytes": 477133,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/scene_study_tech.png",
+      "category": "backgrounds",
+      "id": "scene_study_tech",
+      "expected": [
+        640,
+        260
+      ],
+      "requires_alpha": false,
+      "note": "vinheta; exceção documentada ao 4:3",
+      "warnings": [],
+      "width": 640,
+      "height": 260,
+      "bytes": 458100,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/scene_work_clerk.png",
+      "category": "backgrounds",
+      "id": "scene_work_clerk",
+      "expected": [
+        640,
+        260
+      ],
+      "requires_alpha": false,
+      "note": "vinheta; exceção documentada ao 4:3",
+      "warnings": [],
+      "width": 640,
+      "height": 260,
+      "bytes": 466736,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/scene_work_courier.png",
+      "category": "backgrounds",
+      "id": "scene_work_courier",
+      "expected": [
+        640,
+        260
+      ],
+      "requires_alpha": false,
+      "note": "vinheta; exceção documentada ao 4:3",
+      "warnings": [],
+      "width": 640,
+      "height": 260,
+      "bytes": 479066,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/backgrounds/scene_work_mechanic.png",
+      "category": "backgrounds",
+      "id": "scene_work_mechanic",
+      "expected": [
+        640,
+        260
+      ],
+      "requires_alpha": false,
+      "note": "vinheta; exceção documentada ao 4:3",
+      "warnings": [],
+      "width": 640,
+      "height": 260,
+      "bytes": 465648,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age12.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age12",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 375352,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=270615; partial=120006",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age12_sick.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age12_sick",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 394882,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=265373; partial=125357",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age12_tired.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age12_tired",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 364819,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=275248; partial=115477",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age13.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age13",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 339444,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=285185; partial=105472",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age13_sick.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age13_sick",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 367283,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=275418; partial=115450",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age13_tired.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age13_tired",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 368616,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=276091; partial=114809",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age14.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age14",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 351456,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=279879; partial=110988",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age14_sick.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age14_sick",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 368681,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=273452; partial=117307",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age14_tired.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age14_tired",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 365555,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=271676; partial=119232",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age15.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age15",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 312146,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=292904; partial=98271",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age15_sick.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age15_sick",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 299414,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=299283; partial=91443",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_age15_tired.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_age15_tired",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 317721,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=293552; partial=97018",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_casual_a_tired.png",
+      "category": "characters",
+      "id": "char_rat_casual_a_tired",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [
+        "FORMATO WebP com extensão PNG",
+        "DIMENSÕES"
+      ],
+      "bytes": 623936,
+      "alpha_max": 255,
+      "alpha_min": 0,
+      "height": 1531,
+      "partial": 496813,
+      "width": 1027,
+      "zero": 1074458,
+      "alpha": "0–255; zero=1074458; partial=496813"
+    },
+    {
+      "path": "assets/art/characters/char_rat_idle.png",
+      "category": "characters",
+      "id": "char_rat_idle",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [
+        "DIMENSÕES"
+      ],
+      "width": 1027,
+      "height": 1531,
+      "bytes": 937366,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1107608; partial=463849",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_school_age12.png",
+      "category": "characters",
+      "id": "char_rat_school_age12",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [],
+      "width": 512,
+      "height": 768,
+      "bytes": 318691,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=287088; partial=104061",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/char_rat_work.png",
+      "category": "characters",
+      "id": "char_rat_work",
+      "expected": [
+        512,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 1536,
+      "bytes": 1980834,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–254; zero=1012415; partial=560449",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/characters/portrait_rat_angry.png",
+      "category": "characters",
+      "id": "portrait_rat_angry",
+      "expected": [
+        256,
+        256
+      ],
+      "requires_alpha": false,
+      "note": "fundo burgundy permitido",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2308544,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/characters/portrait_rat_happy.png",
+      "category": "characters",
+      "id": "portrait_rat_happy",
+      "expected": [
+        256,
+        256
+      ],
+      "requires_alpha": false,
+      "note": "fundo burgundy permitido",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2337000,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/characters/portrait_rat_neutral.png",
+      "category": "characters",
+      "id": "portrait_rat_neutral",
+      "expected": [
+        256,
+        256
+      ],
+      "requires_alpha": false,
+      "note": "fundo burgundy permitido",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2333100,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/characters/portrait_rat_sad.png",
+      "category": "characters",
+      "id": "portrait_rat_sad",
+      "expected": [
+        256,
+        256
+      ],
+      "requires_alpha": false,
+      "note": "fundo burgundy permitido",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2355775,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/characters/portrait_rat_shy.png",
+      "category": "characters",
+      "id": "portrait_rat_shy",
+      "expected": [
+        256,
+        256
+      ],
+      "requires_alpha": false,
+      "note": "fundo burgundy permitido",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2411141,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/characters/portrait_rat_sick.png",
+      "category": "characters",
+      "id": "portrait_rat_sick",
+      "expected": [
+        256,
+        256
+      ],
+      "requires_alpha": false,
+      "note": "fundo burgundy permitido",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2339980,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/characters/portrait_rat_surprised.png",
+      "category": "characters",
+      "id": "portrait_rat_surprised",
+      "expected": [
+        256,
+        256
+      ],
+      "requires_alpha": false,
+      "note": "fundo burgundy permitido",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2346994,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/characters/portrait_rat_tired.png",
+      "category": "characters",
+      "id": "portrait_rat_tired",
+      "expected": [
+        256,
+        256
+      ],
+      "requires_alpha": false,
+      "note": "fundo burgundy permitido",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2321671,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    },
+    {
+      "path": "assets/art/endings/aprendiz_de_ciborgues.png",
+      "category": "endings",
+      "id": "aprendiz_de_ciborgues",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1252867,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1053844; partial=518243",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/artista_emergente.png",
+      "category": "endings",
+      "id": "artista_emergente",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1207746,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1108180; partial=462576",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/autora_emergente.png",
+      "category": "endings",
+      "id": "autora_emergente",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1383607,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=845402; partial=725923",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/caminho_equilibrado.png",
+      "category": "endings",
+      "id": "caminho_equilibrado",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1732308,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=825250; partial=746530",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/defensora_das_ruas.png",
+      "category": "endings",
+      "id": "defensora_das_ruas",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1473263,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=903791; partial=668249",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/evadida_do_sistema.png",
+      "category": "endings",
+      "id": "evadida_do_sistema",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1837225,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=790977; partial=780648",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/guardia_da_rede.png",
+      "category": "endings",
+      "id": "guardia_da_rede",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1867032,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=729621; partial=842666",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/hacker_de_elite.png",
+      "category": "endings",
+      "id": "hacker_de_elite",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1470655,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=810412; partial=761019",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/lider_comunitaria_jovem.png",
+      "category": "endings",
+      "id": "lider_comunitaria_jovem",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1653809,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=775458; partial=795797",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/mecanica_de_campo.png",
+      "category": "endings",
+      "id": "mecanica_de_campo",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1751957,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=836812; partial=734383",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/mediadora_comunitaria.png",
+      "category": "endings",
+      "id": "mediadora_comunitaria",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1316528,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=991497; partial=579676",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/promessa_corporativa.png",
+      "category": "endings",
+      "id": "promessa_corporativa",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1684292,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=772008; partial=799456",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/recruta_do_submundo.png",
+      "category": "endings",
+      "id": "recruta_do_submundo",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1642468,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=844524; partial=727334",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/tecnica_juvenil_da_cidade.png",
+      "category": "endings",
+      "id": "tecnica_juvenil_da_cidade",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1393174,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=969948; partial=601783",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/endings/voz_das_ruas.png",
+      "category": "endings",
+      "id": "voz_das_ruas",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1724344,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=766693; partial=805478",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_agenda.png",
+      "category": "icons",
+      "id": "icon_agenda",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "FORMATO WebP com extensão PNG",
+        "DIMENSÕES"
+      ],
+      "bytes": 545904,
+      "alpha_max": 255,
+      "alpha_min": 0,
+      "height": 1254,
+      "partial": 417557,
+      "width": 1254,
+      "zero": 1154141,
+      "alpha": "0–255; zero=1154141; partial=417557"
+    },
+    {
+      "path": "assets/art/icons/icon_city.png",
+      "category": "icons",
+      "id": "icon_city",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "FORMATO WebP com extensão PNG",
+        "DIMENSÕES"
+      ],
+      "bytes": 676604,
+      "alpha_max": 254,
+      "alpha_min": 0,
+      "height": 1024,
+      "partial": 560721,
+      "width": 1536,
+      "zero": 1012143,
+      "alpha": "0–254; zero=1012143; partial=560721"
+    },
+    {
+      "path": "assets/art/icons/icon_credits.png",
+      "category": "icons",
+      "id": "icon_credits",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [],
+      "width": 128,
+      "height": 128,
+      "bytes": 17960,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=11170; partial=4956",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_equipment.png",
+      "category": "icons",
+      "id": "icon_equipment",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1975616,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–254; zero=615531; partial=957333",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_menu_options.png",
+      "category": "icons",
+      "id": "icon_menu_options",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [],
+      "width": 128,
+      "height": 128,
+      "bytes": 24240,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=8504; partial=7500",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_menu_rest.png",
+      "category": "icons",
+      "id": "icon_menu_rest",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [],
+      "width": 128,
+      "height": 128,
+      "bytes": 16545,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=11561; partial=4433",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_mission.png",
+      "category": "icons",
+      "id": "icon_mission",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES"
+      ],
+      "width": 1230,
+      "height": 1278,
+      "bytes": 903495,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1124738; partial=445806",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_profile.png",
+      "category": "icons",
+      "id": "icon_profile",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "FORMATO WebP com extensão PNG",
+        "DIMENSÕES"
+      ],
+      "bytes": 649480,
+      "alpha_max": 255,
+      "alpha_min": 0,
+      "height": 1254,
+      "partial": 529119,
+      "width": 1254,
+      "zero": 1042543,
+      "alpha": "0–255; zero=1042543; partial=529119"
+    },
+    {
+      "path": "assets/art/icons/icon_stat_cha.png",
+      "category": "icons",
+      "id": "icon_stat_cha",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1281,
+      "height": 1227,
+      "bytes": 1028869,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1024766; partial=546608",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_stat_eth.png",
+      "category": "icons",
+      "id": "icon_stat_eth",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES"
+      ],
+      "width": 1237,
+      "height": 1271,
+      "bytes": 926729,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1113279; partial=457734",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_stat_int.png",
+      "category": "icons",
+      "id": "icon_stat_int",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES"
+      ],
+      "width": 1232,
+      "height": 1277,
+      "bytes": 940984,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1057415; partial=515647",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_stat_ref.png",
+      "category": "icons",
+      "id": "icon_stat_ref",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES"
+      ],
+      "width": 1230,
+      "height": 1278,
+      "bytes": 831513,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1159782; partial=410729",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_stat_sta.png",
+      "category": "icons",
+      "id": "icon_stat_sta",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1229,
+      "height": 1280,
+      "bytes": 1034259,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1047035; partial=525522",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_stat_str.png",
+      "category": "icons",
+      "id": "icon_stat_str",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES"
+      ],
+      "width": 1234,
+      "height": 1274,
+      "bytes": 961470,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1058217; partial=512896",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_stress.png",
+      "category": "icons",
+      "id": "icon_stress",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [],
+      "width": 128,
+      "height": 128,
+      "bytes": 12150,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=12169; partial=3957",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/icons/icon_talk.png",
+      "category": "icons",
+      "id": "icon_talk",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1418652,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–254; zero=1026976; partial=545888",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/items/adesivo_recuperacao.png",
+      "category": "items",
+      "id": "adesivo_recuperacao",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1892210,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–254; zero=931368; partial=641496",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/items/casaco_acolchoado.png",
+      "category": "items",
+      "id": "casaco_acolchoado",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1461305,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=704081; partial=866926",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/items/kit_ferramentas.png",
+      "category": "items",
+      "id": "kit_ferramentas",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone/emblema",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1295,
+      "height": 1215,
+      "bytes": 1416392,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=805008; partial=766869",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/monsters/drone_patrulha.png",
+      "category": "monsters",
+      "id": "drone_patrulha",
+      "expected": [
+        512,
+        512
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1024,
+      "height": 1536,
+      "bytes": 1910192,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–254; zero=1041682; partial=531182",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/monsters/rastreador.png",
+      "category": "monsters",
+      "id": "rastreador",
+      "expected": [
+        512,
+        512
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1242,
+      "height": 1266,
+      "bytes": 1609788,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=861772; partial=709904",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/monsters/sentinela.png",
+      "category": "monsters",
+      "id": "sentinela",
+      "expected": [
+        512,
+        512
+      ],
+      "requires_alpha": true,
+      "note": "sprite",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1231,
+      "height": 1278,
+      "bytes": 1713820,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=826625; partial=745599",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/reference/char_rat_sheet_base.png",
+      "category": "reference",
+      "id": "char_rat_sheet_base",
+      "expected": [
+        832,
+        1216
+      ],
+      "requires_alpha": false,
+      "note": "aproximado; referência",
+      "warnings": [
+        "FORMATO JPEG com extensão PNG; referência excluída do runtime"
+      ],
+      "bytes": 2247261,
+      "width": 1696,
+      "height": 2528,
+      "alpha": "opaco (JPEG)"
+    },
+    {
+      "path": "assets/art/ui/icon_ending.png",
+      "category": "ui",
+      "id": "icon_ending",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone UI",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1226418,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=805014; partial=766536",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/ui/icon_schedule.png",
+      "category": "ui",
+      "id": "icon_schedule",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone UI",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1083324,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=940634; partial=631013",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/ui/icon_success.png",
+      "category": "ui",
+      "id": "icon_success",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "ícone UI",
+      "warnings": [
+        "DIMENSÕES"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 516611,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=1324152; partial=247702",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/ui/ui_dialog_box.png",
+      "category": "ui",
+      "id": "ui_dialog_box",
+      "expected": [
+        800,
+        200
+      ],
+      "requires_alpha": false,
+      "note": "fundo liso ou transparente permitido",
+      "warnings": [],
+      "width": 800,
+      "height": 200,
+      "bytes": 139187,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=40278; partial=117809",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/ui/ui_frame_mission.png",
+      "category": "ui",
+      "id": "ui_frame_mission",
+      "expected": [
+        1024,
+        768
+      ],
+      "requires_alpha": true,
+      "note": "moldura",
+      "warnings": [],
+      "width": 1024,
+      "height": 768,
+      "bytes": 418674,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=625591; partial=159383",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/ui/ui_hex_button.png",
+      "category": "ui",
+      "id": "ui_hex_button",
+      "expected": [
+        128,
+        128
+      ],
+      "requires_alpha": true,
+      "note": "botão",
+      "warnings": [],
+      "width": 128,
+      "height": 128,
+      "bytes": 23249,
+      "color": 6,
+      "depth": 8,
+      "alpha": "0–255; zero=8714; partial=7365",
+      "alpha_min": 0
+    },
+    {
+      "path": "assets/art/ui/ui_panel.png",
+      "category": "ui",
+      "id": "ui_panel",
+      "expected": [
+        512,
+        512
+      ],
+      "requires_alpha": false,
+      "note": "RGBA; centro vazio sem texto",
+      "warnings": [
+        "DIMENSÕES",
+        ">1 MB"
+      ],
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2086111,
+      "color": 2,
+      "depth": 8,
+      "alpha": "opaque"
+    }
+  ],
+  "coverage": [
+    {
+      "category": "backgrounds",
+      "id": "bg_bedroom_day",
+      "source": "Placeholder",
+      "final": true,
+      "placeholder": true,
+      "import_bad": true,
+      "where": "src/scenes/MainScreen.gd:146",
+      "context": "ativo"
+    },
+    {
+      "category": "backgrounds",
+      "id": "bg_ending",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingScreen.gd:71; CreditsScreen.gd:29",
+      "context": "ativo"
+    },
+    {
+      "category": "characters",
+      "id": "char_rat_idle",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/scenes/MainScreen.gd:159; src/ui/widgets/CharacterCard.gd:50; src/scenes/ProfileScreen.gd:41",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "aprendiz_de_ciborgues",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "artista_emergente",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "autora_emergente",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "caminho_equilibrado",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "defensora_das_ruas",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "evadida_do_sistema",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "guardia_da_rede",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "hacker_de_elite",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "lider_comunitaria_jovem",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "mecanica_de_campo",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "mediadora_comunitaria",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "promessa_corporativa",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "recruta_do_submundo",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "tecnica_juvenil_da_cidade",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "endings",
+      "id": "voz_das_ruas",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingGallery.gd:178; EndingScreen.gd:294; assets/data/endings.json",
+      "context": "ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_agenda",
+      "source": "Placeholder",
+      "final": true,
+      "placeholder": true,
+      "import_bad": true,
+      "where": "src/scenes/MainScreen.gd:16,250",
+      "context": "ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_city",
+      "source": "Placeholder",
+      "final": true,
+      "placeholder": true,
+      "import_bad": true,
+      "where": "src/scenes/MainScreen.gd:16,250",
+      "context": "ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_equipment",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/scenes/MainScreen.gd:16,250",
+      "context": "ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_mission",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/scenes/MainScreen.gd:16,250",
+      "context": "ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_profile",
+      "source": "Placeholder",
+      "final": true,
+      "placeholder": true,
+      "import_bad": true,
+      "where": "src/scenes/MainScreen.gd:16,250",
+      "context": "ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_stat_cha",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/StatsPanel.gd:112; StatusScreen.gd:94",
+      "context": "consumidor legado; ausente no StatusPanel ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_stat_eth",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/StatsPanel.gd:112; StatusScreen.gd:94",
+      "context": "consumidor legado; ausente no StatusPanel ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_stat_int",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/StatsPanel.gd:112; StatusScreen.gd:94",
+      "context": "consumidor legado; ausente no StatusPanel ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_stat_ref",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/StatsPanel.gd:112; StatusScreen.gd:94",
+      "context": "consumidor legado; ausente no StatusPanel ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_stat_sta",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/StatsPanel.gd:112; StatusScreen.gd:94",
+      "context": "consumidor legado; ausente no StatusPanel ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_stat_str",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/widgets/StatsPanel.gd:112; StatusScreen.gd:94",
+      "context": "consumidor legado; ausente no StatusPanel ativo"
+    },
+    {
+      "category": "icons",
+      "id": "icon_talk",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/scenes/MainScreen.gd:16,250",
+      "context": "ativo"
+    },
+    {
+      "category": "items",
+      "id": "adesivo_recuperacao",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/ItemManagementScreen.gd:249; assets/data/items.json",
+      "context": "ativo"
+    },
+    {
+      "category": "items",
+      "id": "casaco_acolchoado",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/ItemManagementScreen.gd:249; assets/data/items.json",
+      "context": "ativo"
+    },
+    {
+      "category": "items",
+      "id": "kit_ferramentas",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/ItemManagementScreen.gd:249; assets/data/items.json",
+      "context": "ativo"
+    },
+    {
+      "category": "monsters",
+      "id": "drone_patrulha",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/EncounterScreen.gd:111; assets/data/monsters.json",
+      "context": "ativo"
+    },
+    {
+      "category": "monsters",
+      "id": "rastreador",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/EncounterScreen.gd:111; assets/data/monsters.json",
+      "context": "ativo"
+    },
+    {
+      "category": "monsters",
+      "id": "sentinela",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/EncounterScreen.gd:111; assets/data/monsters.json",
+      "context": "ativo"
+    },
+    {
+      "category": "ui",
+      "id": "icon_ending",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/EndingScreen.gd:297",
+      "context": "fallback condicional"
+    },
+    {
+      "category": "ui",
+      "id": "icon_schedule",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/ScheduleButton.gd:25",
+      "context": "widget legado"
+    },
+    {
+      "category": "ui",
+      "id": "icon_success",
+      "source": "Final",
+      "final": true,
+      "placeholder": false,
+      "import_bad": false,
+      "where": "src/ui/widgets/ActivityResult.gd:54",
+      "context": "ativo"
+    },
+    {
+      "category": "ui",
+      "id": "ui_panel",
+      "source": "Final",
+      "final": true,
+      "placeholder": true,
+      "import_bad": false,
+      "where": "src/ui/UITheme.gd:18",
+      "context": "ativo"
+    }
+  ],
+  "planned": [
+    [
+      "ASSET-001",
+      "char_rat_sheet_base",
+      "Reference",
+      "In Progress"
+    ],
+    [
+      "ASSET-002",
+      "char_rat_idle",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-003",
+      "bg_bedroom_day",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-004",
+      "ui_panel",
+      "UI",
+      "In Progress"
+    ],
+    [
+      "ASSET-005",
+      "bg_ending",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-006",
+      "icon_agenda",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-007",
+      "icon_profile",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-008",
+      "icon_city",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-009",
+      "icon_equipment",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-010",
+      "icon_talk",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-011",
+      "icon_mission",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-012",
+      "icon_stat_str",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-013",
+      "icon_stat_int",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-014",
+      "icon_stat_cha",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-015",
+      "icon_stat_ref",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-016",
+      "icon_stat_sta",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-017",
+      "icon_stat_eth",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-018",
+      "icon_schedule",
+      "UI",
+      "In Progress"
+    ],
+    [
+      "ASSET-019",
+      "icon_success",
+      "UI",
+      "In Progress"
+    ],
+    [
+      "ASSET-020",
+      "icon_ending",
+      "UI",
+      "In Progress"
+    ],
+    [
+      "ASSET-021",
+      "kit_ferramentas",
+      "Items",
+      "In Progress"
+    ],
+    [
+      "ASSET-022",
+      "casaco_acolchoado",
+      "Items",
+      "In Progress"
+    ],
+    [
+      "ASSET-023",
+      "adesivo_recuperacao",
+      "Items",
+      "In Progress"
+    ],
+    [
+      "ASSET-024",
+      "rastreador",
+      "Monsters",
+      "In Progress"
+    ],
+    [
+      "ASSET-025",
+      "drone_patrulha",
+      "Monsters",
+      "In Progress"
+    ],
+    [
+      "ASSET-026",
+      "sentinela",
+      "Monsters",
+      "In Progress"
+    ],
+    [
+      "ASSET-027",
+      "evadida_do_sistema",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-028",
+      "aprendiz_de_ciborgues",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-029",
+      "tecnica_juvenil_da_cidade",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-030",
+      "guardia_da_rede",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-031",
+      "lider_comunitaria_jovem",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-032",
+      "promessa_corporativa",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-033",
+      "recruta_do_submundo",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-034",
+      "voz_das_ruas",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-035",
+      "mediadora_comunitaria",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-036",
+      "autora_emergente",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-037",
+      "mecanica_de_campo",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-038",
+      "defensora_das_ruas",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-039",
+      "hacker_de_elite",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-040",
+      "artista_emergente",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-041",
+      "caminho_equilibrado",
+      "Endings",
+      "In Progress"
+    ],
+    [
+      "ASSET-042",
+      "char_rat_school",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-043",
+      "char_rat_casual_b",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-044",
+      "char_rat_work",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-045",
+      "char_rat_hacker",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-046",
+      "char_rat_armor",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-047",
+      "char_rat_gala",
+      "Characters",
+      "Blocked"
+    ],
+    [
+      "ASSET-048",
+      "char_rat_casual_a_tired",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-049",
+      "char_rat_school_tired",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-050",
+      "char_rat_casual_b_tired",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-051",
+      "char_rat_work_tired",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-052",
+      "char_rat_hacker_tired",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-053",
+      "char_rat_armor_tired",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-054",
+      "char_rat_gala_tired",
+      "Characters",
+      "Blocked"
+    ],
+    [
+      "ASSET-055",
+      "char_rat_casual_a_sick",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-056",
+      "char_rat_casual_b_sick",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-057",
+      "portrait_rat_neutral",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-058",
+      "portrait_rat_happy",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-059",
+      "portrait_rat_angry",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-060",
+      "portrait_rat_sad",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-061",
+      "portrait_rat_surprised",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-062",
+      "portrait_rat_tired",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-063",
+      "portrait_rat_shy",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-064",
+      "portrait_rat_sick",
+      "Characters",
+      "In Progress"
+    ],
+    [
+      "ASSET-065",
+      "portrait_guardian_neutral",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-066",
+      "portrait_guardian_happy",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-067",
+      "portrait_guardian_worried",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-068",
+      "char_guardian_idle",
+      "Characters",
+      "Deferred"
+    ],
+    [
+      "ASSET-069",
+      "bg_bedroom_night",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-070",
+      "bg_street_night",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-071",
+      "bg_corp_lobby",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-072",
+      "bg_market",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-073",
+      "bg_workshop",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-074",
+      "bg_school",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-075",
+      "bg_clinic",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-076",
+      "bg_shop_weapons",
+      "Backgrounds",
+      "Blocked"
+    ],
+    [
+      "ASSET-077",
+      "bg_shop_fashion",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-078",
+      "bg_shop_black_market",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-079",
+      "bg_mission_factory",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-080",
+      "bg_mission_subway",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-081",
+      "bg_mission_rooftop",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-082",
+      "bg_bedroom_day_b",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-083",
+      "scene_work_mechanic",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-084",
+      "scene_work_courier",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-085",
+      "scene_work_clerk",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-086",
+      "scene_study_tech",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-087",
+      "scene_study_etiquette",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-088",
+      "scene_study_combat",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-089",
+      "scene_rest_home",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-090",
+      "scene_leisure_park",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-091",
+      "cg_festival_parkour",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-092",
+      "cg_festival_hacking",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-093",
+      "cg_festival_drones",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-094",
+      "cg_merchant",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-095",
+      "cg_chase",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-096",
+      "cg_defeat_carried",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-097",
+      "cg_birthday",
+      "Backgrounds",
+      "In Progress"
+    ],
+    [
+      "ASSET-098",
+      "cg_gala",
+      "Backgrounds",
+      "Blocked"
+    ],
+    [
+      "ASSET-099",
+      "ui_frame_mission",
+      "UI",
+      "In Progress"
+    ],
+    [
+      "ASSET-100",
+      "ui_dialog_box",
+      "UI",
+      "In Progress"
+    ],
+    [
+      "ASSET-101",
+      "ui_hex_button",
+      "UI",
+      "In Progress"
+    ],
+    [
+      "ASSET-102",
+      "icon_stress",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-103",
+      "icon_credits",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-104",
+      "icon_menu_rest",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-105",
+      "icon_menu_options",
+      "Icons",
+      "In Progress"
+    ],
+    [
+      "ASSET-106",
+      "item_jacket_hardlight",
+      "Items",
+      "Deferred"
+    ],
+    [
+      "ASSET-107",
+      "item_implant_focus",
+      "Items",
+      "Deferred"
+    ],
+    [
+      "ASSET-108",
+      "item_energy_drink",
+      "Items",
+      "Deferred"
+    ],
+    [
+      "ASSET-109",
+      "item_cyber_glasses",
+      "Items",
+      "Deferred"
+    ],
+    [
+      "ASSET-110",
+      "item_gift_chip",
+      "Items",
+      "Deferred"
+    ]
+  ]
+}

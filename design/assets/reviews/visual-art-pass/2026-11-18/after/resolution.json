@@ -1,0 +1,282 @@
+[
+	{
+		"height": 192,
+		"key": "backgrounds/bg_bedroom_day",
+		"path": "res://assets/placeholders/backgrounds/bg_bedroom_day.png",
+		"source": "placeholder",
+		"width": 256
+	},
+	{
+		"height": 1086,
+		"key": "backgrounds/bg_ending",
+		"path": "res://assets/art/backgrounds/bg_ending.png",
+		"source": "final",
+		"width": 1448
+	},
+	{
+		"height": 1531,
+		"key": "characters/char_rat_idle",
+		"path": "res://assets/art/characters/char_rat_idle.png",
+		"source": "final",
+		"width": 1027
+	},
+	{
+		"height": 1254,
+		"key": "endings/aprendiz_de_ciborgues",
+		"path": "res://assets/art/endings/aprendiz_de_ciborgues.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/artista_emergente",
+		"path": "res://assets/art/endings/artista_emergente.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/autora_emergente",
+		"path": "res://assets/art/endings/autora_emergente.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/caminho_equilibrado",
+		"path": "res://assets/art/endings/caminho_equilibrado.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/defensora_das_ruas",
+		"path": "res://assets/art/endings/defensora_das_ruas.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/evadida_do_sistema",
+		"path": "res://assets/art/endings/evadida_do_sistema.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/guardia_da_rede",
+		"path": "res://assets/art/endings/guardia_da_rede.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/hacker_de_elite",
+		"path": "res://assets/art/endings/hacker_de_elite.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/lider_comunitaria_jovem",
+		"path": "res://assets/art/endings/lider_comunitaria_jovem.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/mecanica_de_campo",
+		"path": "res://assets/art/endings/mecanica_de_campo.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/mediadora_comunitaria",
+		"path": "res://assets/art/endings/mediadora_comunitaria.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/promessa_corporativa",
+		"path": "res://assets/art/endings/promessa_corporativa.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/recruta_do_submundo",
+		"path": "res://assets/art/endings/recruta_do_submundo.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/tecnica_juvenil_da_cidade",
+		"path": "res://assets/art/endings/tecnica_juvenil_da_cidade.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "endings/voz_das_ruas",
+		"path": "res://assets/art/endings/voz_das_ruas.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 48,
+		"key": "icons/icon_agenda",
+		"path": "res://assets/placeholders/icons/icon_agenda.png",
+		"source": "placeholder",
+		"width": 48
+	},
+	{
+		"height": 48,
+		"key": "icons/icon_city",
+		"path": "res://assets/placeholders/icons/icon_city.png",
+		"source": "placeholder",
+		"width": 48
+	},
+	{
+		"height": 1024,
+		"key": "icons/icon_equipment",
+		"path": "res://assets/art/icons/icon_equipment.png",
+		"source": "final",
+		"width": 1536
+	},
+	{
+		"height": 1278,
+		"key": "icons/icon_mission",
+		"path": "res://assets/art/icons/icon_mission.png",
+		"source": "final",
+		"width": 1230
+	},
+	{
+		"height": 48,
+		"key": "icons/icon_profile",
+		"path": "res://assets/placeholders/icons/icon_profile.png",
+		"source": "placeholder",
+		"width": 48
+	},
+	{
+		"height": 1227,
+		"key": "icons/icon_stat_cha",
+		"path": "res://assets/art/icons/icon_stat_cha.png",
+		"source": "final",
+		"width": 1281
+	},
+	{
+		"height": 1271,
+		"key": "icons/icon_stat_eth",
+		"path": "res://assets/art/icons/icon_stat_eth.png",
+		"source": "final",
+		"width": 1237
+	},
+	{
+		"height": 1277,
+		"key": "icons/icon_stat_int",
+		"path": "res://assets/art/icons/icon_stat_int.png",
+		"source": "final",
+		"width": 1232
+	},
+	{
+		"height": 1278,
+		"key": "icons/icon_stat_ref",
+		"path": "res://assets/art/icons/icon_stat_ref.png",
+		"source": "final",
+		"width": 1230
+	},
+	{
+		"height": 1280,
+		"key": "icons/icon_stat_sta",
+		"path": "res://assets/art/icons/icon_stat_sta.png",
+		"source": "final",
+		"width": 1229
+	},
+	{
+		"height": 1274,
+		"key": "icons/icon_stat_str",
+		"path": "res://assets/art/icons/icon_stat_str.png",
+		"source": "final",
+		"width": 1234
+	},
+	{
+		"height": 1024,
+		"key": "icons/icon_talk",
+		"path": "res://assets/art/icons/icon_talk.png",
+		"source": "final",
+		"width": 1536
+	},
+	{
+		"height": 1024,
+		"key": "items/adesivo_recuperacao",
+		"path": "res://assets/art/items/adesivo_recuperacao.png",
+		"source": "final",
+		"width": 1536
+	},
+	{
+		"height": 1254,
+		"key": "items/casaco_acolchoado",
+		"path": "res://assets/art/items/casaco_acolchoado.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1215,
+		"key": "items/kit_ferramentas",
+		"path": "res://assets/art/items/kit_ferramentas.png",
+		"source": "final",
+		"width": 1295
+	},
+	{
+		"height": 1536,
+		"key": "monsters/drone_patrulha",
+		"path": "res://assets/art/monsters/drone_patrulha.png",
+		"source": "final",
+		"width": 1024
+	},
+	{
+		"height": 1266,
+		"key": "monsters/rastreador",
+		"path": "res://assets/art/monsters/rastreador.png",
+		"source": "final",
+		"width": 1242
+	},
+	{
+		"height": 1278,
+		"key": "monsters/sentinela",
+		"path": "res://assets/art/monsters/sentinela.png",
+		"source": "final",
+		"width": 1231
+	},
+	{
+		"height": 1254,
+		"key": "ui/icon_ending",
+		"path": "res://assets/art/ui/icon_ending.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "ui/icon_schedule",
+		"path": "res://assets/art/ui/icon_schedule.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "ui/icon_success",
+		"path": "res://assets/art/ui/icon_success.png",
+		"source": "final",
+		"width": 1254
+	},
+	{
+		"height": 1254,
+		"key": "ui/ui_panel",
+		"path": "res://assets/art/ui/ui_panel.png",
+		"source": "final",
+		"width": 1254
+	}
+]

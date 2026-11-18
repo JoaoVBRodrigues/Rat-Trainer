@@ -30,6 +30,11 @@ The script writes `ui/ui_panel`, `characters/char_rat_idle`, `backgrounds/bg_bed
 
 ## Asset fallback and live preview
 
+Generated artwork is organized under `assets/art/` by category. See the
+[art index and previews](design/assets/README.md) for the current files, generation
+records, preserved earlier versions and verified migration inventory. The former
+temporary image folder has been removed; game loading does not depend on it.
+
 `Assets.get_texture(id, category)` checks these paths in order:
 
 1. `assets/art/<category>/<id>.png`

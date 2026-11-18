@@ -13,6 +13,7 @@ const OPTION_LABELS: Dictionary = {
 var _monster_name: String = ""
 var _monster_id: String = ""
 var _options_container: VBoxContainer
+var _monster_icon: TextureRect
 var _monster_label: Label
 var _instructions_label: Label
 var _scene_label: Label
@@ -44,12 +45,12 @@ func _build_ui() -> void:
 	monster_header.alignment = BoxContainer.ALIGNMENT_CENTER
 	layout.add_child(monster_header)
 
-	var monster_icon: TextureRect = TextureRect.new()
-	monster_icon.name = "MonsterIcon"
-	monster_icon.custom_minimum_size = Vector2(64.0, 64.0)
-	monster_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	monster_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	monster_header.add_child(monster_icon)
+	_monster_icon = TextureRect.new()
+	_monster_icon.name = "MonsterIcon"
+	_monster_icon.custom_minimum_size = Vector2(64.0, 64.0)
+	_monster_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_monster_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	monster_header.add_child(_monster_icon)
 
 	_monster_label = Label.new()
 	_monster_label.name = "MonsterName"
@@ -104,6 +105,13 @@ func open_encounter(
 ) -> void:
 	_monster_id = monster_id
 	_monster_name = monster_name
+	if _monster_icon != null:
+		var assets: AssetResolver = get_node_or_null("/root/Assets") as AssetResolver
+		_monster_icon.texture = (
+			assets.get_texture(StringName(monster_id), &"monsters")
+			if assets != null and not monster_id.is_empty()
+			else null
+		)
 
 	if _monster_label != null:
 		_monster_label.text = monster_name

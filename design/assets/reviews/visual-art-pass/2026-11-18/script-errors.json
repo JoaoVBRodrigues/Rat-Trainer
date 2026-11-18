@@ -1,0 +1,22 @@
+﻿{
+    "id":  1.0,
+    "jsonrpc":  "2.0",
+    "result":  {
+                   "content":  [
+                                   {
+                                       "text":  "{\n\t\"checked\": 0,\n\t\"error_count\": 0,\n\t\"errors\": [],\n\t\"language\": \"gdscript\",\n\t\"path\": \"res://src/ui/UITheme.gd\"\n}",
+                                       "type":  "text"
+                                   }
+                               ],
+                   "isError":  false,
+                   "structuredContent":  {
+                                             "checked":  0.0,
+                                             "error_count":  0.0,
+                                             "errors":  [
+
+                                                        ],
+                                             "language":  "gdscript",
+                                             "path":  "res://src/ui/UITheme.gd"
+                                         }
+               }
+}

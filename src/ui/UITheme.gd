@@ -4,7 +4,7 @@ extends RefCounted
 const PANEL_ASSET_ID: StringName = &"ui_panel"
 const PANEL_ASSET_CATEGORY: StringName = &"ui"
 const PANEL_SLICE_MARGIN: float = 16.0
-const PANEL_CONTENT_MARGIN: float = 12.0
+const PANEL_CONTENT_MARGIN: float = 20.0
 
 
 static func apply_runtime_assets(theme: Theme, assets: AssetResolver) -> bool:
