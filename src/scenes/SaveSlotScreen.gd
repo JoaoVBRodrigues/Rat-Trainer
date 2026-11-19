@@ -20,6 +20,10 @@ func _build_ui() -> void:
 	panel.name = "SaveSlotPanel"
 	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(520.0, 420.0)
+	panel.offset_left = -260.0
+	panel.offset_top = -210.0
+	panel.offset_right = 260.0
+	panel.offset_bottom = 210.0
 	add_child(panel)
 	var layout: VBoxContainer = VBoxContainer.new()
 	layout.name = "SaveSlotLayout"

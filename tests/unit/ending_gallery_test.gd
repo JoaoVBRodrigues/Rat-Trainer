@@ -64,6 +64,8 @@ func test_ending_screen_assets_resolve_to_asset_placeholders() -> void:
 	var ending_ids: Array[String] = _load_ending_ids()
 	assert_int(ending_ids.size()).is_equal(15)
 	var assets: AssetResolver = auto_free(AssetResolver.new())
+	# Force the fallback branch even when the project has final art installed.
+	assets.art_root = "res://reports/absent_final_art"
 	add_child(assets)
 
 	# Act

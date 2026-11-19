@@ -26,6 +26,7 @@ func _ready() -> void:
 		push_error("Could not load UI theme: %s." % THEME_PATH)
 		return
 	theme = shared_theme
+	UIThemeResource.apply_runtime_assets(shared_theme, get_node("/root/Assets") as AssetResolver)
 	_show_title()
 	var settings: Dictionary = Data.get_settings()
 	if not settings.is_empty():
@@ -195,6 +196,9 @@ func _on_quit_requested() -> void:
 
 
 func _return_campaign_to_title() -> void:
+	if Game.simulation != null and not Game.autosave_completed_period(false):
+		push_error("Could not save before returning to the title screen.")
+		return
 	Game.return_to_title()
 	_show_title()
 

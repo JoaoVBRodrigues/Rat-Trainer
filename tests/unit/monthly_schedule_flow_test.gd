@@ -62,7 +62,7 @@ func test_finish_execution_at_campaign_end_shows_and_persists_ending() -> void:
 
 
 func _create_data_manager() -> DataManager:
-	_test_save_dir = "user://gdunit_ending_flow_%d" % Time.get_ticks_usec()
+	_test_save_dir = "res://reports/gdunit_ending_flow_%d" % Time.get_ticks_usec()
 	var data_manager: DataManager = auto_free(DataManager.new())
 	data_manager.save_dir = _test_save_dir
 	add_child(data_manager)

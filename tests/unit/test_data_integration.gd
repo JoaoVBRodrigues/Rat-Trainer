@@ -255,7 +255,7 @@ func test_missing_calendar_key_fails_loading_explicitly() -> void:
 
 
 func _create_fixture_data() -> String:
-	var fixture_path: String = "user://data_integration_%d" % Time.get_ticks_usec()
+	var fixture_path: String = "res://reports/data_integration_%d" % Time.get_ticks_usec()
 	var absolute_path: String = ProjectSettings.globalize_path(fixture_path)
 	if DirAccess.make_dir_recursive_absolute(absolute_path) != OK:
 		return ""

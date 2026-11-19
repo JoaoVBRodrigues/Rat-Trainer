@@ -18,6 +18,10 @@ func _build_ui() -> void:
 	panel.name = "OptionsPanel"
 	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(640.0, 520.0)
+	panel.offset_left = -320.0
+	panel.offset_top = -260.0
+	panel.offset_right = 320.0
+	panel.offset_bottom = 260.0
 	add_child(panel)
 
 	var layout: VBoxContainer = VBoxContainer.new()

@@ -38,6 +38,8 @@ var _status_panel: StatusPanel
 var _schedule_flow: MonthlyScheduleFlow
 var _item_management_screen: ItemManagementScreen
 var _game_manager: GameManager
+var _profile_screen: ProfileScreen
+var _talk_screen: TalkScreen
 
 
 func _ready() -> void:
@@ -80,6 +82,13 @@ func update_simulation(sim: SimulationCore, profile: Dictionary = {}) -> void:
 	_update_character_card()
 	_update_status()
 	_update_availability()
+	_refresh_character_art()
+
+
+func _refresh_character_art() -> void:
+	var character: TextureRect = get_node_or_null("CharacterVisual") as TextureRect
+	if character != null:
+		character.texture = _assets.get_texture(ArtPresentation.character_id(simulation), &"characters")
 
 
 func resume_saved_flow() -> void:
@@ -95,6 +104,9 @@ func resume_saved_flow() -> void:
 
 func refresh_credits() -> void:
 	_update_character_card()
+	_update_status()
+	_update_availability()
+	_refresh_character_art()
 
 
 func get_menu_button_count() -> int:
@@ -120,6 +132,13 @@ func _build_screen() -> void:
 	_build_background()
 	_build_character_visual()
 	_build_calendar()
+	var title_button: Button = Button.new()
+	title_button.name = "TitleButton"
+	title_button.text = Localization.text("ui.menu_principal")
+	title_button.position = Vector2(16, 156)
+	title_button.size = Vector2(180, 44)
+	title_button.pressed.connect(func() -> void: return_to_title_requested.emit())
+	add_child(title_button)
 	_build_character_card()
 	_build_status_panel()
 	_build_menu()
@@ -154,8 +173,8 @@ func _build_background() -> void:
 func _build_character_visual() -> void:
 	var character: TextureRect = TextureRect.new()
 	character.name = "CharacterVisual"
-	character.position = Vector2(286.0, 164.0)
-	character.size = Vector2(380.0, 390.0)
+	character.position = Vector2(230.0, 84.0)
+	character.size = Vector2(420.0, 470.0)
 	character.texture = _assets.get_texture(CHARACTER_ASSET, &"characters")
 	character.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	character.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -174,7 +193,7 @@ func _build_calendar() -> void:
 
 func _build_character_card() -> void:
 	var card: PanelContainer = _create_panel(
-		"CharacterCard", Vector2(684.0, 16.0), Vector2(324.0, 144.0)
+		"CharacterCard", Vector2(684.0, 16.0), Vector2(324.0, 176.0)
 	)
 	var content: VBoxContainer = _add_panel_content(card)
 	_name_label = _add_label(content, "CharacterName", "", 20)
@@ -201,7 +220,7 @@ func _build_character_card() -> void:
 func _build_status_panel() -> void:
 	_status_panel = StatusPanel.new()
 	_status_panel.name = "StatusPanel"
-	_status_panel.position = Vector2(684.0, 164.0)
+	_status_panel.position = Vector2(684.0, 204.0)
 	_status_panel.size = Vector2(324.0, 390.0)
 	_status_panel.custom_minimum_size = Vector2(324.0, 390.0)
 	add_child(_status_panel)
@@ -489,6 +508,26 @@ func _on_game_started() -> void:
 
 
 func _on_menu_pressed(destination: String) -> void:
+	if simulation == null:
+		return
+	if destination == "perfil":
+		if _profile_screen == null:
+			_profile_screen = ProfileScreen.new()
+			_profile_screen.name = "ProfileScreen"
+			_profile_screen.closed.connect(func() -> void: _menu_buttons[1].grab_focus())
+			add_child(_profile_screen)
+		_profile_screen.move_to_front()
+		_profile_screen.show_profile(simulation, _profile)
+		return
+	if destination == "falar":
+		if _talk_screen == null:
+			_talk_screen = TalkScreen.new()
+			_talk_screen.name = "TalkScreen"
+			_talk_screen.closed.connect(func() -> void: _menu_buttons[4].grab_focus())
+			add_child(_talk_screen)
+		_talk_screen.move_to_front()
+		_talk_screen.open_conversation(simulation, _profile)
+		return
 	if destination == "agenda":
 		schedule_requested.emit("agenda")
 		return
@@ -505,8 +544,7 @@ func _on_menu_pressed(destination: String) -> void:
 
 
 func _on_item_management_screen_closed() -> void:
-	_update_character_card()
-	_update_status()
+	refresh_credits()
 	var menu_index: int = MENU_IDS.find(
 		"cidade" if _item_management_screen._mode == "shops" else "equipamento"
 	)

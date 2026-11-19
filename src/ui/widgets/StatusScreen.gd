@@ -92,14 +92,13 @@ func _build_attributes_section() -> void:
         var icon: TextureRect = TextureRect.new()
         icon.name = "Icon"
         icon.texture = Assets.get_texture("icon_stat_" + stat_id, &"icons")
-        icon.expand = true
+        icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
         icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
         icon.custom_minimum_size = Vector2(32, 32)
 
         var name: Label = Label.new()
         name.name = "Name"
         name.text = STAT_NAMES.get(stat_id, stat_id)
-        name.custom_fonts/font = null  # Will use theme font
 
         var bar: ProgressBar = ProgressBar.new()
         bar.name = stat_id + "Bar"
@@ -139,7 +138,9 @@ func _build_reputation_section() -> void:
         bar.name = rep["id"] + "Bar"
         bar.min_value = 0
         bar.max_value = 100
-        bar.custom_colors/fg_color = rep["color"]
+        var fill: StyleBoxFlat = StyleBoxFlat.new()
+        fill.bg_color = rep["color"]
+        bar.add_theme_stylebox_override("fill", fill)
 
         var value: Label = Label.new()
         value.name = rep["id"] + "Label"

@@ -19,6 +19,10 @@ func _build_ui() -> void:
 	panel.name = "CharacterCreationPanel"
 	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(560.0, 360.0)
+	panel.offset_left = -280.0
+	panel.offset_top = -180.0
+	panel.offset_right = 280.0
+	panel.offset_bottom = 180.0
 	add_child(panel)
 
 	var layout: VBoxContainer = VBoxContainer.new()

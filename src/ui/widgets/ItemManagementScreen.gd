@@ -23,6 +23,7 @@ var _equipment_rows: VBoxContainer
 var _items_list: VBoxContainer
 var _inventory_label: Label
 var _feedback_label: Label
+var _shop_artwork: TextureRect
 
 
 func _ready() -> void:
@@ -98,6 +99,7 @@ func _build_ui() -> void:
 	_close_button.focus_mode = Control.FOCUS_ALL
 	_close_button.pressed.connect(_on_close_pressed)
 	header.add_child(_close_button)
+	_shop_artwork = ArtPresentation.artwork(layout, &"bg_workshop", Vector2(0, 150), "ShopArtwork")
 
 	_shop_tabs = HBoxContainer.new()
 	_shop_tabs.name = "ShopTabs"
@@ -159,6 +161,7 @@ func _refresh() -> void:
 		{"used": _simulation.get_inventory_used_count(), "limit": _simulation.get_inventory_limit()}
 	)
 	_shop_tabs.visible = _mode == "shops"
+	_shop_artwork.visible = _mode == "shops"
 	_shop_description.visible = _mode == "shops"
 	_equipment_rows.visible = _mode == "equipment"
 	if _mode == "shops":
@@ -173,6 +176,8 @@ func _refresh() -> void:
 
 
 func _build_shop_tabs() -> void:
+	var art_ids: Dictionary = {"workshop": &"bg_workshop", "general": &"bg_market", "clinic": &"bg_clinic"}
+	_shop_artwork.texture = _assets.get_texture(art_ids.get(_selected_shop_id, &"bg_market"), &"backgrounds")
 	var shops: Array[Dictionary] = _simulation.get_item_shops()
 	for shop: Dictionary in shops:
 		var shop_id: String = str(shop.get("id", ""))

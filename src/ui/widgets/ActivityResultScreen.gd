@@ -32,6 +32,8 @@ var _continue_button: Button
 var _skip_button: Button
 var _result: PeriodResult
 var _simulation: SimulationCore
+var _artwork: TextureRect
+var _character_art: TextureRect
 
 
 func _ready() -> void:
@@ -39,37 +41,31 @@ func _ready() -> void:
 
 
 func _build_ui() -> void:
-	for child: Node in get_children():
-		remove_child(child)
-		child.queue_free()
-
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var panel: PanelContainer = PanelContainer.new()
 	panel.name = "ResultPanel"
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(panel)
-
 	var layout: VBoxContainer = VBoxContainer.new()
 	layout.name = "ResultLayout"
 	layout.add_theme_constant_override("separation", 10)
 	panel.add_child(layout)
-
 	var header: HBoxContainer = HBoxContainer.new()
-	header.name = "Header"
 	layout.add_child(header)
 	_outcome_label = Label.new()
 	_outcome_label.name = "OutcomeIndicator"
-	_outcome_label.custom_minimum_size.x = 40.0
 	header.add_child(_outcome_label)
 	_title_label = Label.new()
 	_title_label.name = "TitleLabel"
 	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_title_label.add_theme_font_size_override("font_size", 22)
 	header.add_child(_title_label)
 	_period_label = Label.new()
 	_period_label.name = "PeriodLabel"
+	_period_label.custom_minimum_size.x = 300
+	_period_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	header.add_child(_period_label)
-
 	_description_label = Label.new()
 	_description_label.name = "SummaryLabel"
 	_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -78,38 +74,32 @@ func _build_ui() -> void:
 	_inventory_warning_label.name = "InventoryWarning"
 	_inventory_warning_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(_inventory_warning_label)
-
-	var placeholder_panel: PanelContainer = PanelContainer.new()
-	placeholder_panel.name = "ActivityPlaceholderPanel"
-	placeholder_panel.custom_minimum_size = Vector2(0.0, 128.0)
-	placeholder_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	layout.add_child(placeholder_panel)
-	var placeholder_center: CenterContainer = CenterContainer.new()
-	placeholder_center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	placeholder_center.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	placeholder_panel.add_child(placeholder_center)
+	var illustration: HBoxContainer = HBoxContainer.new()
+	illustration.name = "ResultIllustration"
+	layout.add_child(illustration)
+	_artwork = ArtPresentation.artwork(illustration, &"bg_school", Vector2(0, 240), "ActivityArtwork")
+	_character_art = TextureRect.new()
+	_character_art.name = "ResultCharacter"
+	_character_art.custom_minimum_size = Vector2(170, 240)
+	_character_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_character_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	illustration.add_child(_character_art)
+	# Accessible activity text is retained without the former zero-width CenterContainer.
 	_placeholder_label = Label.new()
 	_placeholder_label.name = "ActivityPlaceholderLabel"
-	_placeholder_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_placeholder_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_placeholder_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	placeholder_center.add_child(_placeholder_label)
-
-	var result_heading: Label = Label.new()
-	result_heading.text = Localization.text("ui.atributos")
-	layout.add_child(result_heading)
-	_changes_container = VBoxContainer.new()
-	_changes_container.name = "ChangesContainer"
-	layout.add_child(_changes_container)
-
-	var values_heading: Label = Label.new()
-	values_heading.text = Localization.text("ui.status")
-	layout.add_child(values_heading)
-	_values_container = VBoxContainer.new()
-	_values_container.name = "ValuesContainer"
-	_values_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	layout.add_child(_values_container)
-
+	_placeholder_label.visible = false
+	layout.add_child(_placeholder_label)
+	var scroll: ScrollContainer = ScrollContainer.new()
+	scroll.name = "ResultDetails"
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	layout.add_child(scroll)
+	var columns: HBoxContainer = HBoxContainer.new()
+	columns.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columns.add_theme_constant_override("separation", 32)
+	scroll.add_child(columns)
+	_changes_container = _detail_column(columns, "ChangesContainer", "ui.atributos")
+	_values_container = _detail_column(columns, "ValuesContainer", "ui.status")
 	var footer: HBoxContainer = HBoxContainer.new()
 	footer.name = "Footer"
 	footer.alignment = BoxContainer.ALIGNMENT_END
@@ -117,17 +107,28 @@ func _build_ui() -> void:
 	_skip_button = Button.new()
 	_skip_button.name = "SkipButton"
 	_skip_button.text = Localization.text("ui.pular_apresentacao")
-	_skip_button.custom_minimum_size = Vector2(0.0, 44.0)
-	_skip_button.focus_mode = Control.FOCUS_ALL
+	_skip_button.custom_minimum_size = Vector2(0, 44)
 	_skip_button.pressed.connect(_on_continue_pressed)
 	footer.add_child(_skip_button)
 	_continue_button = Button.new()
 	_continue_button.name = "ContinueButton"
 	_continue_button.text = Localization.text("ui.continuar")
-	_continue_button.custom_minimum_size = Vector2(0.0, 44.0)
-	_continue_button.focus_mode = Control.FOCUS_ALL
+	_continue_button.custom_minimum_size = Vector2(150, 44)
 	_continue_button.pressed.connect(_on_continue_pressed)
 	footer.add_child(_continue_button)
+
+func _detail_column(parent: HBoxContainer, node_name: String, title_key: String) -> VBoxContainer:
+	var column: VBoxContainer = VBoxContainer.new()
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	parent.add_child(column)
+	var title: Label = Label.new()
+	title.text = Localization.text(title_key)
+	title.add_theme_font_size_override("font_size", 20)
+	column.add_child(title)
+	var entries: VBoxContainer = VBoxContainer.new()
+	entries.name = node_name
+	column.add_child(entries)
+	return entries
 
 
 func show_result(result: PeriodResult, simulation: SimulationCore) -> void:
@@ -139,6 +140,15 @@ func show_result(result: PeriodResult, simulation: SimulationCore) -> void:
 		_continue_button.disabled = false
 		_skip_button.disabled = false
 		_continue_button.grab_focus()
+		_continue_button.text = Localization.text("ui.continuar")
+
+
+func show_save_error() -> void:
+	_inventory_warning_label.text = Localization.text("ui.save_retry")
+	_inventory_warning_label.visible = true
+	_continue_button.text = Localization.text("ui.retry_save")
+	_continue_button.disabled = false
+	_skip_button.disabled = true
 
 
 func display_result(result: PeriodResult, simulation: SimulationCore) -> void:
@@ -146,6 +156,8 @@ func display_result(result: PeriodResult, simulation: SimulationCore) -> void:
 	_simulation = simulation
 	if not is_node_ready():
 		return
+	_artwork.texture = Assets.get_texture(ArtPresentation.activity_id(result), &"backgrounds")
+	_character_art.texture = Assets.get_texture(ArtPresentation.character_id(simulation), &"characters")
 	var record: Dictionary = _activity_record(result)
 	if (
 		record.is_empty()
@@ -255,7 +267,8 @@ func _build_changes(result: PeriodResult) -> void:
 
 func _build_resulting_values(result: PeriodResult) -> void:
 	_clear_children(_values_container)
-	var stats: Dictionary = result.post_period_state.get("stats", {})
+	var stat_state: Dictionary = result.post_period_state.get("stats", {})
+	var stats: Dictionary = stat_state.get("stats", stat_state)
 	for stat_id: String in STAT_NAME_KEYS:
 		if stats.has(stat_id):
 			_add_value_row(

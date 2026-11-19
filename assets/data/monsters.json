@@ -4,7 +4,7 @@
 		{
 			"id": "rastreador",
 			"name": "Rastreador",
-			"description": "Cena placeholder: rastros de calor se movem pelas Ruínas Industriais.",
+			"description": "Rastros de calor se movem pelas Ruínas Industriais.",
 			"type": "patrol",
 			"difficulty": 35,
 			"mission_id": "missao_fisica_ruinas"
@@ -12,7 +12,7 @@
 		{
 			"id": "drone_patrulha",
 			"name": "Drone Patrulha",
-			"description": "Cena placeholder: um drone de patrulha examina a área com uma luz suave.",
+			"description": "Um drone de patrulha examina a área com uma luz suave.",
 			"type": "machine",
 			"difficulty": 50,
 			"mission_id": "missao_fisica_drones"
@@ -20,7 +20,7 @@
 		{
 			"id": "sentinela",
 			"name": "Sentinela",
-			"description": "Cena placeholder: uma unidade de segurança observa o corredor.",
+			"description": "Uma unidade de segurança observa o corredor.",
 			"type": "defense",
 			"difficulty": 60,
 			"mission_id": "missao_fisica_infiltracao"

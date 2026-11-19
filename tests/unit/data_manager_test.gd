@@ -206,7 +206,7 @@ func test_save_slots_returns_only_occupied_slots() -> void:
 
 
 func _create_data_manager() -> DataManager:
-	_test_save_dir = "user://gdunit_data_manager_%d" % Time.get_ticks_usec()
+	_test_save_dir = "res://reports/gdunit_data_manager_%d" % Time.get_ticks_usec()
 	var data_manager: DataManager = auto_free(DATA_MANAGER_SCRIPT.new())
 	data_manager.save_dir = _test_save_dir
 	add_child(data_manager)

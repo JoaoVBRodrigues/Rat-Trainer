@@ -6,6 +6,7 @@ signal option_selected(option_id: String)
 var _title_label: Label
 var _description_label: Label
 var _options_container: VBoxContainer
+var _artwork: TextureRect
 
 
 func _ready() -> void:
@@ -18,6 +19,10 @@ func _build_ui() -> void:
 	panel.name = "EventPanel"
 	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(560.0, 360.0)
+	panel.offset_left = -400
+	panel.offset_top = -340
+	panel.offset_right = 400
+	panel.offset_bottom = 340
 	add_child(panel)
 
 	var layout: VBoxContainer = VBoxContainer.new()
@@ -30,6 +35,7 @@ func _build_ui() -> void:
 	_title_label.add_theme_font_size_override("font_size", 24)
 	_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(_title_label)
+	_artwork = ArtPresentation.artwork(layout, &"bg_market", Vector2(0, 240), "EventArtwork")
 
 	_description_label = Label.new()
 	_description_label.name = "EventDescription"
@@ -61,6 +67,7 @@ func open_event(event_data: Dictionary) -> bool:
 		push_error("Event choice screen must enter the scene tree before opening an event.")
 		return false
 	_title_label.text = str(event_name)
+	_artwork.texture = Assets.get_texture(ArtPresentation.event_id(str(event_id)), &"backgrounds")
 	_description_label.text = str(description)
 	for child: Node in _options_container.get_children():
 		_options_container.remove_child(child)
@@ -95,3 +102,7 @@ func _on_option_pressed(option_id: String) -> void:
 
 func close_event() -> void:
 	visible = false
+
+
+func show_save_error() -> void:
+	_description_label.text = Localization.text("ui.save_retry") + "\n" + _description_label.text

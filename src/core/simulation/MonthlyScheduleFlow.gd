@@ -35,6 +35,7 @@ var _recovery_blocked: bool = false
 var _last_report: Dictionary = {}
 var _endings_loaded: bool = false
 var _ending_id: String = ""
+var _checkpoint_pending: bool = false
 
 
 func bind_main_screen(screen: Control) -> void:
@@ -58,7 +59,7 @@ func update_simulation(simulation: SimulationCore) -> void:
 func resume_saved_flow(saved_flow: Dictionary) -> void:
 	if _simulation == null or _simulation.is_campaign_complete():
 		return
-	if _simulation.calendar.period == 1 and not _simulation.has_pending_event():
+	if _simulation.calendar.period == 1 and not _simulation.has_pending_event() and not _simulation.has_pending_encounter():
 		return
 
 	var next_index: int = _simulation.calendar.period - 1
@@ -76,6 +77,9 @@ func resume_saved_flow(saved_flow: Dictionary) -> void:
 	_active = true
 	_recovery_blocked = false
 	_ensure_screens()
+	if _simulation.has_pending_encounter():
+		_show_encounter_screen()
+		return
 	if _simulation.has_pending_event():
 		_show_pending_event()
 		return
@@ -89,6 +93,8 @@ func on_schedule_requested(source: String) -> void:
 		return
 	_active = true
 	_recovery_blocked = false
+	_next_period_index = 0
+	_checkpoint_pending = false
 	_periods_resolved_before_resume = 0
 	_draft = MonthSchedule.new()
 	_draft.credits_at_start = _simulation.economy.get_credits()
@@ -117,6 +123,7 @@ func _ensure_screens() -> void:
 		_schedule_screen.schedule_confirmed.connect(_on_schedule_confirmed)
 		_schedule_screen.schedule_cancelled.connect(_on_schedule_cancelled)
 		_main_screen.add_child(_schedule_screen)
+		_schedule_screen.visible = false
 	if _result_screen == null:
 		_result_screen = ActivityResultScreen.new()
 		_result_screen.name = "ActivityResultScreen"
@@ -355,10 +362,12 @@ func _on_schedule_confirmed(schedule: MonthSchedule) -> void:
 
 
 func _validate_schedule(schedule: MonthSchedule, start_index: int = 0) -> bool:
-	if not schedule.is_month_selected() or _simulation.calendar.period != start_index + 1:
+	if _simulation.calendar.period != start_index + 1:
 		return false
 	var balance: int = _simulation.economy.get_credits()
 	for period_index: int in range(start_index, PERIOD_COUNT):
+		if not schedule.has_selection(period_index):
+			return false
 		var selection: Dictionary = schedule.get_selection(period_index)
 		if not _selection_is_available(selection):
 			return false
@@ -461,14 +470,20 @@ func _resolve_next_period() -> void:
 	if not _selection_is_available(selection):
 		_show_schedule_error(_next_period_index, false)
 		return
+	# Encounter state is intentionally transient in SimulationCore. Save its exact
+	# pre-choice state so loading can safely replay the unresolved mission.
+	if not _test_mode and int(selection.get("activity_type", 0)) == MonthSchedule.ActivityPeriod.MISSION:
+		if not _persist_checkpoint(false):
+			_show_schedule_error(_next_period_index, false)
+			return
 
 	var result: PeriodResult = _simulation.advance_period(_choice_string(selection))
 
 	if result.is_event_pending:
-		if not _persist_checkpoint(false):
-			_show_schedule_error(_next_period_index, false)
-			return
+		var checkpoint_saved: bool = _persist_checkpoint(false)
 		_show_pending_event()
+		if not checkpoint_saved:
+			_event_choice_screen.show_save_error()
 		return
 
 	# Physical missions may trigger an encounter that requires player choice before
@@ -492,12 +507,7 @@ func _resolve_next_period() -> void:
 
 	_results.append(result)
 	_next_period_index += 1
-	if not _persist_checkpoint(result.month_end_processed):
-		_show_schedule_error(_next_period_index - 1, false)
-		return
-	if _test_mode:
-		return
-	_result_screen.show_result(result, _simulation)
+	_present_completed_result(result)
 
 
 func _choice_string(selection: Dictionary) -> String:
@@ -527,15 +537,25 @@ func _on_event_option_selected(option_id: String) -> void:
 		_event_choice_screen.close_event()
 	_results.append(result)
 	_next_period_index += 1
-	if not _persist_checkpoint(result.month_end_processed):
-		_show_schedule_error(_next_period_index - 1, false)
-		return
+	_present_completed_result(result)
+
+
+func _present_completed_result(result: PeriodResult) -> void:
+	_checkpoint_pending = not _persist_checkpoint(result.month_end_processed)
 	if _test_mode:
 		return
 	_result_screen.show_result(result, _simulation)
+	if _checkpoint_pending:
+		_result_screen.show_save_error()
 
 
 func _on_result_continued() -> void:
+	if _checkpoint_pending:
+		var last: PeriodResult = _results.back()
+		if not _persist_checkpoint(last.month_end_processed):
+			_result_screen.show_save_error()
+			return
+		_checkpoint_pending = false
 	_result_screen.hide_result()
 	_resolve_next_period()
 
@@ -591,9 +611,11 @@ func _finish_campaign() -> void:
 func _build_report(pre_state: Dictionary, post_state: Dictionary) -> Dictionary:
 	var pre_stats: Dictionary = pre_state.get("stats", {})
 	var post_stats: Dictionary = post_state.get("stats", {})
+	var pre_attributes: Dictionary = pre_stats.get("stats", pre_stats)
+	var post_attributes: Dictionary = post_stats.get("stats", post_stats)
 	var stat_deltas: Dictionary = {}
 	for stat_id: String in ["str", "int", "cha", "ref", "sta", "eth"]:
-		stat_deltas[stat_id] = int(post_stats.get(stat_id, 0)) - int(pre_stats.get(stat_id, 0))
+		stat_deltas[stat_id] = int(post_attributes.get(stat_id, 0)) - int(pre_attributes.get(stat_id, 0))
 	var pre_economy: Dictionary = pre_state.get("economy", {})
 	var post_economy: Dictionary = post_state.get("economy", {})
 	return {
@@ -697,13 +719,7 @@ func _on_encounter_resolved(option: int) -> void:
 		_encounter_screen.hide_encounter()
 		_results.append(result)
 		_next_period_index += 1
-		if not _persist_checkpoint(result.month_end_processed):
-			_show_schedule_error(_next_period_index - 1, false)
-			return
-		if _test_mode:
-			return
-		if _result_screen != null:
-			_result_screen.show_result(result, _simulation)
+		_present_completed_result(result)
 		return
 
 

@@ -84,7 +84,8 @@ func test_final_period_is_also_month_end() -> void:
 
 func test_calendar_config_accepts_one_year_campaign() -> void:
 	# Arrange
-	var config_path: String = "user://calendar_short_test.json"
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://reports"))
+	var config_path: String = "res://reports/calendar_short_test.json"
 	var file: FileAccess = FileAccess.open(config_path, FileAccess.WRITE)
 	assert_bool(file != null).is_true()
 	if file == null:

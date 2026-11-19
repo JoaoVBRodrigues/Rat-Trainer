@@ -437,7 +437,8 @@ func test_campaign_completes_after_108_periods_deterministic() -> void:
 
 func test_one_year_configuration_completes_after_36_periods() -> void:
 	# Arrange
-	var config_path: String = "user://simulation_short_calendar_test.json"
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://reports"))
+	var config_path: String = "res://reports/simulation_short_calendar_test.json"
 	var file: FileAccess = FileAccess.open(config_path, FileAccess.WRITE)
 	assert_bool(file != null).is_true()
 	if file == null:

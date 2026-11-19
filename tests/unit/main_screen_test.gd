@@ -13,7 +13,7 @@ func before_test() -> void:
 	_previous_simulation = game_manager.simulation
 	_previous_game_state = game_manager.current_state
 	_previous_data = Data.get_current_data()
-	_test_save_dir = "user://gdunit_main_screen_%d" % Time.get_ticks_usec()
+	_test_save_dir = "res://reports/gdunit_main_screen_%d" % Time.get_ticks_usec()
 	Data.save_dir = _test_save_dir
 
 

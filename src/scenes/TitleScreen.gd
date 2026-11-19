@@ -18,10 +18,18 @@ func _ready() -> void:
 
 func _build_ui() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var background: TextureRect = ArtPresentation.artwork(self, &"bg_bedroom_day", Vector2.ZERO, "TitleBackground")
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	background.modulate = Color(0.55, 0.55, 0.55)
 	var panel: PanelContainer = PanelContainer.new()
 	panel.name = "TitlePanel"
 	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(560.0, 560.0)
+	panel.offset_left = -280.0
+	panel.offset_top = -280.0
+	panel.offset_right = 280.0
+	panel.offset_bottom = 280.0
 	add_child(panel)
 
 	var layout: VBoxContainer = VBoxContainer.new()

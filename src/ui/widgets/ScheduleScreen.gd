@@ -237,6 +237,10 @@ func _on_activity_selected(choice: Dictionary) -> void:
 	)
 	_active_period = period_index
 	_update_affordability()
+	for next_index: int in range(_first_editable_period, PERIOD_COUNT):
+		if not _schedule.has_selection(next_index):
+			_active_period = next_index
+			break
 	_refresh()
 
 
@@ -342,7 +346,7 @@ func _update_category_tabs() -> void:
 			label = str(choice.get("category_label", ""))
 			if not label.is_empty():
 				break
-		tab.text = label if not label.is_empty() else Localization.text("ui.indisponivel")
+		tab.text = Localization.text("ui.category_" + category)
 		tab.button_pressed = category == _active_category
 		tab.tooltip_text = tab.text
 		tab.disabled = _recovery_blocked
@@ -385,9 +389,13 @@ func _credits_available_for_active_period() -> int:
 
 func _update_footer() -> void:
 	_update_affordability()
-	var valid: bool = _schedule.is_month_selected()
+	var selected: bool = true
+	for index: int in range(_first_editable_period, PERIOD_COUNT):
+		selected = selected and _schedule.has_selection(index)
+	var valid: bool = selected
 	if valid:
-		for selection: Dictionary in _schedule.selections:
+		for index: int in range(_first_editable_period, PERIOD_COUNT):
+			var selection: Dictionary = _schedule.get_selection(index)
 			if not bool(selection.get("can_afford", false)):
 				valid = false
 				break
@@ -398,8 +406,12 @@ func _update_footer() -> void:
 	if _recovery_blocked:
 		_confirm_button.disabled = true
 		_status_label.text = Localization.text("ui.indisponivel")
-	elif _status_label.text.is_empty() and not valid:
-		_status_label.text = Localization.text("ui.indisponivel")
+	elif not valid:
+		_status_label.text = Localization.text(
+			"ui.schedule_insufficient" if selected else "ui.schedule_incomplete"
+		)
+	else:
+		_status_label.text = ""
 
 
 func _on_repeat_pressed() -> void:

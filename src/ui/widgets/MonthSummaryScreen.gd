@@ -121,6 +121,8 @@ func _build_stat_deltas(pre_state: Dictionary, post_state: Dictionary) -> void:
 		child.queue_free()
 	var pre_stats: Dictionary = pre_state.get("stats", {})
 	var post_stats: Dictionary = post_state.get("stats", {})
+	pre_stats = pre_stats.get("stats", pre_stats)
+	post_stats = post_stats.get("stats", post_stats)
 	for stat_id: String in STAT_NAME_KEYS:
 		var before: int = int(pre_stats.get(stat_id, 0))
 		var after: int = int(post_stats.get(stat_id, 0))

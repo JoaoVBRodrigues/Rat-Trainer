@@ -30,8 +30,13 @@ func _ready() -> void:
 	_stats_available = _load_stat_names()
 	_content = VBoxContainer.new()
 	_content.name = "Content"
+	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_content.add_theme_constant_override("separation", 4)
-	add_child(_content)
+	var scroll: ScrollContainer = ScrollContainer.new()
+	scroll.name = "StatusScroll"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(scroll)
+	scroll.add_child(_content)
 	_refresh_display()
 
 
@@ -49,8 +54,6 @@ func set_expanded(value: bool) -> void:
 	expanded = value
 	if not is_node_ready():
 		return
-	size.y = 500.0 if expanded else 390.0
-	custom_minimum_size.y = size.y
 	_refresh_display()
 
 
@@ -136,6 +139,7 @@ func _build_compact_status() -> void:
 	_add_group_heading(_body, "ui.atributos")
 	for row_start: int in range(0, STAT_IDS.size(), 2):
 		var row: HBoxContainer = HBoxContainer.new()
+		row.custom_minimum_size.y = 24.0
 		row.add_theme_constant_override("separation", 8)
 		for offset: int in 2:
 			var stat_index: int = row_start + offset
@@ -147,9 +151,12 @@ func _build_compact_status() -> void:
 			]
 			var stat_label: Label = _add_body_label(row, entry, 13)
 			stat_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			stat_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 			stat_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		_body.add_child(row)
 
+	_add_progress_row(_body, Localization.text("ui.stress"), _simulation.stats.get_stress(), 100)
+	_add_body_label(_body, Localization.text("ui.doenca_ativa" if _simulation.stats.is_diseased else "ui.sem_doenca"), 13)
 	_add_group_heading(_body, "ui.combate")
 	_add_body_label(_body, Localization.text("ui.combate_automatico"), 13)
 	_add_group_heading(_body, "ui.reputacoes")
@@ -243,9 +250,11 @@ func _add_progress_row(
 	parent: VBoxContainer, row_name: String, value: int, maximum: int
 ) -> void:
 	var row: HBoxContainer = HBoxContainer.new()
+	row.custom_minimum_size.y = 24.0
 	row.add_theme_constant_override("separation", 6)
 	var name_label: Label = _add_body_label(row, row_name, 12)
 	name_label.custom_minimum_size.x = 94.0
+	name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 
 	var progress: ProgressBar = ProgressBar.new()
@@ -268,6 +277,8 @@ func _add_body_label(parent: Node, value: String, font_size: int) -> Label:
 	var label: Label = Label.new()
 	label.text = value
 	label.add_theme_font_size_override("font_size", font_size)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.custom_minimum_size.y = 18.0
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	parent.add_child(label)
 	return label

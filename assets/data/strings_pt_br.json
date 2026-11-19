@@ -135,7 +135,24 @@
       "equipamento": "Solicitar acesso ao equipamento.",
       "falar": "Solicitar uma conversa.",
       "missao": "Solicitar acesso às missões."
-    }
+    },
+    "talk_wellbeing": "Como você está?",
+    "talk_study": "Sobre os estudos",
+    "talk_city": "Sobre a cidade",
+    "talk_reply_normal": "{name}: Estou bem! Podemos planejar os estudos, ajudar na oficina ou passear pelo bairro. O que faremos neste mês?",
+    "talk_reply_tired": "{name}: Estou cansada. Um descanso ou um passeio pode ajudar a diminuir meu stress antes da próxima missão.",
+    "talk_reply_sick": "{name}: Não estou me sentindo bem. Preciso descansar e me recuperar antes de voltar às missões.",
+    "talk_reply_study": "{name}: Quero aprender mais! Tecnologia desenvolve inteligência; comunicação trabalha carisma e refinamento; artes desenvolve refinamento.",
+    "talk_reply_city": "{name}: Na cidade podemos comprar ferramentas, proteção e adesivos de recuperação. Depois precisamos equipar os itens ou usar o adesivo no inventário.",
+    "schedule_incomplete": "Escolha uma atividade para cada um dos três períodos.",
+    "schedule_insufficient": "O saldo previsto não cobre todas as atividades. Escolha trabalho ou descanso para equilibrar a agenda.",
+    "category_study": "Estudo",
+    "category_work": "Trabalho",
+    "category_mission": "Missão",
+    "category_leisure": "Lazer",
+    "save_retry": "Não foi possível salvar. Verifique o acesso à pasta de saves e tente novamente.",
+    "retry_save": "Tentar salvar novamente",
+    "menu_principal": "Menu principal"
   },
   "calendar": {
     "months": [

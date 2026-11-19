@@ -1,7 +1,7 @@
 extends GdUnitTestSuite
 
 const ASSET_RESOLVER_SCRIPT: GDScript = preload("res://src/core/Assets.gd")
-const TEST_ROOT: String = "user://gdunit_assets_fallback"
+const TEST_ROOT: String = "res://reports/gdunit_assets_fallback"
 
 var _created_files: Array[String] = []
 var _created_directories: Array[String] = []
