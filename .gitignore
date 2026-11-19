@@ -9,3 +9,23 @@ reports/
 # Godot build artifacts
 *.import
 builds/
+
+# Local art-generation prompts and working records
+/03-prompts-arte-garota-rato-e-cenarios.md
+/design/assets/codex-*-prompt.md
+/design/assets/gpt-image-generation-guide.md
+/design/assets/art-migration.json
+/design/assets/reviews/*-generation-prompts.md
+/design/assets/reviews/*-review.md
+/design/assets/reviews/nyx-mvp-age-variants.md
+
+# Local audit helpers, logs and generated measurements
+/design/assets/reviews/visual-art-pass/*/*.py
+/design/assets/reviews/visual-art-pass/*/*.gd
+/design/assets/reviews/visual-art-pass/*/*.gd.uid
+/design/assets/reviews/visual-art-pass/*/*.tscn
+/design/assets/reviews/visual-art-pass/*/*.ps1
+/design/assets/reviews/visual-art-pass/*/*.log
+/design/assets/reviews/visual-art-pass/*/*.json
+/design/assets/reviews/visual-art-pass/*/before/*.json
+/design/assets/reviews/visual-art-pass/*/after/*.json
