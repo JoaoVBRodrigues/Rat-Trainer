@@ -135,7 +135,7 @@ func _build_screen() -> void:
 	var title_button: Button = Button.new()
 	title_button.name = "TitleButton"
 	title_button.text = Localization.text("ui.menu_principal")
-	title_button.position = Vector2(16, 156)
+	title_button.position = Vector2(16, 188)
 	title_button.size = Vector2(180, 44)
 	title_button.pressed.connect(func() -> void: return_to_title_requested.emit())
 	add_child(title_button)
@@ -173,8 +173,9 @@ func _build_background() -> void:
 func _build_character_visual() -> void:
 	var character: TextureRect = TextureRect.new()
 	character.name = "CharacterVisual"
-	character.position = Vector2(230.0, 84.0)
-	character.size = Vector2(420.0, 470.0)
+	# Foreground portrait: the lower body deliberately continues behind the HUD.
+	character.position = Vector2(180.0, 20.0)
+	character.size = Vector2(620.0, 900.0)
 	character.texture = _assets.get_texture(CHARACTER_ASSET, &"characters")
 	character.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	character.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -184,7 +185,8 @@ func _build_character_visual() -> void:
 
 
 func _build_calendar() -> void:
-	_calendar_panel = _create_panel("CalendarPanel", Vector2(16.0, 16.0), Vector2(334.0, 132.0))
+	_calendar_panel = _create_panel("CalendarPanel", Vector2(16.0, 16.0), Vector2(334.0, 160.0))
+	UIThemeResource.frame_panel(_calendar_panel)
 	var content: VBoxContainer = _add_panel_content(_calendar_panel)
 	_year_label = _add_label(content, "CalendarYear", "", 18)
 	_period_label = _add_label(content, "CalendarPeriod", "", 16)
@@ -193,7 +195,7 @@ func _build_calendar() -> void:
 
 func _build_character_card() -> void:
 	var card: PanelContainer = _create_panel(
-		"CharacterCard", Vector2(684.0, 16.0), Vector2(324.0, 176.0)
+		"CharacterCard", Vector2(684.0, 16.0), Vector2(324.0, 212.0)
 	)
 	var content: VBoxContainer = _add_panel_content(card)
 	_name_label = _add_label(content, "CharacterName", "", 20)
@@ -220,16 +222,16 @@ func _build_character_card() -> void:
 func _build_status_panel() -> void:
 	_status_panel = StatusPanel.new()
 	_status_panel.name = "StatusPanel"
-	_status_panel.position = Vector2(684.0, 204.0)
-	_status_panel.size = Vector2(324.0, 390.0)
-	_status_panel.custom_minimum_size = Vector2(324.0, 390.0)
+	_status_panel.position = Vector2(684.0, 236.0)
+	_status_panel.size = Vector2(324.0, 394.0)
+	_status_panel.custom_minimum_size = Vector2(324.0, 394.0)
 	add_child(_status_panel)
 	_status_panel.set_expanded(false)
 
 
 func _build_menu() -> void:
 	var menu_panel: PanelContainer = _create_panel(
-		"MenuPanel", Vector2(16.0, 556.0), Vector2(650.0, 196.0)
+		"MenuPanel", Vector2(16.0, 576.0), Vector2(650.0, 192.0)
 	)
 	var grid: GridContainer = GridContainer.new()
 	grid.name = "MenuGrid"
@@ -248,7 +250,7 @@ func _build_menu() -> void:
 func _make_menu_button(destination: String, icon_id: StringName) -> Button:
 	var button: Button = Button.new()
 	button.name = "Menu_%s" % destination
-	button.custom_minimum_size = Vector2(198.0, 80.0)
+	button.custom_minimum_size = Vector2(180.0, 44.0)
 	button.focus_mode = Control.FOCUS_ALL
 	button.tooltip_text = Localization.text("ui.tooltip.%s" % destination)
 
@@ -265,7 +267,7 @@ func _make_menu_button(destination: String, icon_id: StringName) -> Button:
 
 	var icon: TextureRect = TextureRect.new()
 	icon.name = "Icon"
-	icon.custom_minimum_size = Vector2(40.0, 40.0)
+	icon.custom_minimum_size = Vector2(32.0, 32.0)
 	icon.texture = _assets.get_texture(icon_id, &"icons")
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -290,8 +292,8 @@ func _make_menu_button(destination: String, icon_id: StringName) -> Button:
 func _build_schedule_button() -> void:
 	_schedule_button = Button.new()
 	_schedule_button.name = "ScheduleButton"
-	_schedule_button.position = Vector2(684.0, 670.0)
-	_schedule_button.size = Vector2(324.0, 82.0)
+	_schedule_button.position = Vector2(684.0, 698.0)
+	_schedule_button.size = Vector2(324.0, 54.0)
 	_schedule_button.custom_minimum_size = Vector2(0.0, 54.0)
 	_schedule_button.text = Localization.text("ui.agendar")
 	_schedule_button.focus_mode = Control.FOCUS_ALL
@@ -302,7 +304,7 @@ func _build_schedule_button() -> void:
 func _build_save_button() -> void:
 	_save_button = Button.new()
 	_save_button.name = "SaveButton"
-	_save_button.position = Vector2(684.0, 612.0)
+	_save_button.position = Vector2(684.0, 642.0)
 	_save_button.size = Vector2(324.0, 44.0)
 	_save_button.text = Localization.text("ui.salvar_campanha")
 	_save_button.focus_mode = Control.FOCUS_ALL
@@ -355,6 +357,7 @@ func _create_panel(panel_name: String, panel_position: Vector2, panel_size: Vect
 	panel.size = panel_size
 	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(panel)
+	UIThemeResource.frame_panel(panel, 40.0)
 	return panel
 
 

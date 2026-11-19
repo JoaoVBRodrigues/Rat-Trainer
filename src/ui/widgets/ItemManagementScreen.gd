@@ -76,6 +76,7 @@ func _build_ui() -> void:
 	panel.offset_right = -16.0
 	panel.offset_bottom = -16.0
 	add_child(panel)
+	UIThemeResource.frame_panel(panel, 40.0)
 	var layout: VBoxContainer = VBoxContainer.new()
 	layout.name = "Content"
 	layout.add_theme_constant_override("separation", 8)
@@ -241,6 +242,7 @@ func _add_item_card(item: ItemDef, in_shop: bool) -> void:
 	card.name = "Item_%s" % item.id
 	card.custom_minimum_size.y = 112.0
 	_items_list.add_child(card)
+	UIThemeResource.frame_panel(card, 40.0)
 	var row: HBoxContainer = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 	card.add_child(row)
@@ -286,6 +288,8 @@ func _add_item_card(item: ItemDef, in_shop: bool) -> void:
 
 	var action_button: Button = Button.new()
 	action_button.name = "Action"
+	action_button.custom_minimum_size = Vector2(104.0, 44.0)
+	action_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	action_button.focus_mode = Control.FOCUS_ALL
 	if in_shop:
 		action_button.text = Localization.text("ui.comprar")

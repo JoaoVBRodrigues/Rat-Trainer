@@ -25,6 +25,7 @@ func _ready() -> void:
 	panel.offset_right = -24
 	panel.offset_bottom = -24
 	add_child(panel)
+	UIThemeResource.frame_panel(panel)
 	var layout: VBoxContainer = VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 12)
 	panel.add_child(layout)
@@ -45,14 +46,21 @@ func _ready() -> void:
 	body.add_theme_constant_override("separation", 24)
 	layout.add_child(body)
 	var portrait: VBoxContainer = VBoxContainer.new()
-	portrait.custom_minimum_size.x = 280
+	portrait.custom_minimum_size.x = 400
 	body.add_child(portrait)
+	var portrait_stage: Control = Control.new()
+	portrait_stage.name = "PortraitStage"
+	portrait_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	portrait_stage.clip_contents = true
+	portrait.add_child(portrait_stage)
 	_character_image = TextureRect.new()
 	_character_image.name = "ProfileCharacter"
 	_character_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_character_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_character_image.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	portrait.add_child(_character_image)
+	_character_image.position = Vector2(-40, -12)
+	_character_image.size = Vector2(520, 830)
+	_character_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	portrait_stage.add_child(_character_image)
 	_age_label = Label.new()
 	portrait.add_child(_age_label)
 	_credits_label = Label.new()
@@ -61,6 +69,8 @@ func _ready() -> void:
 	_stats_panel.name = "ProfileStats"
 	_stats_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.add_child(_stats_panel)
+	# A quiet inset surface keeps the full-body portrait as the focal point.
+	_stats_panel.add_theme_stylebox_override("panel", get_theme_stylebox("normal", "Button").duplicate())
 	_stats_panel.set_expanded(true)
 
 func show_profile(sim: SimulationCore, profile: Dictionary = {}) -> void:

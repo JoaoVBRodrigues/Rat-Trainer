@@ -3,8 +3,25 @@ extends RefCounted
 
 const PANEL_ASSET_ID: StringName = &"ui_panel"
 const PANEL_ASSET_CATEGORY: StringName = &"ui"
-const PANEL_SLICE_MARGIN: float = 16.0
-const PANEL_CONTENT_MARGIN: float = 20.0
+const PANEL_SLICE_MARGIN: float = 64.0
+const PANEL_CONTENT_MARGIN: float = 40.0
+
+
+## Opt-in safe content inset; never mutates the shared style resource.
+static func frame_panel(panel: PanelContainer, padding: float = 40.0) -> void:
+	var source: StyleBox = panel.get_theme_stylebox("panel")
+	var style: StyleBox = source.duplicate() as StyleBox
+	if style is StyleBoxTexture:
+		var frame: StyleBoxTexture = style as StyleBoxTexture
+		frame.texture_margin_left = 64.0
+		frame.texture_margin_top = 64.0
+		frame.texture_margin_right = 64.0
+		frame.texture_margin_bottom = 64.0
+	style.content_margin_left = padding
+	style.content_margin_top = padding
+	style.content_margin_right = padding
+	style.content_margin_bottom = padding
+	panel.add_theme_stylebox_override("panel", style)
 
 
 static func apply_runtime_assets(theme: Theme, assets: AssetResolver) -> bool:

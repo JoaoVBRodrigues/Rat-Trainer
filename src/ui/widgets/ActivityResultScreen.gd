@@ -46,11 +46,13 @@ func _build_ui() -> void:
 	panel.name = "ResultPanel"
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(panel)
+	UIThemeResource.frame_panel(panel)
 	var layout: VBoxContainer = VBoxContainer.new()
 	layout.name = "ResultLayout"
 	layout.add_theme_constant_override("separation", 10)
 	panel.add_child(layout)
 	var header: HBoxContainer = HBoxContainer.new()
+	header.add_theme_constant_override("separation", 16)
 	layout.add_child(header)
 	_outcome_label = Label.new()
 	_outcome_label.name = "OutcomeIndicator"
@@ -58,7 +60,10 @@ func _build_ui() -> void:
 	_title_label = Label.new()
 	_title_label.name = "TitleLabel"
 	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_title_label.size_flags_vertical = Control.SIZE_FILL
+	_title_label.custom_minimum_size.y = 36
 	_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_title_label.add_theme_font_size_override("font_size", 22)
 	header.add_child(_title_label)
 	_period_label = Label.new()
@@ -74,16 +79,31 @@ func _build_ui() -> void:
 	_inventory_warning_label.name = "InventoryWarning"
 	_inventory_warning_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(_inventory_warning_label)
-	var illustration: HBoxContainer = HBoxContainer.new()
+	var body: HBoxContainer = HBoxContainer.new()
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 24)
+	layout.add_child(body)
+	var illustration: VBoxContainer = VBoxContainer.new()
 	illustration.name = "ResultIllustration"
-	layout.add_child(illustration)
+	illustration.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	illustration.add_theme_constant_override("separation", 20)
+	body.add_child(illustration)
 	_artwork = ArtPresentation.artwork(illustration, &"bg_school", Vector2(0, 240), "ActivityArtwork")
+	var portrait_stage: Control = Control.new()
+	portrait_stage.name = "ResultPortraitStage"
+	portrait_stage.custom_minimum_size.x = 360
+	portrait_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	portrait_stage.clip_contents = true
+	portrait_stage.z_index = 1
+	body.add_child(portrait_stage)
 	_character_art = TextureRect.new()
 	_character_art.name = "ResultCharacter"
-	_character_art.custom_minimum_size = Vector2(170, 240)
+	_character_art.position = Vector2(-64, -10)
+	_character_art.size = Vector2(500, 800)
+	_character_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_character_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_character_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	illustration.add_child(_character_art)
+	portrait_stage.add_child(_character_art)
 	# Accessible activity text is retained without the former zero-width CenterContainer.
 	_placeholder_label = Label.new()
 	_placeholder_label.name = "ActivityPlaceholderLabel"
@@ -93,7 +113,7 @@ func _build_ui() -> void:
 	scroll.name = "ResultDetails"
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	layout.add_child(scroll)
+	illustration.add_child(scroll)
 	var columns: HBoxContainer = HBoxContainer.new()
 	columns.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	columns.add_theme_constant_override("separation", 32)
@@ -102,6 +122,7 @@ func _build_ui() -> void:
 	_values_container = _detail_column(columns, "ValuesContainer", "ui.status")
 	var footer: HBoxContainer = HBoxContainer.new()
 	footer.name = "Footer"
+	footer.add_theme_constant_override("separation", 12)
 	footer.alignment = BoxContainer.ALIGNMENT_END
 	layout.add_child(footer)
 	_skip_button = Button.new()
